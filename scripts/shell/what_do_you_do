@@ -1,0 +1,15 @@
+#!/bin/sh
+
+echo "Run:\nhistory | awk {'print \$2'} | sort | uniq -c | sort -k1 -rn | head"
+
+#     94 git
+#     72 vi
+#     65 ls
+#     42 make
+#     34 find
+#     28 fg
+#     24 cd
+#     23 perl
+#     15 rm
+#     15 prove
+

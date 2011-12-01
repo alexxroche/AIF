@@ -1,0 +1,5 @@
+#!/bin/bash
+#Find all the perl files that do not have a valid $VERSION 
+# (also an example of how to echo the matching file name AND -exec on it)
+
+find . -type f -name "*.p[m|l]" -printf "%p \t" -exec perl -MExtUtils::MakeMaker -le 'print MM->parse_version(shift)' {} \;
