@@ -1,0 +1,2 @@
+#SUBSYSTEM=="usb", ATTRS{idVendor}=="1d6b", ATTRS{idProduct}=="0001", ATTRS{serial}=="0000:00:03.2", RUN+="/usr/local/bin/trigger.sh"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="1d6b", ATTRS{idProduct}=="0001", ATTRS{serial}=="0000:00:03.2", RUN+="/usr/local/bin/z35"

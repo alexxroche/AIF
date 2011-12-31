@@ -1,0 +1,205 @@
+#!/usr/bin/perl
+
+use strict;
+
+=head1 name
+
+mtp-z35 - I wrote this as a wrapper to mtp to pull images from a Fuji Finepix z35
+	we could write an album function so that it groups images by continuous time-stamps into groups
+
+	also, using exiftool we could try to detect if they have failed to set the time in the camera
+
+=head2 variables
+
+You can change these
+
+=cut
+
+my $user	= 'xandra';
+my $ping	= 'mtp-detect 2>/dev/null';
+my $ls		= 'mtp-files 2>/dev/null';
+my $cp		= 'mtp-getfile 2>&1';
+my $output	= '/home/xandra/Pictures';
+#my $output	= '~/Pictures';
+my $db_name	= '.img_data.db';
+
+
+=head2 modules
+
+These are needed
+
+=cut
+
+use File::Path;
+use Cwd;
+
+
+my $device_name;
+my $device_uid;
+my $out_path;
+my %opt;
+
+if($ARGV[0] eq '-d'){$opt{D}++; $opt{verb}++;}
+if($ARGV[0] eq '-v'){$opt{verb}++;}
+if($ARGV[0] eq '-h'){ &help;}
+
+
+# check device is connected, and find it
+
+open(DEV, "$ping |");
+DEV: while(my $l = <DEV>){
+	if($l=~m/No raw devices found/){
+		print "Please plug-in your digital camera and ensure it is on\n" if $opt{verb}>=1;
+		close(DEV);
+		exit 1;
+	}
+	if($l=~m/Found (\d+) device/){
+		if($1 ne '1' && $1 != 1){
+			print "We have not written the code to work with $1 devices\n" if $opt{verb}>=1;
+			close(DEV);
+			exit;
+		}
+	}elsif($l=~m/VolumeIdentifier:(.*)/){
+		$device_uid = $1;
+		chomp($device_uid);
+		$device_uid=~s/^\s*//;
+		last DEV;
+	}elsif($l=~m/Model:(.*)/){
+		$device_name= $1;
+		chomp($device_name);
+		$device_name=~s/^\s*//;
+	}
+}
+close(DEV);
+
+# check for output folder
+$device_name = 'z35' unless $device_name;
+$device_uid = '1' unless $device_uid;
+
+# create $output/$device_name/$device_uid/
+
+$out_path = $output . '/' . $device_name . '/' . $device_uid;
+chomp($out_path);
+$out_path=~s/^\s*//;
+$out_path=~s/\s*$//;
+$out_path=~s/\s/_/g;
+$opt{currWorkDir} = &Cwd::cwd();
+if($out_path=~s/^\~\/// || $out_path!~m/^\//){
+	$out_path = $opt{currWorkDir} . '/' . $out_path;
+}
+
+if(-d "$out_path"){ 
+	print "Found output dir: $out_path\n" if $opt{D}>=1;
+}else{
+	print "Creating output dir: $out_path\n" if $opt{D}>=1;
+	&File::Path::mkpath($out_path);
+	if(-d $out_path){
+		print "$out_path created\n" if $opt{D}>=1;
+	}else{
+		print STDERR "Failed to make $out_path\n";
+		exit;
+	}
+}
+
+=pod
+
+mtp-files: Successfully connected
+Listing File Information on Device with name: (NULL)
+File ID: 132
+   Filename: DSCF4246.JPG
+   File size 4819766 (0x0000000000498B36) bytes
+   Parent ID: 131
+   Storage ID: 0x00020001
+   Filetype: JPEG file
+
+From this we could:
+1. check that we have the disk space to copy
+2. That we are putting the same Filetype together
+
+=cut
+
+my(%db,$fid,$filename);
+open(DB, "<$out_path/$db_name");
+while(my $db = <DB>){
+	my($filename,$size) = split(/,/, $db);
+	$db{$filename}=$size;
+}
+close(DB);
+
+open(LS, "$ls |");
+FILE: while(my $line = <LS>){
+	chomp($line);
+	if($line=~m/Filename: (.+)/ && $fid ne ''){
+		my $file = $1;
+		chomp($file);
+		if($file){ $filename = $file; }
+		next FILE if $db{$filename};
+		unless(-f  "$out_path/$file"){
+		  # we should just stick the $files{$fid} = $filename into a hash
+		  # so that we can pull the newest images first 
+			&copy($fid,"$out_path",$file);
+		}
+	}elsif($line=~m/File ID: (\d+)/){
+		$fid = $1;
+	}elsif($line=~m/File size (\d+)/){
+		$db{$filename} = $1;
+		$fid = '';
+	}
+}
+
+open(DB, ">$out_path/$db_name$$");
+foreach my $file (keys %db){
+	print DB "$file,$db{$file}\n";
+}
+close(DB);
+rename("$out_path/$db_name$$","$out_path/$db_name");
+system("chown $user: $out_path/$db_name");
+
+
+sub copy {
+	my($fid,$out_path,$file) = @_;
+	print "cp $fid $out_path/$file\n" if $opt{D}>=1;
+	system("$cp $fid $out_path/$file");
+	system("chown $user: $out_path/$file");
+}
+
+sub help {
+	print "$0 [-d|-v]\n -d debug mode\n -v human output\n";
+	exit;
+}
+
+
+__END__
+
+=head1 THANKS
+
+MttJocy (who ever you are) for "mtp-detect" in http://ubuntuforums.org/showthread.php?t=1214003&page=4
+
+=head1 BUGS AND LIMITATIONS
+
+Probably, and certainly better ways to do the same thing
+
+Please fix any bugs
+
+=head1 SEE ALSO
+
+L<Notice>
+
+=head1 AUTHOR
+
+Alexx Roche, C<< <notice-dev@alexx.net> >>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright (C) 2011 Alexx Roche
+
+This program is free software; you can redistribute it and/or modify it
+under the following license: Eclipse Public License, Version 1.0 ; 
+ the GNU Lesser General Public License as published 
+by the Free Software Foundation; or the Artistic License.
+
+See http://www.opensource.org/licenses/ for more information.
+
+=cut
+
+

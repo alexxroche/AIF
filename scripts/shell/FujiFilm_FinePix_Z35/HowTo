@@ -1,0 +1,37 @@
+#!/bin/sh
+
+echo "#( cut-n-past as root:)\ncp -i 00.rules /etc/udev/rules.d/00.rules && cp -i z35 /usr/local/bin/z35 && chmod 755 /usr/local/bin/z35"
+exit
+
+__END__
+
+=head1 Notes
+
+I wanted to be able to plug this into a linux box and have all the new pictures copied over. It took a little hunting but in the end I found
+
+mtp + udev 
+
+1. create a script to detect the camera and copy things over
+(see perl script z35)
+
+2. create udev rule and copy it into /etc/udev/rules.d/00.rule
+(see 00.rule)
+
+
+# If you want to work it out yourself then 
+$ mtp-discover
+# and
+$ tail -0f /var/log/kern.log|sed 's/: [new|reset].*//'
+# (should end with \d-\d e.g. 4-1) then you want
+$ udevadm info -a -p $(udevadm info -q path -n /dev/bus/usb/004/001 )
+# will help
+
+It only took me a few minutes to work this out, so why doesn't Fiji have "drivers" for linux when it is this easy?
+There should at least be a .tar.gz .rpm .deb 
+
+Alexx Roche 2011-05-23
+
+2011-11-11 I installed this on another ubuntu machine and it required a few tweeks. Specifically the shell needed chaning form sh to bash.
+
+
+=cut
