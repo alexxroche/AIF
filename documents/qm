@@ -1,0 +1,11 @@
+feynman path integral [0] can be simplified to
+
+t > (x dx m) / h
+
+t = time        (seconds)
+x = distance    (meters)
+dx= size of the box (m^3)
+m = mass of the particle (kg)
+h = planck's constant    (kgm^2/s) 6.6x10^-34
+
+[0] Path_integral_formulation

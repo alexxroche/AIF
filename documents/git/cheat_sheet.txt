@@ -1,0 +1,19 @@
+
+# diff two branches (you can replase 'master' and 'HEAD' with branch names)
+
+git diff --stat master..HEAD
+git diff --summary master..HEAD
+git diff --shortstat master..HEAD
+
+
+# wipe the logs in a branch and chage the first log
+
+git reset --soft $(git log git log --pretty=format:'%H'|tail -n1)
+git commit -a --amend
+
+# log formats that I like (so much that I add them to my ~/.gitconfig
+
+git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+git log --graph --decorate --pretty=oneline --abbrev-commit --all
+git log --graph --decorate --pretty=oneline --abbrev-commit
+

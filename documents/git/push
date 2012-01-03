@@ -1,0 +1,3 @@
+#==  How to push a local branch, (called github) into the remote master branch ==#
+git remote add -t github origin git@github.com:alexxroche/Notice.git
+git push origin github:master

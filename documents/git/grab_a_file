@@ -1,0 +1,5 @@
+#== how to grab a file from another branch ==#
+
+git checkout source_branch [PATH/]file.name
+
+#== This also works using a tag or the SHA for a past commit ==#

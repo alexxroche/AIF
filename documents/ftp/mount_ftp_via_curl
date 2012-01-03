@@ -1,0 +1,7 @@
+If you only have ftp access to a remote server and do not want to mirror the whole site then curlftpfs is your friend:
+
+Just run the following as root, (you might have to install curlftpfs first), to "mount" the remote site on /media/cfs
+(you can change the mount point to suit you.) It will, obv. not be as fast as local access but if you only need to 
+hack one or two files, or local disk-space is an issue, then this might be the way.
+
+# curlftpfs -o allow_other ftp://USERNAME:PASSWORD@IP_OR_HOSTNAME /media/cfs

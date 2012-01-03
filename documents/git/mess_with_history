@@ -1,0 +1,38 @@
+You should not shoot yourself in the foot;
+
+# Q how to insert a commit as the first, shifting all the others?
+# A first you need a new empty branch; let's call it `newroot`
+git symbolic-ref HEAD refs/heads/newroot
+git rm --cached -r .
+git clean -f -d
+# then you apply the same steps
+git commit --allow-empty -m 'root commit'
+git cherry-pick $(git rev-list --reverse master | head -1)
+git rebase --onto newroot newroot master
+git branch -d newroot
+
+{
+# Q how to squash the first two commits?
+# A Go back to the last commit that we want to form the initial commit (detach HEAD)
+git checkout <sha1_for_B>
+
+# reset the branch pointer to the initial commit,
+# but leaving the index and working tree intact.
+git reset --soft <sha1_for_A>
+
+# amend the initial tree using the tree from 'B'
+git commit --amend
+
+# temporarily tag this new initial commit
+# (or you could remember the new commit sha1 manually)
+git tag tmp
+
+# go back to the original branch (assume master for this example)
+git checkout master
+
+# Replay all the commits after B onto the new initial commit
+git rebase --onto tmp <sha1_for_B>
+
+# remove the temporary tag
+git tag -d tmp
+}
