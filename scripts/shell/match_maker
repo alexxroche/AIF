@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# This calculates the age range of the people that you should be dating
+# 34 and 53 are the ages where "half your age + 7" meets "significance"
+
+YourAge=$1
+
+if [ ! $YourAge ]
+then
+	echo "How old are you? No really, I need to know"
+	exit
+fi
+
+# The age of reason may be 7, but not reasonableness
+if [ $YourAge -gt 8 ]
+then
+	count=1;
+	Younger=0;
+	while [ $Younger -eq 0 ]
+	do
+	   potent_White=$(($YourAge-$count));
+	   j=$(echo "(($YourAge-$potent_White)/2)^2"|bc); 
+	   if [ $(($YourAge+$potent_White)) -lt $j ]; then Younger=$potent_White; fi
+	   count=$(($count+1));
+	done
+    if [ $Younger -lt $(( ($YourAge/2) + 7 )) ];then WhiteDraw=$Younger; Younger=$(( $(( ($YourAge/2) ))+7)); fi
+    if [ $Younger -gt $YourAge ];then Younger=$(( $YourAge-1)); fi
+
+	max_count=1
+	Older=$(($YourAge-1));
+	while [ $Older -lt $YourAge ]
+	do
+		potent_Black=$(($YourAge+$max_count));
+		j=$(echo "(($potent_Black-$YourAge)/2)^2"|bc); 
+		if [ $(($YourAge+$potent_Black)) -lt $j ]; then Older=$potent_Black; fi
+		max_count=$(($max_count+1))
+	done
+    Old=$(( ($YourAge - 7) * 2 ))
+    if [ $Old -lt $YourAge ];then Old=$(( $YourAge+1)); fi
+	echo "You should be looking for someone between $Younger and $Old";
+	if [ $2 ]; then echo "At the VERY limit between ($WhiteDraw) and ($Older) /might/ be possible"; fi
+
+else
+	echo "You are not old enough to data yet.";
+fi
