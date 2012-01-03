@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# Search all of the branches of a git repo for a filename
+
+# You probably want to 
+# pushd ~git_root
+# so that we can search all of the tree
+
+help ()
+{
+    echo "Usage: $0 \$filename_to_search_for [-v]" && exit;
+}
+
+git_id ()
+{ 
+    echo -n $(printf 'blob %s\0' "$(ls -l "$1" | awk '{print $5;}')" | cat - "$1" | sha1sum | awk '{print $1}')
+    echo " - $1"
+}
+
+git_diff ()
+{ 
+    echo -e '# \e[01;30mAfter you find your file(s) you might want to compare them with\e[00m\n'
+    echo ' git diff --stat commit_hash_A..commit_hash_B -- path/to/file'
+    echo ' git diff --stat commit_hash_A:path/to/file commit_hash_B:other/path/to/same/file'
+    echo -e '\n git show commit_hash:path/to/file'
+    echo -e '\n git show HEAD^^^:path/to/file'
+    echo -e '\n#git difftool master:path/to/file dev:test/path/to/file.t '
+}
+
+[ "$2" == '-id' ] && git_id "$1" && exit
+[ "$1" == '-d' ] && git_diff && exit
+[ "$2" == '-d' ] && git_diff && exit
+
+#[ ! $1 ] && echo "Usage: $0 \$filename_to_search_for [-v]" && exit;
+[ ! $1 ] && help
+[ "$1" == '-v' ] && help #this happens far too often
+#[ ! -e "$1" ] && help # we can't have this as we might be looking for a file 
+#                        that is in a branch that we are not in
+
+if [ ! $2 ]
+then
+    echo '######################################################################'
+    echo -e '#  \e[00;33m(Branch)\e[00m     : location '
+    echo '######################################################################'
+    for branch in `git for-each-ref --format="%(refname)" refs/heads`
+    do
+        echo -ne "\e[00;33m($branch)\e[00m \t:"; git ls-tree -r --name-only $branch | grep "$1" || echo ''
+    done
+
+    echo '######################################################################'
+fi
+
+if [ $2 ]
+then
+    for i in `git log --name-only --all|grep "$1"|sort -u`
+    do 
+        git log --pretty=format:"%Cred%H%Creset -%C(yellow)%d%Creset" --name-only --all -- $i
+    done
+fi
