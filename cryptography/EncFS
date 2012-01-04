@@ -1,0 +1,49 @@
+#!/bin/bash
+
+howto(){
+sudo apt-get install encfs
+
+#This installed all dependencies, including the FUSE library. I needed to add myself to the fuse user group and then log out and back in to be able to run the fusermount command. I also added fuse to /etc/modules so the appropriate kernel module loads on startup. Issue the following command to create an encrypted filesystem:
+
+encfs ~/.crypt/ ~/crypt
+
+# encfs ~/Dropbox/encfs ~/Documents/private
+
+#When prompted for what options you want to use when creating the filesystem, choose between a default (paranoid) option and an expert option. Choosing expert gives you a number of options, including the encryption algorithm (AES, Blowfish, and blowfish-compat) and the specific key size and block size you want to use (depending on which encryption algorithm you've selected). Choosing expert also prompts you for the password used to determine access to the encrypted filesystem. You can use the encfsctl program to change the password at a later date. The filesystem is then mounted automatically; you can unmount it with this command:
+
+fusermount -u ~/crypt
+
+
+}
+
+#I threw together the following quick script to allow you to mount and unmount the EncFS encrypted filesystem easily:
+__END__
+
+#!/bin/bash
+# /usr/local/bin/file-crypt 
+
+usage(){
+  echo "file-crypt [m|mount|u|unmount]"
+  echo " either mounts or unmounts encrypted file system"
+}
+
+if [ -z $1 ]
+then
+  usage
+  exit
+fi
+
+case "$1" in
+    "m" | "mount" )
+            /usr/bin/encfs ~/.crypt ~/crypt
+            echo "Encrypted filesystem now mounted"
+            ;;
+    "u" | "unmount" )
+            /usr/bin/fusermount -u ~/crypt
+            echo "Encrypted filesystem has been unmounted"
+            ;;
+    * )
+            usage
+            ;;
+esac
+
