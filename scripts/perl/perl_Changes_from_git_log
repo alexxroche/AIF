@@ -1,0 +1,83 @@
+#!/usr/bin/perl
+
+use strict;
+use Cwd;
+$|=1;
+
+my $module = cwd || 'Notice';
+$module=~s%/$%%; #don't want to end up with nothing
+$module=~s%.*/%%;
+
+my $log_cmd = 'git log --pretty=format:"VERSION   %cd%n          %s%n"';
+my $log_title = 'Revision history for ';
+
+my $log = $log_title . $module . "\n\n" . `$log_cmd`;
+
+die "You have to be using git\n" unless $log=~m/VERSION/;
+
+my $count = 0;
+$count++ while $log =~ m/VERSION/g;
+
+if ($count && $count>=1){
+
+    for (my $i=$count;$i>=1;$i--){
+        my $v = $i;
+        if ($v >= 100){ $v=~s/^(\d+)(\d\d)/$1\.$2/; }
+        elsif($v <= 9){ $v = '0.0' . $v; }
+        else { $v = '0.' . $v; }
+        #print "Changing VERSION to $v\n";
+        $log=~s/^VERSION/$v/m || print "Failed to change $v\n";
+    }
+}else{
+    die "Failed to count the version with $count\n";
+}
+
+print $log unless $ARGV[0];
+
+__END__
+
+=head1 NAME
+
+perl_Changes_from_git_log - creates perl CPAN style Changes from git-log
+
+=head1 SYNOPSIS
+
+$ perl_Changes_from_git_log > Changes
+
+=head1 DESCRIPTION
+
+If, like me you have moved from svn to git then you might already
+
+
+=head1 BUGS AND LIMITATIONS
+
+Probably, and certainly better ways to do the same thing.
+
+The biggest bug at this time is that the versions are fictitious,
+(this produced the version you /should/ have if 
+you updated your version with each commit.)
+
+The second bug is that it presumes that you are starting with version 0.01
+and that there are no dev versions, (though I keep those in another branch.)
+
+Please report any bugs or feature suggestions to C<alexx at cpan.org>
+
+=head1 SEE ALSO
+
+L<Notice>
+
+=head1 AUTHOR
+
+Alexx Roche, C<notice-dev at alexx.net>
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright (C) 2012 Alexx Roche
+
+This program is free software; you can redistribute it and/or modify it
+under the following license: LGPL-3.0 
+
+See http://www.opensource.org/licenses/ for more information.
+
+=cut
+
