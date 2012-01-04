@@ -55,5 +55,17 @@ then
     for i in `git log --name-only --all|grep "$1"|sort -u`
     do 
         git log --pretty=format:"%Cred%H%Creset -%C(yellow)%d%Creset" --name-only --all -- $i
+        if [ "$2" == '-v' ]
+        then
+            count=0;
+            hashes=(`git log --pretty=format:"%H" --name-only --all -- $i|grep -v $i|grep .|sort -u`)
+            for (( j = 0 ; j < ${#hashes[*]} ; j++ ))
+            do
+                echo -n "[${hashes[$j]} = "
+                echo -n $(git ls-tree -r ${hashes[$j]} -- $i|grep $i)
+                echo ']'
+            done
+        fi
+        echo -e '\n'
     done
 fi
