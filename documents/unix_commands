@@ -1,0 +1,36 @@
+A few commands that you might find hard to search for. 
+Most of these are "..and so much more"
+
+|    - THE unix linker
+ab   - apache benchmark
+awk  - ps auwxf|awk '{print $NF}' 
+bc   - An arbitrary precision calculator language
+dd   - disk to disk copy
+df   - disk free? 
+du   - directory usage
+dig  - DNS query tool
+find - a lot more useful that you might think
+git  - now my VCS of choice
+grep - match
+ip a - (replaces ifconfig)
+host - replaces nslookup
+ls   - list the contense of a directory
+mtr  - Matts Tracreroute
+nc   - use to test network-server
+netstat -pan
+od   - octal dump (shows you what is REALLY there)
+ps   - process list
+sed  - she what
+screen- how many night did I dream of this?
+sort - u
+tee  - send output to two locations
+time - see how long something takes to run
+tree - a graphical ls
+tmux - terminal multiplexor (like screen)
+vi   - I use vim
+w    - who
+watch - have a guess
+
+This list could be a lot larger, (I have over 3500 programs in various /[s]bin/)
+but these are the ones that I either took too long to find or had a,
+"Why didn't anyone tell me about..." moment.

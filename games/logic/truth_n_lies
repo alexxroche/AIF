@@ -1,0 +1,90 @@
+This is a classic: I have found my way to the top of the tallest tower in a castle.
+There are two doors and one guard in front of each door. One guard always lies and the other always tells the truth.
+Behind one door is the treasure that I'm looking for. Behind the other door is some pain that I do not want.
+Once I pick a door and go through the guards will lock the door behind me. The treasure room has a parachute 
+and a window so that I can escape. I do NOT know which guard lies and which tells the truth, and if I ask
+more than one question both guards will kill me.
+
+What question do I ask and to which guard?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+This is a fun one because there IS a factually correct answer.
+
+
+The first thing to notice is that because we do not know which guard is which the one question that we
+ask has to work with either guard.
+
+
+
+What if I ask, "Is the door behind you the door to the treasure?"
+
+There are four possible situations.
+
+a. I'm asking the honest guard and he is in front of the treasure.
+b. I'm asking the honest guard and he is in front of the pain.
+
+c. I'm asking the liar and he is in front of the treasure.
+d. I'm asking the liar and he is in front of the pain.
+
+
+So this simple question fails for c. and d.
+
+
+If my one question is: 
+"If I asked the other guard, does this door lead to the treasure, would he say yes?"
+
+What are the replies and depending on the replies what would my actions be?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"If I asked the other guard, does this door lead to the treasure, would he say no?"
+
+a. I'm asking the honest guard and he is in front of the treasure: reply:yes, action: pick that door
+b. I'm asking the honest guard and he is in front of the pain:  reply: no, action: pick the other door
+
+c. I'm asking the liar and he is in front of the treasure: reply: no, action: pick the other door
+d. I'm asking the liar and he is in front of the pain:  reply: yes, action: pick that door.
+
+
+
+

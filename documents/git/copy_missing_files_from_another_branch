@@ -1,0 +1,9 @@
+# you have spent the day working over in the dev branch
+# you were amazing and it all worked. You checked it all in.
+# You now need to copy that all over to the master branch
+
+git checkout master
+for i in `git diff dev..master --stat|grep -v +|awk '{print $1}'`; do git co dev -- $i; done
+git commit -a -m 'Latest code from the dev branch'
+
+# hometime! (or pub-time)

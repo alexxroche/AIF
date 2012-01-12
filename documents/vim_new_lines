@@ -1,0 +1,4 @@
+# Those dos new lines... fixed with
+
+:e ++ff=unix 
+:%s/\r\(\n\)/\1/g

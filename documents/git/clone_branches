@@ -1,0 +1,7 @@
+# so you have cloned using
+ git clone http://www.example.com/~username/git/repo-name
+# and now want another branch. you could wipe your copy of the repo and clone the other branch OR
+ cd repo-name
+ git fetch
+# you can even call it "mybranch" if you like
+ git checkout --track -b mybranch origin/remote-branch-name 
