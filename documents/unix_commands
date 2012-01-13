@@ -5,6 +5,7 @@ Most of these are "..and so much more"
 ab   - apache benchmark
 awk  - ps auwxf|awk '{print $NF}' 
 bc   - An arbitrary precision calculator language
+curlftpfs - mount a remote filesystem over ftp
 dd   - disk to disk copy
 df   - disk free? 
 du   - directory usage
@@ -22,6 +23,7 @@ od   - octal dump (shows you what is REALLY there)
 ps   - process list
 sed  - she what
 screen- how many night did I dream of this?
+ssh  - ~/.ssh/config
 sort - u
 tee  - send output to two locations
 time - see how long something takes to run
