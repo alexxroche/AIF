@@ -8,6 +8,7 @@ YourAge=$1
 if [ ! $YourAge ]
 then
 	echo "How old are you? No really, I need to know"
+	echo "Usage: $0 Your_Age [-v]"
 	exit
 fi
 
@@ -23,7 +24,12 @@ then
 	   if [ $(($YourAge+$potent_White)) -lt $j ]; then Younger=$potent_White; fi
 	   count=$(($count+1));
 	done
-    if [ $Younger -lt $(( ($YourAge/2) + 7 )) ];then WhiteDraw=$Younger; Younger=$(( $(( ($YourAge/2) ))+7)); fi
+    if [ ! $2 ]; then
+        if [ $Younger -lt $(( ($YourAge/2) + 7 )) ];then WhiteDraw=$Younger; Younger=$(( $(( ($YourAge/2) ))+7)); 
+        else WhiteDraw=$Younger; fi
+    else
+        WhiteDraw=$(( $(( ($YourAge/2) ))+7));
+    fi
     if [ $Younger -gt $YourAge ];then Younger=$(( $YourAge-1)); fi
 
 	max_count=1
