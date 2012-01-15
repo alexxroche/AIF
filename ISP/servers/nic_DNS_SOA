@@ -1,0 +1,10 @@
+denic.de 2-5 name servers
+
+refresh : 10000 - 86400 2.7h - 24
+retry: 1800 -28800
+expire: 604800 - 3600000 1w - 5w6d14h
+ttl: 180 - 345600
+
+nic.fr
+expire > (7 * refresh);
+

@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# So you find munin and realise that it rocks...
+# but what if you need more than day,week,month,year?
+# what if you need decade,centry,millenium?
+#
+# No problem, (why would you doubt Tobi Oetiker?)
+
+# N.B. This is a sudo-code outline for an idea!
+
+# old
+OLD_DB='year.rrd'
+# new
+NEW_DB='decade.rrd'
+
+# Check for existance of new database
+if [ ! -f $NEW_DB ]
+then
+    # Create database to hold decade information
+    # this depends on your existing database
+    # (I should really extract these settings from the old DB)
+
+# DS:ds-name:GAUGE | COUNTER | DERIVE | ABSOLUTE:heartbeat:min:max
+# A ds-name must be 1 to 19 characters long in the characters [a-zA-Z0-9_]
+
+    rrdcreate='rrdtool create decade.rrd \
+    --start  $(date +%s) \
+    DS:Title:GAUGE:24600:U:U \
+    RRA:AVERAGE:0.5:1:24 \
+    RRA:AVERAGE:0.5:6:10'
+fi
+
+# stop if we have not got our database
+[ -f $NEW_DB ] || echo "Can't find $NEW_DB" && exit;
+
+
+# Fetch old data
+rrdtool_fetch='rrdtool fetch'
+rrdfetch_args='AVERAGE -r 2635200 --start $(( $(date +%s) - 2635200)) --end $(date +%s)'
+
+# Populate new database
+rrd_populate="rrdtool update $NEW_DB"
+
+# `for i in `$rrdtool_fetch $EXISTING_DB $rrdfetch_args|grep :`; do rrd_populate $i; done`
+
+`rrd_populate echo -n $($rrdtool_fetch $OLD_DB $rrdfetch_args|grep :);`
+ 
