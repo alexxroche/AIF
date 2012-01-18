@@ -1,0 +1,171 @@
+#! /usr/bin/perl -w
+#
+# This plugin will graph the chassis temp of a METAR STATION
+# against room temperature (where either are available)
+# 
+# To enable: 
+#
+#   install weather-util apci
+#   ln -s /usr/share/munin/plugins/weather-therm /etc/munin/plugins/weather-therm
+#
+# Configuration parameters for /etc/munin/plugin-conf.d/munin-node
+#
+# [weather_therm]
+#   user 	 - User that has permissions to run ipmi-sensors
+#   env.category sensors
+#
+# Parameters:
+#
+#   config
+#   autoconf
+#
+# Author: Alexx Roche <munin-ipmi-plugin@alexx.net>
+# Revision: 0.01  2012/01/15
+#
+#%# family=auto
+#%# capabilities=autoconf
+
+use strict;
+
+my $METAR_STATION = 'LFRS';
+
+=pod
+
+=head1 METAR Stations
+
+NTS we should include the station name in the graph
+NTS we should pull the date from the weather query 
+
+Some examples:
+
+-United Kingdom
+ EGNM -> Leeds And Bradford
+ EGKK -> London / Gatwick Airport
+ EGLL -> London / Heathrow Airport
+ EGLC -> London City Airport
+-France
+ LFPG -> Paris-Aeroport Charles De Gaulle
+ LRTS -> Nantes Atlantique
+
+=head1 NTS
+
+http://search.cpan.org/search?query=metar&mode=all
+METAR (Routine Aviation weather Report) and TAF (Terminal Area weather Report) 
+ICAO codes
+
+=cut
+
+my $EXTERNAL;
+my $INTERNAL;
+my $ACPI;
+my $internal_fudge = 10; #how many degrees above ambient my CPU is
+my $internal = 0; # ambient temp *from a REAL probe
+
+# smartctl
+
+if(-f "/usr/bin/weather"){ $EXTERNAL='/usr/bin/weather'; }
+unless($EXTERNAL){
+   $EXTERNAL = `which weather 2>/dev/null|sed 's/.*no weather//'`;
+   #$EXTERNAL = `echo -n \$(which weather)`;
+}
+chomp($EXTERNAL);
+unless($EXTERNAL){ exit 1; }
+
+if(-f "/usr/bin/sensors"){ $INTERNAL='/usr/bin/sensors'; }
+unless($INTERNAL){
+   $INTERNAL = `which sensors 2>/dev/null|sed 's/.*no sensors//'`; 
+   #$IPMI = `echo -n \$(which ipmi-sensors)`;
+}
+chomp($INTERNAL);
+unless($INTERNAL){ exit 1; }
+
+if(-f "/usr/bin/acpi"){ $ACPI='/usr/bin/acpi -V'; }
+unless($ACPI){
+   $ACPI = `which acpi 2>/dev/null|sed 's/.*no acpi//'`;          
+   #$ACPI = `echo -n \$(which acpi)`;
+}
+chomp($ACPI);
+unless($ACPI){ exit 1; }
+
+my %val;
+
+if ($ARGV[0] && $ARGV[0] eq "config") {
+	print "graph_title METAR STATION - Temperature Inside and out\n";
+	print "graph_args --base 1000 -l 0\n";
+	print "graph_vlabel Temperature in Celsius\n";
+	print "graph_category Sensors\n";
+	print "graph_info Airport and local temperature\n";
+	foreach my $j (sort keys %val) {
+		print "probe_$j.label $val{$j}{'Probe Name'}\n";
+		print "probe_$j.warning $val{$j}{'Warning Threshold'}\n";
+		print "probe_$j.critical $val{$j}{'Critical Threshold'}\n";
+	}
+print qq |ex.label External Temperature
+wnd.label Windchill
+dwp.label Dew Point
+int.label Internal
+|;
+
+}elsif ($ARGV[0] && $ARGV[0] eq "autoconf"){
+    if (-f $ACPI){
+	print "yes\n";
+    }else{
+	print "no ($ACPI does not exist)\n";
+	exit(1);
+    }
+}elsif($ARGV[0]  && $ARGV[0] eq 'cmd'){
+	print "$INTERNAL|grep C|sed -e 's/.C.*//' -e 's/.* //'|head -n1\n";
+	print "$EXTERNAL -vi $METAR_STATION|grep ' F '|sed -e 's/.*F (//' -e 's/ C.*//'\n";
+        print "$ACPI|grep degrees|sed -e 's/ deg.*//' -e 's/.* //'|head -n1\n";
+}else{
+        my $sensor_cmd = "$INTERNAL|grep C|sed -e 's/.C.*//' -e 's/.* //'|head -n1";
+        my $acpi_cmd = "$ACPI|grep degrees|sed -e 's/ deg.*//' -e 's/.* //'|head -n1";
+
+
+	# NTS you are here fudging because your laptop does not have an ambient temp-sensor
+
+
+	my $external_cmd = "$EXTERNAL -vi $METAR_STATION|grep ' F '|sed -e 's/.*F (//' -e 's/ C.*//'";
+
+
+        my @acpi_result = `$acpi_cmd`;
+        my @sensor_result = `$sensor_cmd`;
+        my @weather_result = `$external_cmd`;
+        my (%val, $index);
+	$index=0;
+	my $count=0;
+	#Four of these seem to be unlabled, I'm going to guess that they are the CPU(s) and HDD(s)
+	my @unknown = ('External Temperature','Windchill','Dew Point','Internal');
+	my @label = ('ex','wnd','dwp','int');
+
+	print "$label[0].value $weather_result[0]";
+	print "$label[1].value $weather_result[1]";
+	print "$label[2].value $weather_result[2]";
+	#my $div = @acpi_result + @sensor_result + 2;
+	push @sensor_result, @acpi_result;
+	my $total = 0;
+	my $div = 4;
+	my %opt;
+	# if we have a real internal temperature value then we can use it. 
+	# As I do not I'm using the cpu and sda values and fudging it down.
+	foreach my $val (@sensor_result){
+	    chomp($val);
+	    my $v = $val; $v=~s/\D\.//g;
+	   $opt{debug} .= " $val,";
+	    if($val=~m/-/){
+		$total -= $v;
+	        $div++;
+	   }else{
+		$total += $v;
+	        $div++;
+	   }
+	}
+	#print "total: $total, div: $div ::$opt{debug}::  " . @acpi_result . @sensor_result . "\n";
+	if($internal){
+		print "$label[3].value $internal\n"
+	}else{
+		print "$label[3].value " . int( ($total / $div) - $internal_fudge) . "\n";
+	}
+}
+
+exit(0);
