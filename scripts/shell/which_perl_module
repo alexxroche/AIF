@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ ! $1 ];then echo "Which perl module should I look for?"; exit; fi
+
+echo -n "You are using: "
+perldoc -l $1
+echo "which I found by looking in:"
+perl -MData::Dump=pp -e 'unshift @INC, '$1'; pp(\@INC)'
+#echo "or"; perl -MData::Dump=pp -e 'pp(\%INC)'
