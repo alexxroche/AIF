@@ -1,0 +1,9 @@
+ngrep -p 80 -d wlan0 -W byline
+
+tcpdump -i any 'tcp port 80'
+
+tshark -i any 'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'
+
+tshark -i any 'tcp port 80 and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)' -R'http.request.method == "GET" || http.request.method == "HEAD"' 
+
+
