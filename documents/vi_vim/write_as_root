@@ -1,0 +1,3 @@
+# just changed a ro file but you have sudo root?
+:w !sudo tee %
+
