@@ -1,0 +1,12 @@
+# just copy the data
+DROP TABLE IF EXISTS `device.country`;
+CREATE TABLE `device.country` SELECT * FROM `notice.country`;
+
+# OR copy the whole table
+
+DROP TABLE IF EXISTS `device.country`;
+CREATE TABLE device.country LIKE notice.country;
+ALTER TABLE device.country DISABLE KEYS;
+INSERT INTO device.country SELECT * FROM notice.country;
+ALTER TABLE device.country ENABLE KEYS;
+
