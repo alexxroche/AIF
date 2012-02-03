@@ -1,0 +1,6 @@
+cd ~user/Maildir/
+for i in `ls .Trash/cur/`; do mv .Trash/cur/$i new/$(echo -n $i|sed 's/\(.*:2,\).*/\1/'); done
+
+
+[ 1 == 0 ] && for i in `ls .Trash/cur/`; do mv .Trash/cur/$i new/$(echo -n $i|sed 's/2,.*/2,/'); done
+
