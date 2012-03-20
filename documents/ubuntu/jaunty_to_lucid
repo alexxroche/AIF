@@ -1,0 +1,492 @@
+   27  ivstools --merge 127*.ivs 001D1914482F/2010mai.ivs
+   28  aircrack-ng -f 14 -x2 -s 001D1914482F/126* 001D1914482F/2010mai.ivs 
+   29  aircrack-ng -f 14 -x2 -s 001D1914482F/126* 001D1914482F/2010mai.ivs 
+   30  ls
+   31  ivstools --merge 1276*.ivs 001D1914482F/2010mai1276.ivs
+   32  aircrack-ng -f 14 -x2 -s 001D1914482F/126* 001D1914482F/2010mai*
+   33  aircrack-ng -f 14 -x2 -s 001D1914482F/126* 001D1914482F/2010mai*
+   34  aircrack-ng -f 14 -x2 -s 001D1914482F/126* 001D1914482F/2010mai* 1276*
+   35  passwd alexx
+   36  exit
+   37  cd /home/.wireless/
+   38  ls
+   39  ls -la
+   40  cat 00\:16\:41\:F0\:C1\:23 
+   41  airodump-ng
+   42  airodump-ng mon0
+   43  ls -la
+   44  cd ivs/
+   45  ls
+   46  ./crack.sh 
+   47  cd /home/.wireless/
+   48  ls
+   49  cat 00\:16\:41\:F0\:C1\:23 
+   50  grep 1D *
+   51  ls
+   52  vi 001D1914482F
+   53  mv 001D1914482F networks
+   54  ls
+   55  ls -la
+   56  ps au
+   57  df -h
+   58  cd /home/.wireless/
+   59  ls
+   60  cat 00\:16\:41\:F0\:C1\:23 
+   61  la -ltr
+   62  ls -ltr
+   63  date
+   64  date
+   65  cd ivs/
+   66  ivstools 
+   67  ivstools --convert ../*.cap new.cap
+   68  ls -latr
+   69  rm 001D_all.ivs 
+   70  rm 002D.ivs 
+   71  ivstools --merge *.ivs 001D1914482F/*.ivs 001641F0C123/*.ivs 001D.ivs
+   72  cat crack.sh 
+   73  aircrack-ng 001D.ivs -f 14 -x2 -s -b 00:1D:19:14:48:2F
+   74  ls )lq
+   75  la -la
+   76  ls -lsa
+   77  cd sort/
+   78  ls
+   79  ivstools --merge * 126.ivs
+   80  cd 
+   81  ls
+   82  ls
+   83  cd /
+   84  ls
+   85  cd home/
+   86  cd .wireless/
+   87  ls
+   88  cat networks 
+   89  cat /home/.wireless/networks 
+   90  cat /home/.wireless/networks 
+   91  cat /home/.wireless/networks 
+   92  iwconfig 
+   93  cat /home/.wireless/networks 
+   94  ls
+   95  ls
+   96  cd ../
+   97  ls
+   98  cd
+   99  ls -latr
+  100  cd /home/
+  101  ls -latr
+  102  cd .wireless/
+  103  ls
+  104  cat networks 
+  105  apt-get install supertux
+  106  cd /home/.wireless/
+  107  ls
+  108  cat networks 
+  109  vi /lib/udev/rules.d/40-libsane.rules
+  110  ls /lib/udev/rules.d/*sane*
+  111  sane-find-scanner 
+  112  ls /lib/udev/rules.d/*sane*
+  113  vi /lib/udev/rules.d/40-libsane.rules
+  114  sane-find-scanner 
+  115  vi /etc/sane.d/epson2.conf 
+  116  sane-find-scanner 
+  117  aptitude update
+  118  aptitude upgrade
+  119  sane-find-scanner 
+  120  vi /etc/sane.d/epson2.conf 
+  121  reboot
+  122  aircollect 
+  123  cat /etc/issue
+  124  aptitude install libsane-extras *
+  125  aptitude install libsane-extras
+  126  /etc/init.d/udev restart
+  127  vi /etc/sane.d/dll.conf 
+  128  vi /etc/sane.d/dll.conf 
+  129  vi /etc/sane.d/dll.conf 
+  130  /etc/init.d/udev restart
+  131  lsb_release 
+  132  aptitude install lsb
+  133  ls
+  134  ls
+  135  ls
+  136  cd /home/annette/
+  137  ls
+  138  cd Bureau/
+  139  ls
+  140  cd epson-inkjet-printer-escpr_1.1.0-1lsb3.2_i386
+  141  ls
+  142  vi debian-binary 
+  143  ls
+  144  cd control
+  145  grep 3 *
+  146  grep 3.2 *
+  147  cd ..
+  148  ls
+  149  tar zxvf data.tar.gz 
+  150  ls
+  151  cd opt/
+  152  ls
+  153  cd epson-inkjet-printer-escpr/
+  154  ls
+  155  cd ../
+  156  cd ../
+  157  ls
+  158  cd control
+  159  ls
+  160  ls -la
+  161  vi control 
+  162  ls
+  163  cat md5sums 
+  164  md5sum control 
+  165  ls
+  166  vi md5sums 
+  167  ls
+  168  cd ../
+  169  ls
+  170  rm control.tar.gz 
+  171  tar czvf control.tar.gz control
+  172  rm -rf opt/
+  173  rm -rf control
+  174  ls
+  175  cd ..
+  176  mv epson-inkjet-printer-escpr_1.1.0-1lsb3.2_i386.deb epson.deb
+  177  tar zcvf epson-inkjet-printer-escpr_1.1.0-1lsb3.2_i386.deb epson-inkjet-printer-escpr_1.1.0-1lsb3.2_i386
+  178  cd /etc/apt/
+  179  ls
+  180  vi sources.list
+  181  dpkg --configure -a
+  182  aptitude safe-upgrade
+  183  aptitude safe-upgrade
+  184  cat /etc/lsb-release 
+  185  ls -latr /etc/lsb-base/
+  186  cat /etc/lsb-base-logging.sh 
+  187  apt-get -f install
+  188  apt-get update
+  189  apt-get autoclean
+  190  apt-get clean
+  191   apt-get autoremove
+  192  dpkg --remove -force --force-remove-reinstreq package name
+  193  cat /etc/*-release
+  194  lsb_release -a
+  195  aptitude install lsb-release
+  196  cd /home/annette/Bureau/
+  197  dpkg -i epson.deb 
+  198  dpkg -if epson.deb 
+  199  dpkg --help
+  200  dpkg --help|force
+  201  dpkg --help|grep force
+  202  dpkg --help|grep dep
+  203  dpkg -ignore-depends=lsb -i epson.deb 
+  204  dpkg --ignore-depends=lsb -i epson.deb 
+  205  apt-get install update-manager-core 
+  206  apt-get install update-manager-core 
+  207  apt-get -f install update-manager-core 
+  208  dpkg --ignore-depends=lsb -r epson.deb 
+  209  dpkg --ignore-depends=lsb -remove epson.deb 
+  210  dpkg --help|grep remove
+  211  dpkg --remove epson.deb 
+  212  dpkg --remove epson-inkjet-printer-escpr
+  213  apt-get -f install update-manager-core 
+  214  update-manager 
+  215  exit
+  216  mtr 8.8.8.8
+  217  sane-find-scanner 
+  218  vi /lib/udev/rules.d/40-libsane.rules
+  219  crontab -e
+  220  w
+  221  top
+  222  ls -a
+  223  ls -latr
+  224  ls
+  225  crontab -l
+  226  aircollect 
+  227  ls -latr
+  228  which aircollect
+  229  cat /usr/local/sbin/aircollect 
+  230  ls
+  231  cat /usr/local/sbin/aircollect 
+  232  ivstools --convert *.cap ivs.ivs
+  233  ls
+  234  mkdir ivs
+  235  mv replay_arp-0* ivs
+  236  ls
+  237  ls -la
+  238  cd /home/.wireless/
+  239  ls
+  240  ls -latr
+  241  cat 1318427985-01.csv 
+  242  aircollect &
+  243  ls -latr
+  244  ls -latr
+  245  ls -latr
+  246  aircollect &
+  247  ls -latr
+  248  ls -latr
+  249  ls -latr
+  250  ls -latr
+  251  ls -latr
+  252  ls -latr
+  253  ls -latr
+  254  ls -latr
+  255  ls -latr
+  256  ls -latr
+  257  ls -latr
+  258  ls -latr
+  259  aircrack-ng 1318428232-01.cap 
+  260  cd
+  261  cd ivs/
+  262  ls
+  263  ivstools 
+  264  for i in `ls`; do ivstools --convert $i $i.ivs; done
+  265  ls
+  266  ivstools 
+  267  ivstools --merge *.ivs arp_20111009.ivs
+  268  ls
+  269  rm replay_arp-0*
+  270  ls
+  271  aircrack-ng arp_20111009.ivs 
+  272  ls
+  273  mv arp_20111009.ivs /home/.wireless/
+  274  cd ../
+  275  rmdir ivs/
+  276  ls
+  277  cd /home/.wireless/
+  278  ls
+  279  ls -la
+  280  cd ivs/
+  281  ls
+  282  df -h
+  283  ls
+  284  cd ../
+  285  ls
+  286  ls -la
+  287  do-release-upgrade 
+  288  aptitude update
+  289  aptitude upgrade
+  290  cd /etc/apt
+  291  ls
+  292  vi sources.list
+  293  aptitude update
+  294  aptitude upgrade
+  295  vi sources.list
+  296  mv sources.list sources.list.fr && mv src.com sources.list
+  297  aptitude update
+  298  vi sources.list
+  299  aptitude update
+  300  fg
+  301  vi sources.list
+  302  aptitude update
+  303  aptitude install dist-upgrade -y && aptitude upgrade -y
+  304  ip a
+  305  mtr 8.8.8.8
+  306  pin
+  307  ip a
+  308  reset
+  309  ip a
+  310  ip a wlan0
+  311  ip wlan0
+  312  passwd
+  313  do-release-upgrade 
+  314  aptitude update
+  315  aptitude upgrade
+  316  cd /home/
+  317  ls
+  318  ls -la
+  319  cd annette/
+  320  ls
+  321  ls -la
+  322  passwd alexx
+  323  cd /var/log
+  324  ls -latr
+  325  tail auth.log
+  326  tail -f auth.log faillog 
+  327  aptitude upgrade
+  328  halt
+  329  ip a
+  330  aptitude update
+  331  mtr 8.8.8.8
+  332  mtr 8.8.8.8
+  333  reset
+  334  traceroute6 ::1
+  335  traceroute6 ip6.me
+  336  ip r
+  337  ip a
+  338  ifconfig eth0 up
+  339  ip a
+  340  ip a eth0 192.168.1.12
+  341  ip a 192.168.1.12 -i eth0
+  342  ip a add 192.168.1.12 -i eth0
+  343  ip a add 192.168.1.12 eth0
+  344  ip a add eth0 192.168.1.12
+  345  ip a add 192.168.1.12/24
+  346  ip a add 192.168.1.12/24 dev eth0
+  347  mtr 8.8.8.8
+  348  reset
+  349  ip r
+  350  aptitude update
+  351  aptitude install traceroute
+  352  exit
+  353  apt-get update
+  354  apt-get upgrade
+  355  ip a
+  356  ip r
+  357  cd /etc/
+  358  cd pam.d
+  359  vi gdm
+  360  reboot
+  361  /etc/init.d/networking status
+  362  /etc/init.d/networking start
+  363  ip a
+  364  vi /etc/network/interfaces 
+  365  vi /etc/network/interfaces 
+  366  /etc/init.d/networking restart
+  367  aptitude update
+  368  aptitude upgrade
+  369  aptitude safe-upgrade && do-release-upgrade 
+  370  aptitude update
+  371  aptitude safe-upgrade && do-release-upgrade -y
+  372  do-release-upgrade
+  373  cat /etc/issue
+  374  grep karmic /etc/*
+  375  apt-get update
+  376  cd /etc/
+  377  cd apt
+  378  vi sources.list
+  379  apt-get update
+  380  ip a
+  381  traceroute6 ip6.me
+  382  mtr 8.8.8.8
+  383  reboot
+  384  aptitude search isoquery
+  385  w
+  386  top
+  387  /etc/init.d/munin-node stop
+  388  /etc/init.d/mysql stop
+  389  top
+  390  top
+  391  apt-get dist-upgrade
+  392  apt-get install dist-upgrade util-linux
+  393  apt-get install upstart-job
+  394  sed -i 's/karmic/lucid/g' /etc/apt/sources.list
+  395  apt-get update
+  396  apt-get update
+  397  sed -i 's/karmic/lucid/g' /etc/apt/sources.list
+  398  apt-get update
+  399  apt-get upgrade
+  400  apt-get install upstart-job upstart
+  401  aptitude upstart -y
+  402  aptitude upstart
+  403  aptitude install upstart
+  404  aptitude install upstart -y
+  405  fg
+  406  aptitude install dpkg
+  407  aptitude install aptitude dpkg
+  408  aptitude update ; aptitude safe-upgrade
+  409  aptitude remove python-zopeinterface 
+  410  aptitude install openssh-server
+  411  vi /etc/apt/sources.list
+  412  aptitude update ; aptitude safe-upgrade
+  413  vi /etc/apt/sources.list
+  414  aptitude update ; aptitude safe-upgrade
+  415  aptitude help
+  416  apt-get update
+  417  apt-get update -f
+  418  apt-get upgrade
+  419  apt-get -f install
+  420  apt-get autoremove
+  421  apt-get remove openssh-server gitosis
+  422  aptitude update ; aptitude safe-upgrade
+  423  apt-get dist-upgrade
+  424  apt-get install update-manager-core
+  425  apt-get update
+  426  apt-get upgrade
+  427  do-release-upgrade 
+  428  cat /etc/lsb-
+  429  cat /etc/lsb-release 
+  430  fg
+  431  vi /etc/apt/sources.list
+  432  apt-get update
+  433  apt-get upgrade
+  434  apt-get upgrade
+  435  apt-get help
+  436  apt-get check
+  437  5~
+  438  cd /etc/apt
+  439  cp sources.list sources.list.lucid
+  440  vi sources.list
+  441  aptitude update
+  442  aptitude safe-upgrade
+  443  aptitude help
+  444  aptitude remove python-zopeinterface
+  445  aptitude remove python-zopeinterface
+  446  aptitude safe-upgrade
+  447  aptitude update && aptitude safe-upgrade
+  448  aptitude safe-upgrade -y
+  449  aptitude update ; aptitude safe-upgrade -y
+  450  aptitude full-upgrade
+  451  apt-get update
+  452  apt-get update -f
+  453  apt-get upgrade -f
+  454  apt-get upgrade
+  455  apt-get help
+  456  apt-get dist-upgrade
+  457  aptitude install util-linux
+  458  apt-get dist-upgrade
+  459  apt-get install -f
+  460  aptitude update && aptitude -y safe-upgrade
+  461  aptitude
+  462  aptitude help
+  463  aptitude clean
+  464  apt-get dist-upgrade
+  465  apt-get -f install
+  466  apt-get update ; apt-get dist-upgrade
+  467  apt-get -o APT::Immediate-Configure=0 -f install
+  468  apt-get update ; apt-get dist-upgrade
+  469  rm -fR /var/lib/apt/lists/*
+  470  apt-get update ; apt-get upgrade ; apt-get dist-upgrade
+  471  apt-get update
+  472  aptitude
+  473  rm -fr /var/lib/apt/lists
+  474  apt-get update ; apt-get upgrade ; apt-get dist-upgrade
+  475  apt-get update ; apt-get upgrade ; apt-get dist-upgrade
+  476  aptitude update
+  477  aptitude install aptitude
+  478  mkdir /var/lib/apt/lists
+  479  aptitude install aptitude
+  480  apt-get dist_update
+  481  apt-get dist-update
+  482  apt-get dist-upgrade
+  483  apt-get autoclean
+  484  apt-get clean
+  485  mkdir /var/lib/apt/lists/partial
+  486  apt-get clean
+  487  apt-get update
+  488   apt-get -f install synaptic
+  489   apt-get -f install
+  490  aptitude update
+  491  aptitude upgrade
+  492  dpkg -i multiarch-support_2.13-21_i386.deb
+  493  cat /etc/issue
+  494  apt-get update
+  495  apt-get upgrade
+  496  cd /home/annette/
+
+  501  dpkg --configure -a
+  502  dpkg --configure -a
+  503  man apt.conf
+  504  apt-get Immediate-Configure
+  505  apt-get -o APT::Immediate-Configure=0 upgrade
+  506  apt-get -o APT::Immediate-Configure=1 upgrade
+  507  aptitude remove xulrunner-1.9
+  508  apt-get -o APT::Immediate-Configure=1 upgrade
+  509  aptitude search epsom
+  510  aptitude search epson
+  511  aptitude search epson
+  513  aptitude update
+  514  aptitude upgrade
+  515  apt-get update
+  516  apt-get upgrade
+  517  apt-get remove compiz-core
+  518  apt-get remove gdm
+  520  apt-get dist-upgrade
+  523  apt-get -o APT::Immediate-Configure=0 install e2fsprogs
+  524  apt-get -o APT::Immediate-Configure=0 dist-upgrade
+  525  apt-get update && apt-get upgrade

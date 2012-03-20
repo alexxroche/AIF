@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Pick a number between 0 and 997
+# Run it through this algorythem and ask them for the output (which will be $x)
+
+x=19;tmp_str=$(echo "scale=($x*3)+3;1/998001"|bc -l);echo ${tmp_str:$(( ${#tmp_str} - ${#x} ))}
+

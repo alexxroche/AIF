@@ -1,0 +1,30 @@
+#!/bin/sh
+
+if [ ! -f ~/.start_screen ]
+then
+    echo 'screen
+select 1
+title "code"
+exec cd /var/www/sites/github/Notice
+screen
+select 2
+title "server"
+exec cd /var/www/sites/Notice && ./server.pl
+screen
+select 3
+title "templates"
+exec cd /var/www/sites/github/Notice/t/cgi-bin/templates
+screen
+select 4
+title "writing"
+exec cd ~/Documents/writing
+screen
+select 0
+title "admin"
+'>~/.start_screen
+fi
+
+# for cron:
+# screen -dmS alexx && screen -r alexx -X source ~/.start_screen && screen -r alexx
+
+screen -S alexx -X source ~/.start_screen && screen -r alexx

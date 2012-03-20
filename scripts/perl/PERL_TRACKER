@@ -1,0 +1,3 @@
+package Notice::Common;
+open F,">>/tmp/Notice_" . __PACKAGE__; print F localtime() . " $0\n"; close F;
+

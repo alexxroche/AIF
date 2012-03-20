@@ -1,0 +1,1440 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-gb" lang="en-gb" dir="ltr" >
+<head>
+	  <base href="http://linuxconfig.org/Bash_scripting_Tutorial" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="robots" content="index, follow" />
+  <meta name="keywords" content="bash, bash scripting, script, scripting, guide, tutorial" />
+  
+  <meta name="author" content="if bash" />
+  <meta name="description" content="A complete bash scripting tutorial great for learning all major aspects of writing bash scripts. Includes extensive example code." />
+  
+  <title>Bash scripting Tutorial</title>
+  <link href="/templates/beez/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+  <link rel="stylesheet" href="/plugins/content/itpsocialbuttons/styles/style_balloon.css" type="text/css" />
+  <link rel="stylesheet" href="http://linuxconfig.org//modules/mod_cpcloud/css/cpcloud.css" type="text/css" />
+  <script type="text/javascript" src="/plugins/system/mtupgrade/mootools.js"></script>
+  <script type="text/javascript" src="/media/system/js/caption.js"></script>
+  <script type="text/javascript">
+window.addEvent("domready", function() {
+	var JTooltips = new Tips($$(".slickTip"), { maxTitleChars: 50, fixed: false});
+});
+  </script>
+  <!-- JoomlaWorks "Disqus Comment System for Joomla!" Plugin (v2.2) starts here -->
+
+		<script type="text/javascript" src="http://linuxconfig.org/plugins/content/jw_disqus/includes/js/behaviour.js"></script>
+		<script type="text/javascript">
+			//<![CDATA[
+			var disqusSubDomain = 'linuxconfig';
+			var disqus_iframe_css = "http://linuxconfig.org/plugins/content/jw_disqus/tmpl/css/disqus.css";
+			//]]>
+		</script>
+		<style type="text/css" media="all">
+			@import "http://linuxconfig.org/plugins/content/jw_disqus/tmpl/css/template.css";
+		</style>
+		
+<!-- JoomlaWorks "Disqus Comment System for Joomla!" Plugin (v2.2) ends here -->
+
+	<link rel="stylesheet" href="/templates/beez/css/template.css" type="text/css" />
+	<link rel="stylesheet" href="/templates/beez/css/position.css" type="text/css" media="screen,projection" />
+	<link rel="stylesheet" href="/templates/beez/css/layout.css" type="text/css" media="screen,projection" />
+	<link rel="stylesheet" href="/templates/beez/css/print.css" type="text/css" media="Print" />
+	<link rel="stylesheet" href="/templates/beez/css/general.css" type="text/css" />
+		<!--[if lte IE 6]>
+		<link href="/templates/beez/css/ieonly.css" rel="stylesheet" type="text/css" />
+	<![endif]-->
+	<!--[if IE 7]>
+		<link href="/templates/beez/css/ie7only.css" rel="stylesheet" type="text/css" />
+	<![endif]-->
+	<script type="text/javascript" src="/templates/beez/javascript/md_stylechanger.js"></script>
+
+
+<link rel="stylesheet" href="/templates/beez/rssbox/rssdisplaybox.css" />
+<script type="text/javascript" src="/templates/beez/rssbox/virtualpaginate.js"></script>
+
+<script type="text/javascript" src="/templates/beez/rssbox/rssdisplaybox.js"></script>
+
+
+<meta name="google-site-verification" content="qK_FajPvlfEnqgVJeNFeu-EtmfeOTRAnlstj1x05qOk" />
+<meta http-equiv="Content-Language" content="en" /></head>
+<body>
+	<div id="all">
+		<div id="header">
+			<h1 id="logo">
+				<a href=http://linuxconfig.org><img src="http://linuxconfig.org/images/logo.png" border="0" alt="Linux Tutorials"  /></a>
+				<span class="header1">helping Linux users to harness the power of Linux ...</span>
+			</h1>
+
+			<ul>
+				<li><a href="#content" class="u2">Skip to Content</a></li>
+				<li><a href="#mainmenu" class="u2">Jump to Main Navigation and Login</a></li>
+				<li><a href="#additional" class="u2">Jump to additional Information</a></li>
+			</ul>
+
+			<h2 class="unseen">
+				Search, View and Navigation			</h2>
+
+			<div id="fontsize">
+<script type="text/javascript"><!--
+google_ad_client = "pub-4906753266448300";
+/* 728x90, created 3/12/09 */
+google_ad_slot = "7045095412";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+			</div>
+
+			<ul id="mainlevel-nav"><li><a href="http://www.linuxconfig.org" class="mainlevel-nav" >Home</a></li><li><a href="/donors" class="mainlevel-nav" >Donate</a></li><li><a href="/free-ebook-linux" class="mainlevel-nav" >Free eBooks</a></li><li><a href="/Linux-administration-notes-code-snippets/" class="mainlevel-nav" >Linux Notes</a></li><li><a href="http://linuxconfig.org/linux-certification/LPI-101-Linux-certification-1" class="mainlevel-nav" >LPI Certification</a></li><li><a href="/linux-commands" class="mainlevel-nav" >Linux Commands</a></li><li><a href="/Contact-us/Contact-Us" class="mainlevel-nav" >Contact</a></li><li><a href="/about" class="mainlevel-nav" >About</a></li><li><a href="/Linuxconfig.org-Linux-Questions-and-Answers/" class="mainlevel-nav" >Q &amp; A</a></li></ul>
+			
+
+			<div id="breadcrumbs"><center><script type="text/javascript"><!--
+google_ad_client = "pub-4906753266448300";
+/* 728x15, created 5/12/10 */
+google_ad_slot = "0825372747";
+google_ad_width = 728;
+google_ad_height = 15;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></center>
+				<p>
+
+				
+
+					
+
+				</p>
+			</div>
+
+			<div class="wrap">&nbsp;</div>
+		</div><!-- end header -->
+
+		<div id="contentarea2">
+			<a name="mainmenu"></a>
+			<div id="left">
+
+
+<center>
+<a href="http://forum.linuxcareer.com"><img src="http://linuxconfig.org/images/forum-new.jpg" border="0" /></a><hr>
+<!-- Place this tag in your head or just before your close body tag -->
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+
+<!-- Place this tag where you want the +1 button to render -->
+<g:plusone></g:plusone><hr></center>
+<form style="border:1px solid #ccc;padding:3px;text-align:center;" 
+action="http://feedburner.google.com/fb/a/mailverify" 
+method="post" target="popupwindow" 
+onsubmit="window.open('http://feedburner.google.com/fb/a/mailverify?uri=Linuxcareercom-ItCareerResources', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true">
+<b>RSS Subscription</b><br><font size=1 color=gray>Linux Howtos & Tutorials</font><br><p>Enter your email:</p><p><input type="text" style="width:140px" name="email"/></p>
+<input type="hidden" value="Linuxcareercom-ItCareerResources" name="uri"/>
+<input type="hidden" name="loc" value="en_US"/><input type="submit" value="Subscribe" />
+
+<a href="http://feeds.feedburner.com/Linuxcareercom-ItCareerResources"><img src="http://how-to.linuxcareer.com/images/career-resources/rss_smaller.jpg" border="0" /></a>
+<center>Delivered by<br /> <img src="http://how-to.linuxcareer.com/images/career-resources/feedburner.gif" border="0" /><br><br><font size=1 color=gray>NOTE:New tutorials are from LinuxCareer.com</font></center></form>
+						<div class="moduletable">
+							<h3>Latest Linux Jobs</h3>
+						<!-- slick rss http://joomla.daveslist.co.nz -->
+<div class="slick-rss-container" style="direction: ltr; text-align: left">
+<div><a href="https://jobs.linuxcareer.com" target="_blank">LinuxCareer.com</a></div><ul class="slick-rss-list" style="margin-left:0px;padding-left:0px;">
+
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50092/" title="Software Engineer (Embedded Unix/Linux):: California, California&lt;br/&gt;Juniper Networks&lt;br/&gt;&lt;p&gt;Juniper Networks is in the business of network innovation. From devices to data centers, from consumers to cloud providers, Juniper Networks delivers the..." class="slickTip" target="_blank" rel="nofollow">Software Engineer (Embedded Unix/Linux)</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50093/" title="IDI ICR Linux Software Engineer:: Kokomo, IN&lt;br/&gt;DELPHI&lt;br/&gt;&lt;p&gt;-General Linux Architecture and consultation with product development teams&lt;/p&gt;&lt;p&gt;-Establish/maintain Linux System Build&lt;/p&gt;&lt;p&gt;-Develop Open Source SW Development Process&lt;/p&gt;&lt;p&gt;-Recommend appropriate software tools for Linux based development&lt;/p&gt;&lt;p&gt;-Configuration..." class="slickTip" target="_blank" rel="nofollow">IDI ICR Linux Software Engineer</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50091/" title="Embedded Software/Firmware Eng:: Fargo, ND&lt;br/&gt;Belcan&lt;br/&gt;Immediate Direct Hire Opening for a Embedded Software/Firmware Engineer (Windows CE, Linux) in Fargo, ND.&lt;br&gt; &lt;br&gt; Will be responsible for analysis, design, development, debugging..." class="slickTip" target="_blank" rel="nofollow">Embedded Software/Firmware Eng</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50094/" title="Cyber Linux Systems Administrator 3:: Pensacola, Florida&lt;br/&gt;Northrop Grumman&lt;br/&gt;Northrop Grumman Information Systems is seeking a Linux Systems Administrator for 7x24 classified operations including: designing, installing, configuring, securing, and maintaining operating systems..." class="slickTip" target="_blank" rel="nofollow">Cyber Linux Systems Administrator 3</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50087/" title="Unix/Linux Administrator:: Dulles, VA&lt;br/&gt;Harris&lt;br/&gt;&lt;ul 0in type=disc&gt;&lt;li 0in 0in 10pt; mso-list: l2 level1 lfo4&gt;&lt;span 115%; FONT-FAMILY: &#039;Verdana&#039;,&#039;sans-serif&#039;; FONT-SIZE: 12pt&gt;Plans, tests, installs, and integrates new and upgraded versions of..." class="slickTip" target="_blank" rel="nofollow">Unix/Linux Administrator</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50083/" title="Sr C++/UNIX Software Engineer:: Stamford, Connecticut&lt;br/&gt;Hamilton Technical Personnel, Inc.​&lt;br/&gt;A leading quantitative trading company is seeking a very strong C++/Unix software engineer with very strong analytical skills for trading system..." class="slickTip" target="_blank" rel="nofollow">Sr C++/UNIX Software Engineer</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50088/" title="Senior Embedded Linux Software Engineer:: Boulder, CO&lt;br/&gt;Yoh&lt;br/&gt;&lt;p&gt;Yoh has a contract opportunity for a &lt;strong&gt;Senior Embedded Linux Software Engineer &lt;/strong&gt;to join our client in Boulder, CO. &lt;/p&gt;&lt;br&gt;&lt;p&gt;&lt;strong&gt;&lt;b&gt;Job Responsibilities:&lt;/b&gt; &lt;/strong&gt;&lt;/p&gt;&lt;br&gt;&lt;ul&gt;&lt;br&gt;- Design and..." class="slickTip" target="_blank" rel="nofollow">Senior Embedded Linux Software Engineer</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50090/" title="Sr. Program Manager ( Linux ):: Hillsboro, OR&lt;br/&gt;Mavensoft&lt;br/&gt;Mavensoft is seeking Applications for� 3 months w/option to extend Sr. Program Manager ( Linux ) contract position with our client in Hillsboro, OR..." class="slickTip" target="_blank" rel="nofollow">Sr. Program Manager ( Linux )</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50086/" title="Entry Level Linux Administrator:: Orangeburg, NY&lt;br/&gt;Verizon&lt;br/&gt;This is an entry level Linux administrator position.   There is a high preference for a recent college graduate with a passion for..." class="slickTip" target="_blank" rel="nofollow">Entry Level Linux Administrator</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50089/" title="Linux Lead Specialist:: Atlanta, GA&lt;br/&gt;CCSI, Inc&lt;br/&gt;Minimum 6 years experience with Rhel 5.x Linux in building, troubleshooting, performance tuning, security hardening, iptables, multipathing - on both physical and virtual..." class="slickTip" target="_blank" rel="nofollow">Linux Lead Specialist</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50084/" title="Perl/Linux Developer:: Stamford, Connecticut&lt;br/&gt;Hamilton Technical Personnel, Inc.​&lt;br/&gt;&lt;p 0.3in; margin-top: 0pt; margin-bottom: 0pt;&gt;&lt;span&gt;Our client, a small, highly successful financial trading firm, is    seeking an expert-level..." class="slickTip" target="_blank" rel="nofollow">Perl/Linux Developer</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50085/" title="Linux System Administrator:: Chicago, Illinois&lt;br/&gt;Hamilton Technical Personnel, Inc.​&lt;br/&gt;&lt;p 0.3in; margin-bottom: 0pt;&gt;&lt;span Arial;&gt;Our client, a &lt;b&gt;stable    and highly successful technology-driven company&lt;/b&gt;, has a permanent  ..." class="slickTip" target="_blank" rel="nofollow">Linux System Administrator</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50077/" title="Database Administrator:: Amsterdam, Outside US&lt;br/&gt;Booking.com&lt;br/&gt;&lt;p&gt;Booking.com�is looking for MySQL Database Administrators! &lt;br /&gt; &lt;br /&gt; In  this position you will be responsible for managing and providing  support for..." class="slickTip" target="_blank" rel="nofollow">Database Administrator</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50076/" title="Unix Administrators (Amsterdam, UK, Canada):: Amsterdam, Outside US&lt;br/&gt;Booking.com&lt;br/&gt;&lt;p&gt;&lt;strong&gt;Looking for an international challenge? Join our global teams!&lt;/strong&gt;&lt;/p&gt; &lt;p&gt;Booking.com is looking for: Unix System Administrator Team Lead in Vancouver,  Unix System Administrators..." class="slickTip" target="_blank" rel="nofollow">Unix Administrators (Amsterdam, UK, Canada)</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50078/" title="Software Developer - Good in Perl or willing to Learn?:: Amsterdam, Outside US&lt;br/&gt;Booking.com&lt;br/&gt;&lt;p&gt;Good in Perl or willing to learn?&lt;/p&gt; &lt;p&gt;At Booking.com we believe that a good developer is a good developer  no matter what technology..." class="slickTip" target="_blank" rel="nofollow">Software Developer - Good in Perl or willing to Learn?</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50070/" title="LAMP Developer - 30 - 50k:: Hampshire, &lt;br/&gt;Connections Recruitment Ltd&lt;br/&gt;LAMP Developer - Hampshire - £30 - £50k - Linux / Apache / Mysql / PHP / Developer   An experienced..." class="slickTip" target="_blank" rel="nofollow">LAMP Developer - 30 - 50k</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50072/" title="Summer Intern - Linux:: TIMONIUM, MD&lt;br/&gt;ups&lt;br/&gt;&lt;p&gt;&lt;span medium;&gt;&lt;strong&gt;ummer Intern -�Linux&lt;/strong&gt;&lt;/span&gt;&lt;br&gt;&lt;br&gt;Are you looking to launch your Information Technology career? If so, then &lt;strong&gt;UPS is the place for you!&lt;/strong&gt;&lt;br&gt;&lt;br&gt;Once known as a..." class="slickTip" target="_blank" rel="nofollow">Summer Intern - Linux</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50071/" title="Senior-MySQL DBA:: Atlanta, GA&lt;br/&gt;corp-corp.com&lt;br/&gt;Mysql JD:-  &lt;br&gt; &lt;br&gt;Key Responsibilities:   &lt;br&gt;Develop and support MySQL database replication  &lt;br&gt;Mysql V 5.x , 6.x version install on linux/sun..." class="slickTip" target="_blank" rel="nofollow">Senior-MySQL DBA</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50073/" title="Sr. Linux Systems Administrator - Cyber Systems CJ:: Annapolis Junction, Maryland&lt;br/&gt;Northrop Grumman&lt;br/&gt;&lt;p&gt;Requisition&lt;/p&gt; &lt;div&gt;Provide administration support for a software development project; responsible for ensuring availability and optimization of the development environment as well as configuration..." class="slickTip" target="_blank" rel="nofollow">Sr. Linux Systems Administrator - Cyber Systems CJ</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="https://jobs.linuxcareer.com/display-job/50069/" title="Linux Support Engineer:: London, &lt;br/&gt;Connections Recruitment Ltd&lt;br/&gt;We can offer you, the Linux Support Engineer, the ability to grow and develop into a company that offer a clear defined..." class="slickTip" target="_blank" rel="nofollow">Linux Support Engineer</a><div class="slick-rss-item-desc"></div></li></ul>
+</div>
+<!-- /slick-rss -->		</div>
+			<div class="moduletable">
+							<h3>Poll</h3>
+						
+<form action="http://linuxconfig.org/" method="post" name="form2">
+<table width="95%" border="0" cellspacing="0" cellpadding="1" align="center" class="apoll">
+<thead>
+	<tr>
+		<td style="font-weight: bold;">
+			Do you own or wish to have iPhone?		</td>
+	</tr>
+</thead>
+	<tr>
+		<td>
+		
+				
+			<table class="apollstableborder" cellspacing="0" cellpadding="0" border="0" width="100%">
+							<tr>
+					<td class="sectiontableentry2" valign="top">
+						<input style="float:left;" type="radio" name="voteid" id="voteid73" value="73" alt="73" />
+						
+						<label for="voteid73">
+							Yes, I own iPhone.						</label>
+					</td>
+				</tr>
+											<tr>
+					<td class="sectiontableentry1" valign="top">
+						<input style="float:left;" type="radio" name="voteid" id="voteid74" value="74" alt="74" />
+						
+						<label for="voteid74">
+							No, I do not own iPhone. It&#039;s not a Linux.						</label>
+					</td>
+				</tr>
+											<tr>
+					<td class="sectiontableentry2" valign="top">
+						<input style="float:left;" type="radio" name="voteid" id="voteid75" value="75" alt="75" />
+						
+						<label for="voteid75">
+							No, I prefer MeeGo device.						</label>
+					</td>
+				</tr>
+											<tr>
+					<td class="sectiontableentry1" valign="top">
+						<input style="float:left;" type="radio" name="voteid" id="voteid76" value="76" alt="76" />
+						
+						<label for="voteid76">
+							No, I prefer Android device.						</label>
+					</td>
+				</tr>
+											<tr>
+					<td class="sectiontableentry2" valign="top">
+						<input style="float:left;" type="radio" name="voteid" id="voteid77" value="77" alt="77" />
+						
+						<label for="voteid77">
+							No, I hate everything which starts with &quot;i&quot;.						</label>
+					</td>
+				</tr>
+											<tr>
+					<td class="sectiontableentry1" valign="top">
+						<input style="float:left;" type="radio" name="voteid" id="voteid78" value="78" alt="78" />
+						
+						<label for="voteid78">
+							Yes, I must have all i* devices.						</label>
+					</td>
+				</tr>
+										</table>
+
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<div align="center">
+							<input type="submit" name="task_button" class="button" value="Vote" />
+				
+				&nbsp;
+				<input type="button" name="option" class="button" value="Results" onclick="document.location.href='/component/option,com_apoll/id,20/task,view/view,apoll/'" />
+			</div>
+		</td>
+	</tr>
+</table>
+		
+		
+
+
+	<input type="hidden" name="option" value="com_apoll" />
+	<input type="hidden" name="task" value="vote" />
+	<input type="hidden" name="id" value="20" />
+	<input type="hidden" name="55170fece3c16d01c752429dbea825e3" value="1" /></form>		</div>
+			<div class="moduletable">
+							<h3>Recently added ....</h3>
+						
+<ul class="latestnews">
+		<li class="latestnews">
+		<a href="/this-is-a-last-post-on-linuxconfigorg" class="latestnews">
+			This is a last post on LinuxConfig.org !</a>
+	</li>
+		<li class="latestnews">
+		<a href="/a-beginners-howto-to-compiling-from-source-on-linux-systems" class="latestnews">
+			A beginners howto to compiling from source on Linux systems</a>
+	</li>
+	</ul>
+		</div>
+			<div class="moduletable">
+						<div class="bannergroup">
+
+<div class="banneritem"><a href=http://twitter.com/linuxconfig rel=nofollow><img src=http://linuxconfig.org/images/banners/twitter.gif></a> 
+<hr><script type="text/javascript"><!--
+google_ad_client = "pub-4906753266448300";
+/* 160x600, created 1/8/11 android2android */
+google_ad_slot = "2330264694";
+google_ad_width = 160;
+google_ad_height = 600;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4906753266448300";
+/* 160x90, created 1/14/11 */
+google_ad_slot = "7057716910";
+google_ad_width = 160;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+<hr>
+<center>
+<a href="http://www.linuxconfig.org/free-ebook-linux" ><font size=3><b>Linux eBooks FREE Download</b></font></a> 
+ 
+<a href="http://linuxconfig-org.tradepub.com/c/pubRD.mpl?sr=oc&_t=oc:&pc=w_pete01#linux-offers" rel=nofollow ><img src=http://linuxconfig.org/images/banners/tradepub-kernel.png></a><br> 
+<a href="http://linuxconfig-org.tradepub.com/c/pubRD.mpl?sr=oc&_t=oc:&pc=w_pete01#linux-offers" rel=nofollow ><font size=2>A guide to programming Linux kernel modules</font></a> 
+ 
+<a href=http://linuxconfig-org.tradepub.com/free/w_mach01/?p=w_mach01#linux-offers rel=nofollow ><img src=http://linuxconfig.org/images/banners/intro-to-linux.png></a><br> 
+<a href=http://linuxconfig-org.tradepub.com/free/w_mach01/?p=w_mach01#linux-offers rel=nofollow ><font size=2>Introduction to Linux - A Hands on Guide</font></a> 
+
+<a href=http://linuxconfig-org.tradepub.com/free/w_make07/?p=w_make07#linux-offers rel=nofollow ><img src=http://linuxconfig.org/images/banners/tradepub-newbie.png>
+
+</a><br> 
+<a href=http://linuxconfig-org.tradepub.com/free/w_make07/?p=w_make07#linux-offers rel=nofollow ><font size=2>A Newbie's Getting Started Guide to Linux</font></a> 
+<hr> 
+<a href=http://linuxconfig-org.tradepub.com/free/w_linu01/?p=w_linu01#linux-offers rel=nofollow ><img src=http://linuxconfig.org/images/banners/w_linu01c.gif></a><br> 
+<a href=http://linuxconfig-org.tradepub.com/free/w_linu01/?p=w_linu01#linux-offers rel=nofollow ><font size=2>Linux from Scratch - Create Your Own Linux System - Free eBook</font></a> 
+<hr> 
+<a href=http://linuxconfig-org.tradepub.com/free/w_opeb01/prgm.cgi#linux-offers rel=nofollow ><img src=http://linuxconfig.org/images/banners/tradepub-hacking.png></a><br> 
+<a href=http://linuxconfig-org.tradepub.com/free/w_opeb01/prgm.cgi#linux-offers rel=nofollow ><font size=2>Linux: The Hacking Solution (v.3.0)</font></a> 
+<hr> 
+
+
+<a href=http://linuxconfig-org.tradepub.com/free/w_lynd08/?p=w_lynd08#linux-offers rel=nofollow ><img src=http://linuxconfig.org/images/banners/tradepub-sqlitephp.png></a><br> 
+<a href=http://linuxconfig-org.tradepub.com/free/w_lynd08/?p=w_lynd08#linux-offers rel=nofollow ><font size=2>SQLite 3 with PHP Essential Training – Free Video Training Tutorials</font></a> 
+<hr> 
+
+
+
+<a href=http://linuxconfig-org.tradepub.com/free/w_freb01/?p=w_freb01#linux-offers rel=nofollow ><img src=http://linuxconfig.org/images/banners/gnu-linux-basics.png></a><br> 
+<a href=http://linuxconfig-org.tradepub.com/free/w_freb01/?p=w_freb01#linux-offers rel=nofollow ><font size=2>This guide will introduce you to the world of GNU/Linux</font></a> 
+<hr>
+
+
+
+
+<a href=http://linuxconfig-org.tradepub.com/free/w_free01/?p=w_free01#linux-offers rel=nofollow ><img src=http://linuxconfig.org/images/banners/advanced-admin.png></a><br> 
+<a href=http://linuxconfig-org.tradepub.com/free/w_free01/?p=w_free01#linux-offers rel=nofollow ><font size=2>The GNU/Linux Advanced Administration</font></a> 
+<hr> 
+<a href=http://linuxconfig-org.tradepub.com/free/w_ubun01#linux-offers rel=nofollow ><img src=http://linuxconfig.org/images/banners/ubuntu_man.gif></a><br> 
+<a href=http://linuxconfig-org.tradepub.com/free/w_ubun01#linux-offers rel=nofollow ><font size=2>A Complete Beginner's Manual for Ubuntu 10.04 (Lucid Lynx)</font></a> 
+<hr> 
+<a href=http://linuxconfig-org.tradepub.com/free/w_advb01/?p=w_advb01#linux-offers rel=nofollow ><img src=http://linuxconfig.org/images/banners/bash.png></a><br> 
+<a href=http://linuxconfig-org.tradepub.com/free/w_advb01/?p=w_advb01#linux-offers rel=nofollow ><font size=2>Advanced Bash-Scripting Guide</font></a> 
+<hr> 
+
+
+<a href=http://linuxconfig-org.tradepub.com/free/w_pack06/#linux-offers rel=nofollow ><img src=http://linuxconfig.org/images/banners/tradepub-linux-email.png></a><br> 
+<a href=http://linuxconfig-org.tradepub.com/free/w_pack06/#linux-offers rel=nofollow ><font size=2>Set up, maintain, and secure a small office email server</font></a> 
+<hr> 
+
+
+
+<a href=http://www.linuxconfig.org/donors><img src=http://www.linuxconfig.org/images/M_images/btn_donateCC_LG.gif></a></center>
+<hr> 
+<b>Partner Linux Sites:</b> 
+				<!--<li id="nPlace your link here!"><a href="mailto:web@REMOVETHISlinuxconfig.org?subject=Linuxconfig.org partner website - Link exchange&body=Hi there, I have a great web site: YOUR URL . Let's exchange links."><font color=red> Place your link here!</font></a></li>--> 
+<br><a href="http://how-to.linuxcareer.com" target=_blank >How-To.LinuxCareer.com</a><br>                                 
+				<a href="http://jobs.linuxcareer.com" target=_blank >Jobs.LinuxCareer.com</a><br>
+                                <a href="http://www.tuxmachines.org" target=_blank > TuxMachines</a><br> 
+				<!--<a href="http://www.debianadmin.com/" target=_blank> DebianAdmin</a><br>--> 
+				<a href="http://www.monsterb.org/" target=_blank> Monsterb</a><br> 
+				<a href=http://linuxbloggers.org/ target=_blank> LinuxBloggers</a><br> 
+				<a href=http://www.adamsinfo.com/ target=_blank> AdamsInfo</a><br> 
+				<a href=http://www.linuxscrew.com/ target=_blank> LinuxScrew</a><br> 
+				<!--<a href=http://freesoftwarelinux.com/ target=_blank rel="nofollow"> FreeSoftwareLinux</a><br>--> 
+				<!--<a href=http://jamsubuntu.blogspot.com/ target=_blank> Jam's Ubuntu Blog</a><br>//--> 
+				<a href=http://allforlinux.com/ target=_blank> All For Linux </a>
+<script type="text/javascript"><!--
+google_ad_client = "pub-4906753266448300";
+/* 160x90, created 1/14/11 */
+google_ad_slot = "7057716910";
+google_ad_width = 160;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+<hr><div class="clr"></div>
+	</div>
+
+</div>		</div>
+			<div class="moduletable">
+						<!-- slick rss http://joomla.daveslist.co.nz -->
+<div class="slick-rss-container" style="direction: ltr; text-align: left">
+<div><a href="http://jobs.linuxcareer.com" target="_blank">LinuxCareer.com - Linux Howto's &amp; Tutorials</a></div><ul class="slick-rss-list" style="margin-left:0px;padding-left:0px;">
+
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/c-development-on-linux-basic-io-viii" title="C development on Linux - Basic I/O - VIII.:: With this part of our C development on Linux article we are getting ready to get out of the theoretical zone and enter the real..." class="slickTip" target="_blank" >C development on Linux - Basic I/O - VIII.</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/learning-linux-commands-join" title="Learning Linux Commands: join:: Join command is yet another example of text processing utility under GNU/Linux. Join command combines two files based on the matching content lines found in..." class="slickTip" target="_blank" >Learning Linux Commands: join</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/linux-command-line-basics-for-beginners-part-3" title="Linux command line basics for beginners: Part 3:: Here&#039;s another installment of the Linux CLI basics series. This time we will deal with other interest-worthy tasks, like setting up your keyboard layout or..." class="slickTip" target="_blank" >Linux command line basics for beginners: Part 3</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/linux-command-line-basics-for-beginners-part-2" title="Linux command line basics for beginners: Part 2:: Hello, and welcome to part two of our Linux command line series. You will learn some more interesting tips that you can use to master..." class="slickTip" target="_blank" >Linux command line basics for beginners: Part 2</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/ubuntu-command-line-basics-for-beginners-part-1" title="Ubuntu command line basics for beginners: Part 1:: You may consider this article as somewhat of a &quot;part two&quot; of the article I wrote a few days ago. It&#039;s all about going step-by-step..." class="slickTip" target="_blank" >Ubuntu command line basics for beginners: Part 1</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/learning-linux-commands-ls" title="Learning Linux Commands: ls:: If you ever tried to work with Linux command line, ls command was surely one of the first commands you have executed. In fact, ls..." class="slickTip" target="_blank" >Learning Linux Commands: ls</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/c-development-on-linux-structures-vii" title="C development on Linux - Structures - VII.:: We will continue in this part of our tutorial with the complex data types in C, and we will talk about structures. Many modern programming..." class="slickTip" target="_blank" >C development on Linux - Structures - VII.</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/how-to-setup-a-basic-firewall-in-ubuntu-linux" title="How to setup a basic firewall in Ubuntu Linux:: The first question you will ask yourself (probably) is &quot;why on earth would I need a firewall? Linux is secure, right?&quot; Right, and I know..." class="slickTip" target="_blank" >How to setup a basic firewall in Ubuntu Linux</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/command-line-programs-for-everyday-use-in-linux" title="Command-line programs for everyday use in Linux:: I must admit, I&#039;m a command line geek. Whenever I have the chance, regardless of desktop environment or distribution, I open a terminal and start..." class="slickTip" target="_blank" >Command-line programs for everyday use in Linux</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/using-devede-to-create-dvds-on-linux" title="Using DeVeDe to create DVDs on Linux:: Your daughter&#039;s birthday was beautiful and you have lots of videos and pictures from the event that have to be organized in a nice-looking way...." class="slickTip" target="_blank" >Using DeVeDe to create DVDs on Linux</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/customize-your-cinnamon-desktop-with-javascript" title="Customize your Cinnamon desktop with Javascript:: We&#039;ve seen, in the last years at least, a big rise of the Web in everything we do and everywhere we do it. Now, lots..." class="slickTip" target="_blank" >Customize your Cinnamon desktop with Javascript</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/learning-linux-commands-top" title="Learning Linux Commands: top:: System monitoring is an important aspect of any more-or-less advanced Linux user, because there comes a time when you want to know what is taking..." class="slickTip" target="_blank" >Learning Linux Commands: top</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/linux-desktop-new-goodies-razor-qt-and-cinnamon" title="Linux Desktop new goodies: Razor-Qt and Cinnamon:: While there&#039;s no doubt that the leaders in the Linux desktop contest are GNOME and KDE, that does not mean they are catered for everyone...." class="slickTip" target="_blank" >Linux Desktop new goodies: Razor-Qt and Cinnamon</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/it-helpdesk-sysaid-installation-on-linux-system" title="SysAid - IT helpdesk installation on Linux system:: This article describes an installation of SysAid software on a Linux system using tomcat and Apache. SysAid is a commercial web-based help desk software and..." class="slickTip" target="_blank" >SysAid - IT helpdesk installation on Linux system</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/learning-linux-commands-cut" title="Learning Linux Commands: cut:: If you think that you can do Linux System administration without cut command, then you are absolutely right. However, mastering this fairly simple command line..." class="slickTip" target="_blank" >Learning Linux Commands: cut</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/c-development-on-linux-pointers-and-arrays-vi" title="C development on Linux - Pointers and Arrays - VI.:: We have come to a crucial point in our series of articles regarding C development. It&#039;s also, not coincidentally, that part of C that gives..." class="slickTip" target="_blank" >C development on Linux - Pointers and Arrays - VI.</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/remote-gui-administration-over-ssh" title="Remote GUI administration over SSH:: If you&#039;ve ever been in charge of a network you&#039;ve definitely had the need for a secure remote connection. Maybe you just need to keep..." class="slickTip" target="_blank" >Remote GUI administration over SSH</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/c-development-on-linux-functions-v" title="C development on Linux - Functions - V.:: The C standard library offers a plethora of functions for many usual tasks. Also there are lots of libraries for extra functionality, like GUI design..." class="slickTip" target="_blank" >C development on Linux - Functions - V.</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/dual-boot-ubuntu-and-windows-7" title="Dual boot Ubuntu and Windows 7:: You need Windows for a program you use for work, your favorite game runs only on Windows or you are a developer that works on..." class="slickTip" target="_blank" >Dual boot Ubuntu and Windows 7</a><div class="slick-rss-item-desc"></div></li>
+        <li class="slick-rss-item">
+        <a href="http://how-to.linuxcareer.com/automating-linux-installations-with-kickstart" title="Automating Linux installations with Kickstart:: Red Hat, and their community effort, Fedora, are more or less enterprise-oriented. That being said, it&#039;s only natural they offer enterprise-specific tools that don&#039;t quite..." class="slickTip" target="_blank" >Automating Linux installations with Kickstart</a><div class="slick-rss-item-desc"></div></li></ul>
+</div>
+<!-- /slick-rss -->		</div>
+			<div class="moduletable">
+						
+
+
+
+
+
+
+<div class="search" style="background-color: transparent;  ">
+<form method="get" action="http://www.google.com.au/custom" target="google_window">
+<input name="q" id="mod" maxlength="20" alt="search"
+	class="inputbox"
+	type="text"
+	size="15" value="search..."  onblur="if(this.value=='') this.value='search...';" onfocus="if(this.value=='search...') this.value='';"  /><input type="hidden" name="sa" value="Search"></input>
+<div><input type="radio"  name="sitesearch" value="" />Web<br /><input type="radio"  name="sitesearch" value="http://www.linuxconfig.org/" checked="checked" />linuxconfig.org<br /></div><input type="hidden" name="channel" value="linux"></input>
+<input type="hidden" name="client" value="pub-4906753266448300"></input>
+<input type="hidden" name="forid" value="1"></input>
+<input type="hidden" name="ie" value="UTF-8"></input>
+<input type="hidden" name="oe" value="UTF-8"></input>
+<input type="hidden" name="safe" value="active"></input>
+<input type="hidden" name="cof" value="GALT:#228aaf;GL:1;DIV:#FFFFFF;VLC:228aaf;AH:center;BGC:FFFFFF;LBGC:FFFFFF;ALC:228aaf;LC:228aaf;T:000000;GFNT:228aaf;GIMP:228aaf;LH:50;LW:286;L:http://;S:http://;LP:1;FORID:1;"></input>
+<input type="hidden" name="hl" value="en"></input>
+</form>
+</div>
+		</div>
+			<div class="moduletable">
+							<h3>Popular Linux Tutorials</h3>
+						<ul class="mostread">
+	<li class="mostread">
+		<a href="/Bash_scripting_Tutorial" class="mostread">
+			Bash scripting Tutorial</a>
+	</li>
+	<li class="mostread">
+		<a href="/linux-commands" class="mostread">
+			Linux Commands</a>
+	</li>
+	<li class="mostread">
+		<a href="/How_to_mount_partition_with_ntfs_file_system_and_read_write_access" class="mostread">
+			How to mount partition with ntfs file system and read write access</a>
+	</li>
+	<li class="mostread">
+		<a href="/Howto_mount_USB_drive_in_Linux" class="mostread">
+			Howto mount USB drive in Linux</a>
+	</li>
+	<li class="mostread">
+		<a href="/HowTo_configure_NFS" class="mostread">
+			HowTo configure NFS</a>
+	</li>
+	<li class="mostread">
+		<a href="/Linux_lvm_-_Logical_Volume_Manager" class="mostread">
+			Linux lvm - Logical Volume Manager</a>
+	</li>
+	<li class="mostread">
+		<a href="/Vim_Tutorial" class="mostread">
+			Vim Tutorial</a>
+	</li>
+	<li class="mostread">
+		<a href="/how-to-crack-a-wireless-wep-key-using-air-crack" class="mostread">
+			How to crack a wireless WEP key using AIR Crack</a>
+	</li>
+	<li class="mostread">
+		<a href="/Linux_Software_Raid_1_Setup" class="mostread">
+			Linux Software Raid 1 Setup</a>
+	</li>
+	<li class="mostread">
+		<a href="/HowTo_mount_cdrom_in_linux" class="mostread">
+			HowTo mount cdrom in linux</a>
+	</li>
+	<li class="mostread">
+		<a href="/linux-wd-ears-advanced-format" class="mostread">
+			Linux WD EARS Advanced Hard Drive Format</a>
+	</li>
+	<li class="mostread">
+		<a href="/perl-programming-tutorial" class="mostread">
+			Perl Programming Tutorial</a>
+	</li>
+	<li class="mostread">
+		<a href="/c-understanding-pointers" class="mostread">
+			C++ : Understanding pointers</a>
+	</li>
+	<li class="mostread">
+		<a href="/introduction-to-computer-vision-with-opencv-on-linux" class="mostread">
+			 Introduction to Computer Vision with the OpenCV Library on Linux</a>
+	</li>
+	<li class="mostread">
+		<a href="/linux-dns-server-bind-configuration" class="mostread">
+			Linux DNS server BIND configuration</a>
+	</li>
+	<li class="mostread">
+		<a href="/get-started-with-android-application-development-using-linux-and-android-sdk" class="mostread">
+			Get Started with Android application development using Linux and Android SDK</a>
+	</li>
+	<li class="mostread">
+		<a href="/Filesystem_Basics" class="mostread">
+			Filesystem Basics</a>
+	</li>
+	<li class="mostread">
+		<a href="/apache-web-server-ssl-authentication" class="mostread">
+			APACHE web server and SSL authentication</a>
+	</li>
+	<li class="mostread">
+		<a href="/resize-an-image-with-opencv-cvresize-function" class="mostread">
+			Resize an image with OpenCV cvResize function</a>
+	</li>
+	<li class="mostread">
+		<a href="/linux-add-user-to-group" class="mostread">
+			Linux Add User To Group</a>
+	</li>
+</ul>		</div>
+	
+			</div><!-- left -->
+
+			<a name="content"></a>
+			<div id="wrapper">
+				<p>
+
+					<div class="cpcloud">
+<ul class="cpcloud">
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=1&amp;task=tag" class="cpcloud5">admin</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=28&amp;task=tag" class="cpcloud1">android</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=2&amp;task=tag" class="cpcloud1">apache</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=3&amp;task=tag" class="cpcloud2">bash</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=4&amp;task=tag" class="cpcloud1">C++</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=5&amp;task=tag" class="cpcloud4">commands</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=22&amp;task=tag" class="cpcloud1">database</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=12&amp;task=tag" class="cpcloud1">debian</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=25&amp;task=tag" class="cpcloud1">fedora</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=17&amp;task=tag" class="cpcloud2">filesystem</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=24&amp;task=tag" class="cpcloud1">game</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=21&amp;task=tag" class="cpcloud2">hardware</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=11&amp;task=tag" class="cpcloud1">KDE</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=23&amp;task=tag" class="cpcloud1">LPI</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=19&amp;task=tag" class="cpcloud2">multimedia</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=16&amp;task=tag" class="cpcloud2">network</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=6&amp;task=tag" class="cpcloud1">OpenCV</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=8&amp;task=tag" class="cpcloud1">perl</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=15&amp;task=tag" class="cpcloud2">program</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=27&amp;task=tag" class="cpcloud1">regexp</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=7&amp;task=tag" class="cpcloud1">script</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=20&amp;task=tag" class="cpcloud1">search</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=9&amp;task=tag" class="cpcloud2">security</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=13&amp;task=tag" class="cpcloud1">tutorial</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=14&amp;task=tag" class="cpcloud1">virtualization</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=10&amp;task=tag" class="cpcloud1">vmware</a></li>
+<li><a href="/index.php?option=com_customproperties&amp;lang=en&amp;tagId=18&amp;task=tag" class="cpcloud1">VPN</a></li>
+</ul>
+</div>
+
+
+				</p>
+			<div id="main2">
+				
+				
+<div id="page">
+
+
+
+<h2 class="contentheading">
+		<a href="/Bash_scripting_Tutorial" class="contentpagetitle">
+		Bash scripting Tutorial</a>
+	</h2>
+
+<p class="articleinfo">
+		<span class="modifydate">
+		Last Updated on Wednesday, 02 November 2011 06:35	</span>
+		<span class="creaLUBOSCOMMtedby">
+
+	
+	</p>
+
+
+<p class="buttonheading">
+	</p>
+
+
+
+
+
+        <table cellpadding="0" cellspacing="0" class="contenttoc">
+        <tr>
+<th>Article Index</th>
+        </tr>
+        
+                <tr>
+                    <td>
+                    <a href="#1-hello-world-bash-shell-script" class="toclink">1.&nbsp;Hello World Bash Shell Script</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#2-simple-backup-bash-shell-script" class="toclink">2.&nbsp;Simple Backup bash shell script</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#3-variables" class="toclink">3.&nbsp;Variables</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#3-1-global-vs-local-variables" class="toclink">3.1.&nbsp;Global vs. Local variables</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#4-passing-arguments-to-the-bash-script" class="toclink">4.&nbsp;Passing arguments to the bash script</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#5-executing-shell-commands-with-bash" class="toclink">5.&nbsp;Executing shell commands with bash</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#6-reading-user-input" class="toclink">6.&nbsp;Reading User Input</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#7-bash-trap-command" class="toclink">7.&nbsp;Bash Trap Command</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#8-arrays" class="toclink">8.&nbsp;Arrays</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#8-1-declare-simple-bash-array" class="toclink">8.1.&nbsp;Declare simple bash array</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#8-2-read-file-into-bash-array" class="toclink">8.2.&nbsp;Read file into bash array</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#9-bash-if--else--fi-statements" class="toclink">9.&nbsp;Bash if / else / fi statements</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#9-1-simple-bash-ifelse-statement" class="toclink">9.1.&nbsp;Simple Bash if/else statement</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#9-2-nested-ifelse" class="toclink">9.2.&nbsp;Nested if/else</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#10-bash-comparisons" class="toclink">10.&nbsp;Bash Comparisons</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#10-1-arithmetic-comparisons" class="toclink">10.1.&nbsp;Arithmetic Comparisons</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#10-2-string-comparisons" class="toclink">10.2.&nbsp;String Comparisons</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#11-bash-file-testing" class="toclink">11.&nbsp;Bash File Testing</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#12-loops" class="toclink">12.&nbsp;Loops</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#12-1-bash-for-loop" class="toclink">12.1.&nbsp;Bash for loop</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#12-2-bash-while-loop" class="toclink">12.2.&nbsp;Bash while loop</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#12-3-bash-until-loop" class="toclink">12.3.&nbsp;Bash until loop</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#12-4-control-bash-loop-with" class="toclink">12.4.&nbsp;Control bash loop with</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#13-bash-functions" class="toclink">13.&nbsp;Bash Functions</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#14-bash-select" class="toclink">14.&nbsp;Bash Select</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#15-case-statement-conditional" class="toclink">15.&nbsp;Case statement conditional</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#16-bash-quotes-and-quotations" class="toclink">16.&nbsp;Bash quotes and quotations</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#16-1-escaping-meta-characters" class="toclink">16.1.&nbsp;Escaping Meta characters</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#16-2-single-quotes" class="toclink">16.2.&nbsp;Single quotes</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#16-3-double-quotes" class="toclink">16.3.&nbsp;Double Quotes</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#16-4-bash-quoting-with-ansi-c-style" class="toclink">16.4.&nbsp;Bash quoting with ANSI-C style</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#17-arithmetic-operations" class="toclink">17.&nbsp;Arithmetic Operations</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#17-1-bash-addition-calculator-example" class="toclink">17.1.&nbsp;Bash Addition Calculator Example</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#17-2-bash-arithmetics" class="toclink">17.2.&nbsp;Bash Arithmetics</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#17-3-round-floating-point-number" class="toclink">17.3.&nbsp;Round floating point number</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#17-4-bash-floating-point-calculations" class="toclink">17.4.&nbsp;Bash floating point calculations</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#18-redirections" class="toclink">18.&nbsp;Redirections</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#18-1-stdout-from-bash-script-to-stderr" class="toclink">18.1.&nbsp;STDOUT from bash script to STDERR</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#18-2-stderr-from-bash-script-to-stdout" class="toclink">18.2.&nbsp;STDERR from bash script to STDOUT</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#18-3-stdout-to-screen" class="toclink">18.3.&nbsp;stdout to screen</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#18-4-stdout-to-file" class="toclink">18.4.&nbsp;stdout to file</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#18-5-stderr-to-file" class="toclink">18.5.&nbsp;stderr to file</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#18-6-stdout-to-stderr" class="toclink">18.6.&nbsp;stdout to stderr</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#18-7-stderr-to-stdout" class="toclink">18.7.&nbsp;stderr to stdout</a>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>
+                    <a href="#18-8-stderr-and-stdout-to-file" class="toclink">18.8.&nbsp;stderr and stdout to file</a>
+                    </td>
+                </tr>
+                <tr><td><hr><script type="text/javascript"><!--
+google_ad_client = "pub-4906753266448300";
+/* 336x280, created 12/6/09 */
+google_ad_slot = "4561306299";
+google_ad_width = 336;
+google_ad_height = 280;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></td></tr></table>
+
+
+<!-- JoomlaWorks "Disqus Comment System for Joomla!" Plugin (v2.2) starts here -->
+
+<span id="startOfPage"></span>
+
+
+<table border="0">
+<tbody>
+<tr>
+<td><a href="http://linuxconfig-org.tradepub.com/free/w_mach02#linux-offers" target="_self" title="Bash Beginners Guide PDF Download" rel="nofollow"><img src="/images/banners/bash.png" border="0" alt="Free BASH scripting guide DOWNLOAD" /></a><br /><a href="http://linuxconfig-org.tradepub.com/free/w_mach02#linux-offers" target="_self" title="Bash Scripting Beginners Guide PDF Download" rel="nofollow">&gt;PDF DOWNLOAD&lt;</a> <br /> <a href="http://linuxconfig-org.tradepub.com/free/w_advb01/?p=w_advb01#linux-offers" target="_self" title="Bash Scripting Guide PDF Download" rel="nofollow"><img src="/images/banners/re_tradepub-bash.png" border="0" alt="Free BASH scripting guide DOWNLOAD" /></a><br /> <a href="http://linuxconfig-org.tradepub.com/free/w_advb01/?p=w_advb01#linux-offers" target="_self" title="Bash Advandced Guide PDF Download" rel="nofollow">&gt;PDF DOWNLOAD&lt;</a></td>
+<td style="text-align: center;">This bash script tutorial assumes no previous knowledge of bash scripting.As you will soon discover in this quick comprehensive bash scripting  guide, learning the bash shell scripting is very easy task. However, if you do not find an answer to your questions by reading this bash tutorial or you need extra help, feel free to ask us on our new <a href="http://forum.linuxcareer.com" target="_blank" title="Linux Forum" rel="nofollow">Linux Forum</a>. We will be more than happy to help you with your bash questions there.<br /><br />Lets begin this bash scripting tutorial with a simple "Hello World" script.    Let's start with Learning the bash Shell: Unix Shell Programming<br /><br /><a href="http://linuxconfig-org.tradepub.com/free/w_mach02#linux-offers" target="_self" title="Bash Scripting Beginners Guide PDF Download" rel="nofollow"> Bash Scripting <strong>Beginners</strong> Guide <br /><span style="color: red;">FREE</span> PDF DOWNLOAD </a><br /><br /><br /><a href="http://linuxconfig-org.tradepub.com/free/w_advb01/?p=w_advb01#linux-offers" target="_self" title="Bash Scripting Advanced Guide PDF Download" rel="nofollow"> Bash Scripting <strong>Advanced</strong> Guide <br /><span style="color: red;">FREE</span> PDF DOWNLOAD </a></td>
+</tr>
+</tbody>
+</table>
+<h1 id='1-hello-world-bash-shell-script'>1.&nbsp;Hello World Bash Shell Script</h1>
+<p>
+<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="307" height="119" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0">
+<param name="width" value="307" />
+<param name="height" value="119" />
+<param name="align" value="left" />
+<param name="src" value="/images/flash/bash.swf" /> <embed type="application/x-shockwave-flash" width="307" height="119" src="/images/flash/bash.swf" align="left"></embed>
+</object>
+</p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p> </p>
+<p>First you need to find out where is your bash interpreter located. Enter the following into your command line:</p>
+<p> </p>
+<pre style="width: 400px;">$ which bash
+</pre>
+<p><img src="/images/locate-bash-interpreter.gif" border="0" alt="bash interpreter location: /bin/bash" title="Locate a Bash Interpreter" width="188" height="43" /></p>
+<p>Open up you favorite text editor and a create file called hello_world.sh. Insert the following lines to a file:</p>
+<p>NOTE:Every bash shell script in this tutorial starts with <strong>shebang:"#!"</strong> which is not read as a comment. First line is also a place where you put your interpreter which is in this case: /bin/bash.</p>
+<p>Here is our first bash shell script example:</p>
+<pre style="width: 400px;">#!/bin/bash<br /># declare STRING variable<br />STRING="Hello World"<br />#print variable on a screen<br />echo $STRING<br />
+</pre>
+<p>Navigate to a directory where your hello_world.sh is located and make the file executable:</p>
+<pre style="width: 400px;">$ chmod +x hello_world.sh </pre>
+<p><img src="/images/make-bash-script-executable.gif" border="0" alt="Make bash shell script executable" title="Make bash shell script executable" width="263" height="30" /></p>
+<p>Now you are ready to execute your first bash script:</p>
+<div id="s">
+<pre>./hello_world.sh </pre>
+</div>
+<p><img src="/images/Hellobash.gif" border="0" alt="Example of simple bash shell script" title="Example of simple bash shell script" width="214" height="43" /></p>
+
+<p> </p>
+<h1 id='2-simple-backup-bash-shell-script'>2.&nbsp;Simple Backup bash shell script</h1>
+<div id="s" style="position: absolute; width: 430px; height: 45px; background-color: white;">
+<pre>#!/bin/bash<br />tar -czf myhome_directory.tar.gz /home/linuxconfig<br /></pre>
+</div>
+<p><br /><br /><br /><br /><br /><img src="/images/Bash-Simple-backup-script-example.gif" border="0" alt="Simple Backup bash script" title="Simple Backup bash script" /></p>
+<h1 id='3-variables'>3.&nbsp;Variables</h1>
+<p>In this example we declare simple bash variable and print it on the screen ( stdout ) with echo command.</p>
+<pre>#!/bin/bash<br /> STRING="HELLO WORLD!!!"<br /> echo $STRING </pre>
+<p><img src="/images/Bash-string-Variables-bash-script.gif" border="0" alt="Bash string Variables in bash script" title="Bash string Variables in bash script" width="484" height="43" /></p>
+<p>Your backup script and variables:</p>
+<pre>#!/bin/bash<br /> OF=myhome_directory_$(date +%Y%m%d).tar.gz<br /> tar -czf $OF /home/linuxconfig </pre>
+<p><img src="/images/Bash-backup-Script-bash-variables.gif" border="0" alt="Bash backup Script with bash Variables" title="Bash backup Script with bash Variables" width="484" height="69" /></p>
+<h2 id='3-1-global-vs-local-variables'>3.1.&nbsp;Global vs. Local variables</h2>
+<pre>#!/bin/bash<br />#Define bash global variable<br />#This variable is global and can be used anywhere in this bash script<br />VAR="global variable"<br />function bash {<br />#Define bash local variable<br />#This variable is local to bash function only<br />local VAR="local variable"<br />echo $VAR<br />}<br />echo $VAR<br />bash<br /># Note the bash global variable did not change<br /># "local" is bash reserved word<br />echo $VAR<br /></pre>
+<p><img src="/images/Bash-global-local-bash-variables-bash-script.gif" border="0" alt="Global vs. Local Bash variables in bash script" title="Global vs. Local Bash variables in bash script" width="190" height="69" /></p>
+<h1 id='4-passing-arguments-to-the-bash-script'>4.&nbsp;Passing arguments to the bash script</h1>
+<pre>#!/bin/bash<br /># use predefined variables to access passed arguments<br />#echo arguments to the shell<br />echo $1 $2 $3 ' -&gt; echo $1 $2 $3'<br /><br /># We can also store arguments from bash command line in special array<br />args=("$@")<br />#echo arguments to the shell<br />echo ${args[0]} ${args[1]} ${args[2]} ' -&gt; args=("$@"); echo ${args[0]} ${args[1]} ${args[2]}'<br /><br />#use $@ to print out all arguments at once<br />echo $@ ' -&gt; echo $@'<br /><br /># use $# variable to print out<br /># number of arguments passed to the bash script<br />echo Number of arguments passed: $# ' -&gt; echo Number of arguments passed: $#' </pre>
+<pre>/arguments.sh Bash Scripting Tutorial </pre>
+<p><img src="/images/Passing-arguments-bash-script.gif" border="0" alt="Passing arguments to the bash script" title="Passing arguments to the bash script" width="472" height="82" /></p>
+<h1 id='5-executing-shell-commands-with-bash'>5.&nbsp;Executing shell commands with bash</h1>
+<pre>#!/bin/bash<br /># use backticks " ` ` " to execute shell command<br />echo `uname -o`<br /># executing bash command without backticks<br />echo uname -o </pre>
+<p><img src="/images/Execute-shell-commands-within-bash-script.gif" border="0" alt="Executing shell commands with bash" title="Executing shell commands with bash" width="220" height="82" /></p>
+<h1 id='6-reading-user-input'>6.&nbsp;Reading User Input</h1>
+<pre>#!/bin/bash<br /> <br />echo -e "Hi, please type the word: \c "<br />read  word<br />echo "The word you entered is: $word"<br />echo -e "Can you please enter two words? "<br />read word1 word2<br />echo "Here is your input: \"$word1\" \"$word2\""<br />echo -e "How do you feel about bash scripting? "<br /># read command now stores a reply into the default build-in variable $REPLY<br />read<br />echo "You said $REPLY, I'm glad to hear that! "<br />echo -e "What are your favorite colours ? "<br /># -a makes read command to read into an array<br />read -a colours<br />echo "My favorite colours are also ${colours[0]}, ${colours[1]} and ${colours[2]}:-)" </pre>
+<p><img src="/images/Reading-user-input-bash-script.gif" border="0" alt="Reading User Input with bash" title="Reading User Input with bash" width="322" height="173" /></p>
+<h1 id='7-bash-trap-command'>7.&nbsp;Bash Trap Command</h1>
+<table border="0">
+<tbody>
+<tr>
+<td>
+<pre>#!/bin/bash<br /># bash trap command<br />trap bashtrap INT<br /># bash clear screen command<br />clear;<br /># bash trap function is executed when CTRL-C is pressed:<br /># bash prints message =&gt; Executing bash trap subrutine !<br />bashtrap()<br />{<br />    echo "CTRL+C Detected !...executing bash trap !"<br />}<br /># for loop from 1/10 to 10/10<br />for a in `seq 1 10`; do<br />    echo "$a/10 to Exit." <br />    sleep 1;<br />done<br />echo "Exit Bash Trap Example!!!" </pre>
+</td>
+<td width="300">
+<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="249" height="199" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0">
+<param name="width" value="249" />
+<param name="height" value="199" />
+<param name="src" value="/images/flash/bash_trap.swf" /><embed type="application/x-shockwave-flash" width="249" height="199" src="/images/flash/bash_trap.swf"></embed>
+</object>
+<br /></td>
+</tr>
+</tbody>
+</table>
+<h1 id='8-arrays'>8.&nbsp;Arrays</h1>
+<h2 id='8-1-declare-simple-bash-array'>8.1.&nbsp;Declare simple bash array</h2>
+<pre>#!/bin/bash<br />#Declare array with 4 elements<br />ARRAY=( 'Debian Linux' 'Redhat Linux' Ubuntu Linux )<br /># get number of elements in the array<br />ELEMENTS=${#ARRAY[@]}<br /><br /># echo each element in array <br /># for loop<br />for (( i=0;i&lt;$ELEMENTS;i++)); do<br />    echo ${ARRAY[${i}]}<br />done </pre>
+<p><img src="/images/declare-bash-array.gif" border="0" alt="Declare simple bash array" title="Declare simple bash array" width="154" height="82" /></p>
+<h2 id='8-2-read-file-into-bash-array'>8.2.&nbsp;Read file into bash array</h2>
+<div>
+<pre>#!/bin/bash<br /># Declare array<br />declare -a ARRAY<br /># Link filedescriptor 10 with stdin<br />exec 10&lt;&amp;0<br /># stdin replaced with a file supplied as a first argument<br />exec &lt; $1<br />let count=0<br /><br />while read LINE; do<br /><br />    ARRAY[$count]=$LINE<br />    ((count++))<br />done<br /><br />echo Number of elements: ${#ARRAY[@]}<br /># echo array's content<br />echo ${ARRAY[@]}<br /># restore stdin from filedescriptor 10<br /># and close filedescriptor 10<br />exec 0&lt;&amp;10 10&lt;&amp;-<br /><br /></pre>
+</div>
+<p><strong>Bash script execution with an output:</strong></p>
+<pre>linuxconfig.org $ cat bash.txt <br />Bash<br />Scripting<br />Tutorial<br />Guide<br />linuxconfig.org $ ./bash-script.sh bash.txt <br />Number of elements: 4<br />Bash Scripting Tutorial Guide<br />linuxconfig.org $ <br /></pre>
+<h1 id='9-bash-if--else--fi-statements'>9.&nbsp;Bash if / else / fi statements</h1>
+<h2 id='9-1-simple-bash-ifelse-statement'>9.1.&nbsp;Simple Bash if/else statement</h2>
+<p>Please note the spacing inside the [ and ] brackets! Without the spaces, it won't work!</p>
+<pre>#!/bin/bash<br />directory="./BashScripting"<br /><br /># bash check if directory exists<br />if [ -d $directory ]; then<br />	echo "Directory exists"<br />else <br />	echo "Directory does not exists"<br />fi </pre>
+<p><img src="/images/bash-if-else-fi-statement.gif" border="0" alt="Bash if else fi statement" title="Bash if else fi statement" width="232" height="82" /></p>
+<h2 id='9-2-nested-ifelse'>9.2.&nbsp;Nested if/else</h2>
+<pre>#!/bin/bash<br /> <br /># Declare variable choice and assign value 4<br />choice=4<br /># Print to stdout<br /> echo "1. Bash"<br /> echo "2. Scripting"<br /> echo "3. Tutorial"<br /> echo -n "Please choose a word [1,2 or 3]? "<br /># Loop while the variable choice is equal 4<br /># bash while loop<br />while [ $choice -eq 4 ]; do<br /> <br /># read user input<br />read choice<br /># bash nested if/else<br />if [ $choice -eq 1 ] ; then<br /> <br />        echo "You have chosen word: Bash"<br /><br />else                   <br /><br />        if [ $choice -eq 2 ] ; then<br />                 echo "You have chosen word: Scripting"<br />        else<br />         <br />                if [ $choice -eq 3 ] ; then<br />                        echo "You have chosen word: Tutorial"<br />                else<br />                        echo "Please make a choice between 1-3 !"<br />                        echo "1. Bash"<br />                        echo "2. Scripting"<br />                        echo "3. Tutorial"<br />                        echo -n "Please choose a word [1,2 or 3]? "<br />                        choice=4<br />                fi   <br />        fi<br />fi<br />done </pre>
+<p><img src="/images/bash-if-else-nested-statement.gif" border="0" alt="Nested Bash if else statement" title="Nested Bash if else statement" width="232" height="160" /></p>
+<h1 id='10-bash-comparisons'>10.&nbsp;Bash Comparisons</h1>
+<h2 id='10-1-arithmetic-comparisons'>10.1.&nbsp;Arithmetic Comparisons</h2>
+<table border="1">
+<tbody>
+<tr>
+<td width="50">-lt</td>
+<td width="50">&lt;</td>
+</tr>
+<tr>
+<td width="50">-gt</td>
+<td width="50">&gt;</td>
+</tr>
+<tr>
+<td width="50">-le</td>
+<td width="50">&lt;=</td>
+</tr>
+<tr>
+<td width="50">-ge</td>
+<td width="50">&gt;=</td>
+</tr>
+<tr>
+<td width="50">-eq</td>
+<td width="50">==</td>
+</tr>
+<tr>
+<td width="50">-ne</td>
+<td width="50">!=</td>
+</tr>
+</tbody>
+</table>
+<pre>#!/bin/bash<br /># declare integers<br />NUM1=2<br />NUM2=2<br />if [ $NUM1 -eq $NUM2 ]; then<br />	echo "Both Values are equal"<br />else <br />	echo "Values are NOT equal"<br />fi </pre>
+<p><img src="/images/bash_arithmetic-comparisons-equal.gif" border="0" alt="Bash Arithmetic Comparisons" title="Bash Arithmetic Comparisons" width="484" height="43" /></p>
+<pre>#!/bin/bash<br /># declare integers<br />NUM1=2<br />NUM2=1<br />if [ $NUM1 -eq $NUM2 ]; then<br />	echo "Both Values are equal"<br />else <br />	echo "Values are NOT equal"<br />fi </pre>
+<p><img src="/images/bash_arithmetic-comparisons-not-equal.gif" border="0" alt="Bash Arithmetic Comparisons - values are NOT equal" title="Bash Arithmetic Comparisons - values are NOT equal" width="484" height="43" /></p>
+<pre>#!/bin/bash<br /># declare integers<br />NUM1=2<br />NUM2=1<br />if   [ $NUM1 -eq $NUM2 ]; then<br />	echo "Both Values are equal"<br />elif [ $NUM1 -gt $NUM2 ]; then<br />	echo "NUM1 is greater then NUM2"<br />else <br />	echo "NUM2 is greater then NUM1"<br />fi </pre>
+<p><img src="/images/bash_arithmetic-comparisons-greater-then.gif" border="0" alt="Bash Arithmetic Comparisons - greater then" title="Bash Arithmetic Comparisons - greater then" width="370" height="43" /></p>
+<h2 id='10-2-string-comparisons'>10.2.&nbsp;String Comparisons</h2>
+<table border="1">
+<tbody>
+<tr>
+<td width="50">=</td>
+<td width="200">equal</td>
+</tr>
+<tr>
+<td width="50">!=</td>
+<td width="50">not equal</td>
+</tr>
+<tr>
+<td width="50">&lt;</td>
+<td width="50">less then</td>
+</tr>
+<tr>
+<td width="50">&gt;</td>
+<td width="50">greater then</td>
+</tr>
+<tr>
+<td width="50">-n s1</td>
+<td width="50">string s1 is not empty</td>
+</tr>
+<tr>
+<td width="50">-z s1</td>
+<td width="50">string s1 is empty</td>
+</tr>
+</tbody>
+</table>
+<pre>#!/bin/bash<br />#Declare string S1<br />S1="Bash"<br />#Declare string S2<br />S2="Scripting"<br />if [ $S1 = $S2 ]; then<br />	echo "Both Strings are equal"<br />else <br />	echo "Strings are NOT equal"<br />fi </pre>
+<p><img src="/images/bash-string-comparisons-values-NOT-equal.gif" border="0" alt="Bash String Comparisons - values are NOT equal" title="Bash String Comparisons - values are NOT equal" width="370" height="43" /></p>
+<pre>#!/bin/bash<br />#Declare string S1<br />S1="Bash"<br />#Declare string S2<br />S2="Bash"<br />if [ $S1 = $S2 ]; then<br />	echo "Both Strings are equal"<br />else <br />	echo "Strings are NOT equal"<br />fi </pre>
+<p><img src="/images/bash-string-comparisons-values-equal.gif" border="0" alt="bash interpreter location: /bin/bash" title="Locate a Bash Interpreter" width="370" height="43" /></p>
+<h1 id='11-bash-file-testing'>11.&nbsp;Bash File Testing</h1>
+<table border="0">
+<tbody>
+<tr>
+<td width="140">-b filename</td>
+<td width="500">Block special file</td>
+</tr>
+<tr>
+<td width="100">-c filename</td>
+<td width="300">Special character file</td>
+</tr>
+<tr>
+<td width="100">-d directoryname</td>
+<td width="300">Check for directory existence</td>
+</tr>
+<tr>
+<td width="100">-e filename</td>
+<td width="300">Check for file existence</td>
+</tr>
+<tr>
+<td width="100">-f filename</td>
+<td width="300">Check for regular file existence not a directory</td>
+</tr>
+<tr>
+<td width="100">-G filename</td>
+<td width="300">Check if file exists and is owned by effective group ID.</td>
+</tr>
+<tr>
+<td width="100">-g filename</td>
+<td width="300">true if file exists and is set-group-id.</td>
+</tr>
+<tr>
+<td width="100">-k filename</td>
+<td width="300">Sticky bit</td>
+</tr>
+<tr>
+<td width="100">-L filename</td>
+<td width="300">Symbolic link</td>
+</tr>
+<tr>
+<td width="100">-O filename</td>
+<td width="300">True if file exists and is owned by the effective user id.</td>
+</tr>
+<tr>
+<td width="100">-r filename</td>
+<td width="300">Check if file is a readable</td>
+</tr>
+<tr>
+<td width="100">-S filename</td>
+<td width="300">Check if file is socket</td>
+</tr>
+<tr>
+<td width="100">-s filename</td>
+<td width="300">Check if file is nonzero size</td>
+</tr>
+<tr>
+<td width="100">-u filename</td>
+<td width="300">Check if file set-ser-id bit is set</td>
+</tr>
+<tr>
+<td width="100">-w filename</td>
+<td width="300">Check if file is writable</td>
+</tr>
+<tr>
+<td width="100">-x filename</td>
+<td width="300">Check if file is executable</td>
+</tr>
+</tbody>
+</table>
+<pre>#!/bin/bash<br />file="./file"<br />if [ -e $file ]; then<br />	echo "File exists"<br />else <br />	echo "File does not exists"<br />fi </pre>
+<p><img src="/images/bash-file-testing-file-does-not-exist.gif" border="0" alt="Bash File Testing - File does not exist" title="Bash File Testing - File does not exist" width="370" height="43" /> <img src="/images/bash-file-testing-file-exist.gif" border="0" alt="Bash File Testing - File exists" title="Bash File Testing - File exists" width="370" height="82" /></p>
+<p>Similarly for example we can use while loop to check if file does not exists. This script will sleep until file does exists. Note bash negator "!" which negates the -e option.</p>
+<pre>#!/bin/bash<br /> <br />while [ ! -e myfile ]; do<br /># Sleep until file does exists/is created<br />sleep 1<br />done </pre>
+<h1 id='12-loops'>12.&nbsp;Loops</h1>
+<h2 id='12-1-bash-for-loop'>12.1.&nbsp;Bash for loop</h2>
+<pre>#!/bin/bash<br /><br /># bash for loop<br />for f in $( ls /var/ ); do<br />	echo $f<br />done </pre>
+<p>Running for loop from bash shell command line:</p>
+<pre>$ for f in $( ls /var/ ); do echo $f; done </pre>
+<p><img src="/images/bash-for-loop.gif" border="0" alt="Bash for loop" title="Bash for loop" width="484" height="173" /></p>
+<h2 id='12-2-bash-while-loop'>12.2.&nbsp;Bash while loop</h2>
+<pre>#!/bin/bash<br />COUNT=6<br /># bash while loop<br />while [ $COUNT -gt 0 ]; do<br />	echo Value of count is: $COUNT<br />	let COUNT=COUNT-1<br />done </pre>
+<p><img src="/images/bash-while-loop.gif" border="0" alt="Bash while loop" title="Bash while loop" width="484" height="108" /></p>
+<h2 id='12-3-bash-until-loop'>12.3.&nbsp;Bash until loop</h2>
+<pre>#!/bin/bash<br />COUNT=0<br /># bash until loop<br />until [ $COUNT -gt 5 ]; do<br />        echo Value of count is: $COUNT<br />        let COUNT=COUNT+1<br />done </pre>
+<p><img src="/images/bash-until-loop.gif" border="0" alt="Bash until loop" title="Bash until loop" width="484" height="108" /></p>
+<h2 id='12-4-control-bash-loop-with'>12.4.&nbsp;Control bash loop with</h2>
+<p>Here is a example of while loop controlled by standard input. Until the redirection chain from STDOUT to STDIN to the read command exists the while loop continues.</p>
+<pre>#!/bin/bash<br /># This bash script will locate and replace spaces<br /># in the filenames<br />DIR="."<br /># Controlling a loop with bash read command by redirecting STDOUT as<br /># a STDIN to while loop<br /># find will not truncate filenames containing spaces<br />find $DIR -type f | while read file; do<br /># using POSIX class [:space:] to find space in the filename<br />if [[ "$file" = *[[:space:]]* ]]; then<br /># substitute space with "_" character and consequently rename the file<br />mv "$file" `echo $file | tr ' ' '_'`<br />fi;<br /># end of while loop<br />done </pre>
+<p><img src="/images/Rename_files_containing_spaces.gif" border="0" alt="Bash script to replace spaces in the filenames with _" title="Bash script to replace spaces in the filenames with _" width="442" height="160" /></p>
+<h1 id='13-bash-functions'>13.&nbsp;Bash Functions</h1>
+<pre>!/bin/bash<br /># BASH FUNCTIONS CAN BE DECLARED IN ANY ORDER<br />function function_B {<br />        echo Function B.<br />}<br />function function_A {<br />        echo $1<br />}<br />function function_D {<br />        echo Function D.<br />}<br />function function_C {<br />        echo $1<br />}<br /># FUNCTION CALLS<br /># Pass parameter to function A<br />function_A "Function A."<br />function_B<br /># Pass parameter to function C<br />function_C "Function C."<br />function_D </pre>
+<p><img src="/images/bash-functions.gif" border="0" alt="Bash Functions" title="Bash Functions" width="484" height="82" /></p>
+<h1 id='14-bash-select'>14.&nbsp;Bash Select</h1>
+<pre>#!/bin/bash<br /> <br />PS3='Choose one word: ' <br /><br /># bash select<br />select word in "linux" "bash" "scripting" "tutorial" <br />do<br />  echo "The word you have selected is: $word"<br /># Break, otherwise endless loop<br />  break  <br />done<br /><br />exit 0 </pre>
+<p><img src="/images/bash_select.gif" border="0" alt="Bash Select" title="Bash Select" width="214" height="108" /></p>
+<h1 id='15-case-statement-conditional'>15.&nbsp;Case statement conditional</h1>
+<pre>#!/bin/bash<br />echo "What is your preferred programming / scripting language"<br />echo "1) bash"<br />echo "2) perl"<br />echo "3) phyton"<br />echo "4) c++"<br />echo "5) I do not know !"<br />read case;<br />#simple case bash structure<br /># note in this case $case is variable and does not have to<br /># be named case this is just an example<br />case $case in<br />    1) echo "You selected bash";;<br />    2) echo "You selected perl";;<br />    3) echo "You selected phyton";;<br />    4) echo "You selected c++";;<br />    5) exit<br />esac </pre>
+<p><img src="/images/Bash_case_statement.gif" border="0" alt="bash case statement conditiona" title="bash case statement conditiona" width="340" height="134" /></p>
+<h1 id='16-bash-quotes-and-quotations'>16.&nbsp;Bash quotes and quotations</h1>
+<p>Quotations and quotes are important part of bash and bash scripting. Here are some bash quotes and quotations basics.</p>
+<h2 id='16-1-escaping-meta-characters'>16.1.&nbsp;Escaping Meta characters</h2>
+<p>Before we start with quotes and quotations we should know something about escaping meta characters. Escaping will suppress a special meaning of meta characters and therefore meta characters will be read by bash literally. To do this we need to use backslash "\" character. Example:</p>
+<pre>#!/bin/bash<br /> <br />#Declare bash string variable<br />BASH_VAR="Bash Script"<br /><br /># echo variable BASH_VAR<br />echo $BASH_VAR<br /><br />#when meta character such us "$" is escaped with "\" it will be read literally<br />echo \$BASH_VAR <br /><br /># backslash has also special meaning and it can be suppressed with yet another "\"<br />echo "\\" </pre>
+<p><img src="/images/Escaping_meta.gif" border="0" alt="escaping meta characters in bash" title="escaping meta characters in bash" width="202" height="69" /></p>
+<h2 id='16-2-single-quotes'>16.2.&nbsp;Single quotes</h2>
+<p>Single quotes in bash will suppress special meaning of every meta characters. Therefore meta characters will be read literally. It is not possible to use another single quote within two single quotes not even if the single quote is escaped by backslash.</p>
+<pre>#!/bin/bash<br /> <br /> #Declare bash string variable<br /> BASH_VAR="Bash Script"<br /> <br /> # echo variable BASH_VAR<br /> echo $BASH_VAR<br /> <br /> # meta characters special meaning in bash is suppressed when  using single quotes <br /> echo '$BASH_VAR  "$BASH_VAR"' </pre>
+<p><img src="/images/Bash_single_quotes.gif" border="0" alt="Using single quotes in bash" title="Using single quotes in bash" width="214" height="56" /></p>
+<h2 id='16-3-double-quotes'>16.3.&nbsp;Double Quotes</h2>
+<p>Double quotes in bash will suppress special meaning of every meta characters except "$", "\" and "`". Any other meta characters will be read literally. It is also possible to use single quote within double quotes. If we need to use double quotes within double quotes bash can read them literally when escaping them with "\". Example:</p>
+<pre>#!/bin/bash<br /> <br />#Declare bash string variable<br />BASH_VAR="Bash Script"<br /><br /># echo variable BASH_VAR<br />echo $BASH_VAR<br /><br /># meta characters and its special meaning in bash is <br /># suppressed when using double quotes except "$", "\" and "`"<br /><br />echo "It's $BASH_VAR  and \"$BASH_VAR\" using backticks: `date`" </pre>
+<p><img src="/images/Bash_double_quotes.gif" border="0" alt="Using double quotes in bash" title="Using double quotes in bash" width="490" height="56" /></p>
+<h2 id='16-4-bash-quoting-with-ansi-c-style'>16.4.&nbsp;Bash quoting with ANSI-C style</h2>
+<p>There is also another type of quoting and that is ANSI-C. In this type of quoting characters escaped with "\" will gain special meaning according to the ANSI-C standard.</p>
+<table border="1">
+<tbody>
+<tr>
+<td width="50">\a</td>
+<td width="250">alert (bell)</td>
+<td width="50">\b</td>
+<td width="250">backspace</td>
+</tr>
+<tr>
+<td width="50">\e</td>
+<td width="250">an escape character</td>
+<td width="50">\f</td>
+<td width="250">form feed</td>
+</tr>
+<tr>
+<td width="50">\n</td>
+<td width="250">newline</td>
+<td width="50">\r</td>
+<td width="250">carriage return</td>
+</tr>
+<tr>
+<td width="50">\t</td>
+<td width="250">horizontal tab</td>
+<td width="50">\v</td>
+<td width="250">vertical tab</td>
+</tr>
+<tr>
+<td width="50">\\</td>
+<td width="250">backslash</td>
+<td width="50">\`</td>
+<td width="250">single quote</td>
+</tr>
+<tr>
+<td width="50">\nnn</td>
+<td width="250">octal value of characters ( see [http://www.asciitable.com/ ASCII table] )</td>
+<td width="50">\xnn</td>
+<td width="250">hexadecimal value of characters ( see [http://www.asciitable.com/ ASCII table] )</td>
+</tr>
+</tbody>
+</table>
+<p>The syntax fo ansi-c bash quoting is: $'' . Here is an example:</p>
+<pre>#!/bin/bash<br /> <br /># as a example we have used \n as a new line, \x40 is hex value for @<br /># and \56 is octal value for .<br />echo $'web: www.linuxconfig.org\nemail: web\x40linuxconfig\56org' </pre>
+<p><img src="/images/Ansi-c_bash.gif" border="0" alt="quoting in bash with ansi-c stype" title="quoting in bash with ansi-c stype" width="202" height="56" /></p>
+<h1 id='17-arithmetic-operations'>17.&nbsp;Arithmetic Operations</h1>
+<h2 id='17-1-bash-addition-calculator-example'>17.1.&nbsp;Bash Addition Calculator Example</h2>
+<pre>#!/bin/bash<br /> <br />let RESULT1=$1+$2<br />echo $1+$2=$RESULT1 ' -&gt; # let RESULT1=$1+$2'<br />declare -i RESULT2<br />RESULT2=$1+$2<br />echo $1+$2=$RESULT2 ' -&gt; # declare -i RESULT2; RESULT2=$1+$2'<br />echo $1+$2=$(($1 + $2)) ' -&gt; # $(($1 + $2))' </pre>
+<p><img src="/images/Bash_addition_calc.gif" border="0" alt="Bash Addition Calculator" title="Bash Addition Calculator" width="304" height="69" /></p>
+<h2 id='17-2-bash-arithmetics'>17.2.&nbsp;Bash Arithmetics</h2>
+<pre>#!/bin/bash<br /> <br />echo '### let ###'<br /># bash addition<br />let ADDITION=3+5<br />echo "3 + 5 =" $ADDITION<br /><br /># bash subtraction<br />let SUBTRACTION=7-8<br />echo "7 - 8 =" $SUBTRACTION <br /><br /># bash multiplication<br />let MULTIPLICATION=5*8<br />echo "5 * 8 =" $MULTIPLICATION<br /><br /># bash division<br />let DIVISION=4/2<br />echo "4 / 2 =" $DIVISION<br /><br /># bash modulus<br />let MODULUS=9%4<br />echo "9 % 4 =" $MODULUS<br /><br /># bash power of two<br />let POWEROFTWO=2**2<br />echo "2 ^ 2 =" $POWEROFTWO<br /><br /><br />echo '### Bash Arithmetic Expansion ###'<br /># There are two formats for arithmetic expansion: $[ expression ] <br /># and $(( expression #)) its your choice which you use<br /><br />echo 4 + 5 = $((4 + 5))<br />echo 7 - 7 = $[ 7 - 7 ]<br />echo 4 x 6 = $((3 * 2))<br />echo 6 / 3 = $((6 / 3))<br />echo 8 % 7 = $((8 % 7))<br />echo 2 ^ 8 = $[ 2 ** 8 ]<br /><br /><br />echo '### Declare ###'<br /><br />echo -e "Please enter two numbers \c"<br /># read user input<br />read num1 num2<br />declare -i result<br />result=$num1+$num2<br />echo "Result is:$result "<br /><br /># bash convert binary number 10001<br />result=2#10001<br />echo $result<br /><br /># bash convert octal number 16<br />result=8#16<br />echo $result<br /><br /># bash convert hex number 0xE6A<br />result=16#E6A<br />echo $result </pre>
+<p><img src="/images/bash-arithmetic_operations.gif" border="0" alt="Bash Arithmetic Operations" title="Bash Arithmetic Operations" width="262" height="290" /></p>
+<h2 id='17-3-round-floating-point-number'>17.3.&nbsp;Round floating point number</h2>
+<pre>#!/bin/bash<br /># get floating point number<br />floating_point_number=3.3446<br />echo $floating_point_number<br /># round floating point number with bash<br />for bash_rounded_number in $(printf %.0f $floating_point_number); do<br />echo "Rounded number with bash:" $bash_rounded_number<br />done </pre>
+<p><img src="/images/Bash_round_floating_point_number.gif" border="0" alt="Round floating point number with bash" title="Round floating point number with bash" width="178" height="56" /></p>
+<h2 id='17-4-bash-floating-point-calculations'>17.4.&nbsp;Bash floating point calculations</h2>
+<pre>#!/bin/bash<br /># Simple linux bash calculator <br />echo "Enter input:" <br />read userinput<br />echo "Result with 2 digits after decimal point:"<br />echo "scale=2; ${userinput}" | bc <br />echo "Result with 10 digits after decimal point:"<br />echo "scale=10; ${userinput}" | bc <br />echo "Result as rounded integer:"<br />echo $userinput | bc </pre>
+<p><img src="/images/Bash_floating_point.gif" border="0" alt="Bash floating point calculations" title="Bash floating point calculations" width="256" height="134" /></p>
+<h1 id='18-redirections'>18.&nbsp;Redirections</h1>
+<h2 id='18-1-stdout-from-bash-script-to-stderr'>18.1.&nbsp;STDOUT from bash script to STDERR</h2>
+<pre>#!/bin/bash<br /> <br /> echo "Redirect this STDOUT to STDERR" 1&gt;&amp;2 </pre>
+<p>To prove that STDOUT is redirected to STDERR we can redirect script's output to file:<br /> <img src="/images/STDOUTtoSTDERR.gif" border="0" alt="STDOUT from bash script to STDERR" title="STDOUT from bash script to STDERR" width="286" height="147" /></p>
+<h2 id='18-2-stderr-from-bash-script-to-stdout'>18.2.&nbsp;STDERR from bash script to STDOUT</h2>
+<pre>#!/bin/bash<br /> <br /> cat $1 2&gt;&amp;1 </pre>
+<p>To prove that STDERR is redirected to STDOUT we can redirect script's output to file:<br /> <img src="/images/STDERRtoSTDOUT.gif" border="0" alt="STDERR from bash script to STDOUT" title="STDERR from bash script to STDOUT" width="358" height="147" /></p>
+<h2 id='18-3-stdout-to-screen'>18.3.&nbsp;stdout to screen</h2>
+<p>The simple way to redirect a standard output ( stdout ) is to simply use any command, because by default stdout is automatically redirected to screen. First create a file "file1":</p>
+<pre>$ touch file1
+$ ls file1 
+file1
+</pre>
+<p>As you can see from the example above execution of ls command produces STDOUT which by default is redirected to screen.</p>
+<h2 id='18-4-stdout-to-file'>18.4.&nbsp;stdout to file</h2>
+<p>The override the default behavior of STDOUT we can use "&gt;" to redirect this output to file:</p>
+<pre>$ ls file1 &gt; STDOUT
+$ cat STDOUT 
+file1
+</pre>
+<h2 id='18-5-stderr-to-file'>18.5.&nbsp;stderr to file</h2>
+<p>By default STDERR is displayed on the screen:</p>
+<pre>$ ls
+file1  STDOUT
+$ ls file2
+ls: cannot access file2: No such file or directory
+</pre>
+<p>In the following example we will redirect the standard error ( stderr ) to a file and stdout to a screen as default. Please note that STDOUT is displayed on the screen, however STDERR is redirected to a file called STDERR:</p>
+<pre>$ ls
+file1  STDOUT
+$ ls file1 file2 2&gt; STDERR
+file1
+$ cat STDERR 
+ls: cannot access file2: No such file or directory
+</pre>
+<h2 id='18-6-stdout-to-stderr'>18.6.&nbsp;stdout to stderr</h2>
+<p>It is also possible to redirect STDOUT and STDERR to the same file. In the next example we will redirect STDOUT to the same descriptor as STDERR. Both STDOUT and STDERR will be redirected to file "STDERR_STDOUT".</p>
+<pre>$ ls
+file1  STDERR  STDOUT
+$ ls file1 file2 2&gt; STDERR_STDOUT 1&gt;&amp;2
+$ cat STDERR_STDOUT
+ls: cannot access file2: No such file or directory
+file1
+</pre>
+<p>File STDERR_STDOUT now contains STDOUT and STDERR.</p>
+<h2 id='18-7-stderr-to-stdout'>18.7.&nbsp;stderr to stdout</h2>
+<p>The above example can be reversed by redirecting STDERR to the same descriptor as SDTOUT:</p>
+<pre>$ ls
+file1  STDERR  STDOUT
+$ ls file1 file2 &gt; STDERR_STDOUT 2&gt;&amp;1
+$ cat STDERR_STDOUT 
+ls: cannot access file2: No such file or directory
+file1
+</pre>
+<h2 id='18-8-stderr-and-stdout-to-file'>18.8.&nbsp;stderr and stdout to file</h2>
+<p>Previous two examples redirected both STDOUT and STDERR to a file. Another way to achieve the same effect is illustrated below:</p>
+<pre>$ ls
+file1  STDERR  STDOUT
+$ ls file1 file2 &amp;&gt; STDERR_STDOUT
+$ cat STDERR_STDOUT 
+ls: cannot access file2: No such file or directory
+file1
+</pre>
+<p>or</p>
+<pre>ls file1 file2 &gt;&amp; STDERR_STDOUT
+$ cat STDERR_STDOUT 
+ls: cannot access file2: No such file or directory
+file1
+</pre><div id="itp-social-buttons-box"><h4>Share this linux post:</h4><a href="http://del.icio.us/post?url=http://linuxconfig.org/Bash_scripting_Tutorial&amp;title=Bash%20scripting%20Tutorial" title="Submit Bash scripting Tutorial in Delicious" target="blank" rel="nofollow">
+		<img src="/plugins/content/itpsocialbuttons/images/balloon/delicious.png" alt="Submit Bash scripting Tutorial in Delicious" />
+		</a><a href="http://digg.com/submit?url=http://linuxconfig.org/Bash_scripting_Tutorial&amp;title=Bash%20scripting%20Tutorial" title="Submit Bash scripting Tutorial in Digg" target="blank" rel="nofollow">
+        <img src="/plugins/content/itpsocialbuttons/images/balloon/digg.png" alt="Submit Bash scripting Tutorial in Digg" />
+        </a><a href="http://www.facebook.com/sharer.php?u=http://linuxconfig.org/Bash_scripting_Tutorial&amp;t=Bash%20scripting%20Tutorial" title="Submit Bash scripting Tutorial in FaceBook" target="blank" rel="nofollow">
+        <img src="/plugins/content/itpsocialbuttons/images/balloon/facebook.png" alt="Submit Bash scripting Tutorial in FaceBook" />
+        </a><a href="http://www.google.com/bookmarks/mark?op=edit&amp;bkmk=http://linuxconfig.org/Bash_scripting_Tutorial" title="Submit Bash scripting Tutorial in Google Bookmarks" target="blank" rel="nofollow">
+        <img src="/plugins/content/itpsocialbuttons/images/balloon/google.png" alt="Submit Bash scripting Tutorial in Google Bookmarks" />
+        </a><a href="http://www.stumbleupon.com/submit?url=http://linuxconfig.org/Bash_scripting_Tutorial&amp;title=Bash%20scripting%20Tutorial" title="Submit Bash scripting Tutorial in Stumbleupon" target="blank" rel="nofollow">
+        <img src="/plugins/content/itpsocialbuttons/images/balloon/stumbleupon.png" alt="Submit Bash scripting Tutorial in Stumbleupon" />
+        </a><a href="http://technorati.com/faves?add=http://linuxconfig.org/Bash_scripting_Tutorial" title="Submit Bash scripting Tutorial in Technorati" target="blank" rel="nofollow">
+        <img src="/plugins/content/itpsocialbuttons/images/balloon/technorati.png" alt="Submit Bash scripting Tutorial in Technorati" />
+        </a><a href="http://twitter.com/?status=Bash%20scripting%20Tutorial%20http%3A%2F%2Flinuxconfig.org%2FBash_scripting_Tutorial" title="Submit Bash scripting Tutorial in Twitter" target="blank" rel="nofollow" >
+        <img src="/plugins/content/itpsocialbuttons/images/balloon/twitter.png" alt="Submit Bash scripting Tutorial in Twitter" />
+        </a><div style="clear: both;">&nbsp;</div><b><center><font color=red size=4>Comments for this page are closed !!!</b><br>Please visit our new <a href="http://forum.linuxcareer.com">Linux Forum</a> for additional help or discussion.</font></center></div>
+<hr />
+
+<!-- Disqus Comments -->
+<div class="jwDisqusForm">
+	
+			<div id="disqus_thread"></div>
+			<script type="text/javascript">
+				//<![CDATA[
+			
+					var disqus_url= "http://linuxconfig.org/Bash_scripting_Tutorial";
+					var disqus_identifier = "3eb181626d_id52";
+				//]]>
+			</script>
+			<script type="text/javascript" src="http://disqus.com/forums/linuxconfig/embed.js"></script>
+			<noscript>
+				<a href="http://linuxconfig.disqus.com/?url=ref">View the discussion thread.</a>
+			</noscript>
+<hr>
+<table>
+<tr>
+
+<td colspan=2><font size=4 color=red>Linux eBooks <b>FREE</b> Download</font></td>
+
+</tr>
+
+<tr>
+<td>
+<a href=http://linuxconfig-org.tradepub.com/free/w_free01/?p=w_free01 rel=nofollow ><img src=images/banners/advance_admin_linux.png></a>
+</td>
+<td>
+<a href=http://linuxconfig-org.tradepub.com/free/w_make07/?p=w_make07 rel=nofollow ><img src=http://img.tradepub.com/free/w_make07/images/w_make07c.gif></a>
+</td>
+<td>
+<a href=http://linuxconfig-org.tradepub.com/free/w_linu01/?p=w_linu01 rel=nofollow ><img src=http://img.tradepub.com/free/w_linu01/images/w_linu01c.gif>
+</td>
+<td>
+<a href=http://linuxconfig-org.tradepub.com/free/w_ubun01 rel=nofollow ><img src=images/banners/ubuntu_man.gif>
+</td>
+<td>
+<a href=http://linuxconfig-org.tradepub.com/free/w_opeb01/prgm.cgi rel=nofollow ><img src=http://img.tradepub.com/free/w_opeb01/images/w_opeb01c.gif>
+</td>
+</tr>
+
+
+
+</table>
+
+			</div>
+
+<div class="jwDisqusBackToTop">
+	<a href="http://linuxconfig.org/Bash_scripting_Tutorial#startOfPage">back to top</a>
+	<div class="clr"></div>
+</div>
+	
+<div class="clr"></div>
+
+<!-- JoomlaWorks "Disqus Comment System for Joomla!" Plugin (v2.2) ends here -->
+
+
+
+</div>
+
+			</div><!-- end main or main2 -->
+
+			
+
+			<div class="wrap"></div>
+			</div><!-- wrapper -->
+		</div><!-- contentarea -->
+
+		<div id="footer">
+			<p class="syndicate">
+				
+			</p>
+
+
+
+			<p>
+				Copyright © 2011  <a href="http://www.linuxconfig.org/"> Linuxconfig.org</a>. All Rights Reserved - VPS
+			</p>
+
+			<div class="wrap"></div>
+		</div><!-- footer -->
+	</div><!-- all -->
+
+	
+
+</body>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-1910641-7']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</html>

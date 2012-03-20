@@ -1,0 +1,8 @@
+sudo su -
+aptitude install iwlist wpa_supplicant -f
+ifconfig wlan0 up
+iwlist wlan0 scanning
+iwconfig wlan0 essid myBSSID
+iwconfig wlan0 key WEPisBAD
+dhclient
+

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+path='/usr/local/share/games/fortunes/'
+#echo $path | tr -s '/' ' '
+path_array=( `echo $path | tr -s '/' ' '`)
+echo "The thid (counting from zero) depth of '${path_array[*]}' is: ${path_array[3]}";

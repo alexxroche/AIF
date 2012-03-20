@@ -1,0 +1,69 @@
+#!/usr/bin/perl
+# crashoverride ver 1.0 20041001 alexx at alexx dot net
+use strict;
+my $file_ending;
+my $cmd;
+my $count;
+$|=1;
+
+sub footer
+{
+        my $this_year=`date +%Y`; chop($this_year);
+        print "Copyright 2003-$this_year Cahiravahilla publications\n";
+}
+
+sub help
+{
+        print "Usage: crashoverride \$bash_command \$files_regexp [file_ending]\n This will get round the \"Argument list too long\" problem";
+	print "\n If you have problems try putting the \$files_regexp in \" \"\n";
+        &footer;
+exit(1);
+}
+
+if( ($ARGV[0] =~ /^-+h/i) || (!$ARGV[0]) )
+{
+        &help;
+}
+else
+{
+	$cmd = $ARGV[0];
+}
+
+if($ARGV[2])
+{
+	$file_ending = $ARGV[2];
+}
+else
+{
+	$file_ending = '.*';
+}
+
+my $pwd = `pwd`; chomp($pwd);
+my $files = $ARGV[1];
+my @dir_list = `ls -la $pwd`;
+my $safe;
+# I keep forgetting to give file.* and give file*
+if($files=~s/^(.*[^\.])\*$/$1.*/)
+{
+	print "changing to $files\n";
+}
+else
+{
+	print ".";
+}
+
+foreach my $file (@dir_list) {
+   	if($file =~m/$file_ending$/i)
+	{
+		$file =~ s/.*\s(\S*\.$file_ending)$/$1/i;
+		if($file !~ /^$files$/) { next; }	#don't want the others
+		if($cmd=~m/^mv/ || $cmd=~m/^cp/)
+		{
+			$safe = '-i';
+		}
+		`$cmd $safe $pwd/$file`;
+		$count++;
+	}
+}
+print "\n$count files $cmd"."-ed\n";
+exit(0);

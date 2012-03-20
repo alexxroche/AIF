@@ -1,0 +1,12 @@
+# If you have leaked a file from the dev branch into localpublicbranch,  and need to remove it:
+git checkout localpublicbranch
+git pull origin publicbranch:localpublicbranch # fetch an update
+git filter-branch --tree-filter 'rm -rf path/to/file' HEAD
+git filter-branch -f --index-filter 'git rm --cached --ignore-unmatch path/to/file' --prune-empty HEAD
+#                                 :{this is the name of the branch at the other end}
+git push origin +localpublicbranch:publicbranch
+echo "path/to/file" >> .gitignore # remember that .gitignore is uniqie to each branch!
+git ci -a -m 'updating .gitignore'
+git reflog expire --expire=now --all
+git gc --prune=now
+git gc --aggressive --prune=now

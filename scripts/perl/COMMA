@@ -1,0 +1,23 @@
+#!/usr/bin/perl
+# COMMA ver 0.1 20090519 alexx@alexx.net
+use strict;
+no strict "refs";
+
+sub help {
+	print "Usage: $0 number (e.g. 1234)\n";
+	print "Copyright 2003 Cahiravahilla publications\n"; exit(0);
+}
+
+if( ($ARGV[0] =~ /^-+h/i) || (!$ARGV[0]) ){
+	&help;
+}
+
+sub commify {
+    my $text = reverse $_[0];
+    $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+    return scalar reverse $text;
+}
+
+if($ARGV[0]){
+	print &commify($ARGV[0]) . "\n";
+}
