@@ -1,0 +1,29 @@
+POP3 Command Summary
+
+      Minimal POP3 Commands:
+
+         USER name               valid in the AUTHORIZATION state
+         PASS string
+         QUIT
+
+         STAT                    valid in the TRANSACTION state
+         LIST [msg]
+         RETR msg
+         DELE msg
+         NOOP
+         RSET
+         QUIT
+
+      Optional POP3 Commands:
+
+         APOP name digest        valid in the AUTHORIZATION state
+
+         TOP msg n               valid in the TRANSACTION state
+         UIDL [msg]
+
+      POP3 Replies:
+
+         +OK
+         -ERR
+
+

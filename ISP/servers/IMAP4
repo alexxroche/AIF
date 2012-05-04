@@ -1,0 +1,7 @@
+# The raw commands for testing IMAP4
+
+telnet imap.example.org 143
+A login username password
+B list "" *
+C logout
+
