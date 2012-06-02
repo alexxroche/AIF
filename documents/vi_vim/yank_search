@@ -1,0 +1,26 @@
+say we have a UUID of 89a6fdac-acef-11e1-a4dd-00188bba79ac and want to search the rest of the document for it.
+Good news: your mouse just broke. No highlighting for you.
+Here is how:
+
+Esc
+?89a
+y7w
+/^r0
+
+and that is it. 
+
+Esc     # into visual-mode
+?89a    # seach back to the start of the string. We just as well have used /89a6 if we were at the start of this file
+y7w     # yank 7 words (a uuid has seven parts) Hint: if your string goes to the end of the line you can just do y$
+/^r0    # here is the science: search using the last yanked object
+
+^r is Ctrl+r (and may show a " (double quotes) when you press it)
+
+Why does this work with vim? Because the last thing that you yank is put into the 0 register.
+
+Read http://vimdoc.sourceforge.net/htmldoc/change.html#registers for more info.
+
+Remember: Learn just one new vim trick each day and you quickly become vi-mazing!
+
+p.s. Stop using the arrow keys! It just slows you down.
+p.p.s  Well found! 89a6fdac-acef-11e1-a4dd-00188bba79ac 

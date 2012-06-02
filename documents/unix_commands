@@ -32,6 +32,7 @@ tmux - terminal multiplexor (like screen)
 vi   - I use vim
 w    - who
 watch - have a guess
+wn   - command line dictionary
 
 This list could be a lot larger, (I have over 3500 programs in various /[s]bin/)
 but these are the ones that I either took too long to find or had a,

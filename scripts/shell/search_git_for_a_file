@@ -8,6 +8,12 @@
 
 help ()
 {
+    echo ' if you want to search IN a file then
+    gitk --all $(git log -g --pretty=format:%h) 
+    git log -g --grep=search_for_this';
+    echo " or ";
+    # SEARCH_STR='search for this';git grep "$SEARCH_STR" $(git log -g --pretty=format:%h -S"$SEARCH_STR")
+    echo 'SEARCH_STR="search for this";git grep "$SEARCH_STR" $(git log -g --pretty=format:%h -S"$SEARCH_STR")';
     echo "Usage: $0 \$filename_to_search_for [-v]" && exit;
 }
 
@@ -33,6 +39,7 @@ git_diff ()
 
 #[ ! $1 ] && echo "Usage: $0 \$filename_to_search_for [-v]" && exit;
 [ ! $1 ] && help
+[ "$1" == '-h' ] && help #obviously
 [ "$1" == '-v' ] && help #this happens far too often
 #[ ! -e "$1" ] && help # we can't have this as we might be looking for a file 
 #                        that is in a branch that we are not in
