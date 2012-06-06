@@ -1,0 +1,3 @@
+ln -s /bin/gzip /usr/bin/gzip
+
+(exim 4's exicycle looks for gzip here, while exim 3 looked for it there)
