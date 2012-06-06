@@ -1,0 +1,40 @@
+define lxron: {
+    version: "0.01"
+    date: "20090128"
+    name: "LxR Object Notation"
+    summary: "lxron is a cross between json and yaml"
+    description: "lxron data is divided into key value pairs. The values are called objects."
+    definition: {
+        block objects are wrapped in curly braces, { } and nested blocks are usually indented 1 to 4 spaces, when displayed.
+        Each key is terminated by a : with optional spaces either side OR the start of a block.
+        example block1 : { this is normal }
+        example block2 { this is acceptable, but most lxron parsers would add the : back in }
+        example array: [ array objects, are, separated, by a comma]
+        array objects may be padded with spaces before or after the object.
+        Each object is terminated by a new line "\n" or |%| when streamed.
+        REM: [ #, /* blah */, //, ]
+    }
+}
+
+lxron stream:{ this: [array, seems clear]|%| escape:["\"is possible\"",'if you \'need\' it',"but you might 'opt' for this"]|%|}
+
+not finished: {
+
+"regexp stream parser": {
+    s/\|\%\|(\d?)/\|\%\|\s{$1}/g
+    s/\|\%\|/\n/g;
+    # add back the block new lines
+    s/([^\\]\s?:\s?{)/$1\n/g;
+}
+
+"regexp stream encoder": {
+    # we standardise the data as it is parsed, (e.g. missing key : are add back in
+    # we compress the spaces used for indenting and encode new lines
+    s/\n/\s?\|\%\|$/sg;
+    # we encode 
+    s/([^\\]\s?:\s?{)/$1\n/g;
+}
+
+}
+_comment: objects do not have to be in blocks or indented.
+_comment: keys do not have to be unique
