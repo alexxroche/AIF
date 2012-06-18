@@ -1,0 +1,61 @@
+#!/usr/bin/perl -w
+# localtime var 2.0 20120608 alexx - use lxopt
+# localtime var 1.1 20101030 alexx
+# localtime var 1.0 20061030 alexx
+use strict;
+#NTS won't work after Wed May 18 04:33:19 2033
+sub help {
+        print "Usage: echo \"string including seconds since 1970 01 01\" |$0\n";
+        print "or: $0 \"string including seconds since 1970 01 01\" [-z][-n]\n";
+        print " -z produce zulu time\n";
+        print " -n no newline\n";
+        print "Copyright 2006,2012 alexx roche\n";
+exit(2);
+}
+my $nl = "\n";
+
+=head2 lxopt
+
+Get the flags and arguments
+
+=cut
+
+my %opt;
+for(my $args=0;$args<=(@ARGV -1);$args++){
+    if ($ARGV[$args]=~m/^-+h/i){ &help; }
+    elsif ($ARGV[$args] eq '-z'){ $opt{z}++; }
+    elsif ($ARGV[$args] eq '-n'){ $opt{nnl}++; $nl='';}
+    elsif ($ARGV[$args]=~m/^(\d{10})$/){ $opt{t} = $1; }
+    elsif ($ARGV[$args]=~m/-+uts(.+)/){ $opt{t} = $1; }
+    elsif ($ARGV[$args]=~m/-+uts/){ $args++; $opt{t} = $ARGV[$args]; }
+    else{ print "what is this $ARGV[$args] you talk of?\n"; &help; }
+}
+
+if(!$opt{t}){
+    eval {
+        local $SIG{'ALRM'} = sub { die "Timed Out!\n" };
+        alarm(1);
+        WHILE: while(<STDIN>){
+            if($_=~m/(\d{10})/){
+                    print localtime($1) . "\n";
+                    last WHILE;
+                    exit(0);
+            }
+        }
+    };
+    if ($@=~m/timed out/i){ &help; }
+}elsif($opt{t}){
+    if($opt{t}=~m/(\d{10})/){
+        if($opt{z}){
+            use POSIX qw(strftime);
+            print strftime "%Y%m%dT%H%M%SZ$nl", localtime($1);
+        }else{
+            print localtime($1) . $nl;
+        }
+    }else{
+        die "Can't find a ten digit string\n";
+    }
+}else{
+  &help;
+}
+
