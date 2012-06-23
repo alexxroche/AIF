@@ -1,0 +1,7 @@
+# So you want to copy all files from a messed up branch (main) into a backup branch (arch)
+
+git co arch;
+for i in `git diff arch..main --stat|grep '|'|grep -Ev "\-$"|awk '{print $1}'`; do ls $i 2>/dev/null| git co main -- $i; done
+
+# this will copy over any files that do not exists in the arch branch. 
+# You should consider creating a third branch from arch and `git merge main`
