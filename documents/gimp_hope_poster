@@ -1,0 +1,90 @@
+<meta name="src" content="http://www.scottphotographics.com/how-to-make-an-obama-hope-poster-in-gimp/" />
+
+1. Starting
+
+    Firstly choose your portrait – the less detail in the photograph the better the results!
+    Open in GIMP
+    Duplicate Original 4 times
+    Then Add Alpha Channel to all layers
+
+2. Threshold (~ = APPROX.)
+
+    On First layer – Go, Colors –> Threshold
+    Set to ~25 as shown:
+    REPEAT for each layer:
+    Second Layer: set to ~50
+    Third Layer: set to ~100
+    Fourth Layer: set to ~130
+
+3. Blur (This will make it smoother) (~ = APPROX.)
+
+    Now, for all layers again:
+    Go, Filters –> Blur –> Gaussian Blur
+    Set to ~2.00, ~2.00 (any more and they’ll be large white outlines later)
+    (Speed up the process by selecting your layer –>go, Filters –> Repeat ‘Guassian Blur’ , Ctrl F)
+
+4. Remove Background
+
+    Grab the Selection Tool
+    Select the parts you don’t want to include:
+    Delete them from all layers (keep selection, then select layer – Press Delete)
+    The most detail will be on the Fourth Layer:
+
+5. Delete the rest
+
+    Grab the Color Selection Tool
+    Select the white parts of each layer
+    Press Delete (You need to select the white parts for each layer, otherwise you’ll delete other things)
+
+6. Adding Colour
+
+    Select Layer – Right Click –> Alpha to Selection
+    First layer: Strip Pattern (download my version here) (goes in Pattern Folder of GIMP Folder)
+    For the Strips to fit nicely you may need to scale down the image(~350) or edit the .pat file!
+    Apply a little blur if you like!
+
+    Select Layer – Right Click –> Alpha to Selection
+    Second Layer: Creamy Colour: fbde90 (or you could use a Light Blue: 0087a1)
+    Settings as shown: (remember Fill Whole Selection)
+
+    Select Layer – Right Click –> Alpha to Selection
+    Third Layer: Red Colour: 820606 (or for a brighter red e7000a)
+    Settings as shown: (remember Fill Whole Selection)
+
+    Select Layer – Right Click –> Alpha to Selection
+    Fourth Layer: Blue Colour: 004754
+    Settings as shown: (remember Fill Whole Selection)
+
+7. Background Part 1
+
+    Create a new Layer:
+    Grab the Selection Tool
+    Go round the edges just slightly in off the edge, as shown:
+    Now, Fill the selection with the Blue Colour: 004754
+    Then use the Selection Tool again, but select one half (right), fill with Red Colour: 820606 (or for a brighter red e7000a)
+
+7b. Background Part 2
+
+    Now, go Image –> Canvas Size
+    Adjust so it is slightly wider and the length is increased to fit some text (‘HOPE’)
+
+8. Move
+
+    Now, go Right Click (on a layer) –> Merge Visible Layers
+    Then centre the layer in the middle-top, as shown:
+    Now create a new Layer and fill with a Creamy Colour: fcdf91
+
+9. Add Text ‘HOPE’
+
+    Use the Text Tool
+    Whatever word you’d like underneath? (‘HOPE’)
+    Use Text: Franklin Gothic Demi
+    Size: ~180
+    If there is excess length or width just crop away!
+
+
+10. Adjusting Colours
+
+    If you’d like to experiment with colours, just Right Click (on a layer) –> Merge Visible Layerd
+    Then, go Colors –> Hue-Saturation
+
