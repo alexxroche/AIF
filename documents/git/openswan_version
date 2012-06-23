@@ -1,0 +1,11 @@
+<meta name="src" content="http://www.jukie.net/bart/blog/auto-git-versioning" />
+
+BRANCH=`git describe | awk -F'-g[0-9a-fA-F]+' '{print $1}'`
+COMMIT=`git rev-parse HEAD | awk '{print substr($1,0,8)}'`
+INCREMENT=`git rev-list $BRANCH..HEAD | wc -l | awk '{print $1}'` 
+TGZ="openswan-$BRANCH-($INCREMENT)-g$COMMIT.tgz"
+
+# but if we have no tags we can use the branch name
+
+BRANCH=`git log|head -n1|awk '{print $2}'| awk -F'-g[0-9a-fA-F]+' '{print $1}'`
+BRANCH=$(git branch|grep '*'|awk '{print $2}');git rev-list $BRANCH | wc -l | awk '{print $1}'
