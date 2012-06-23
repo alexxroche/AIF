@@ -1,0 +1,17 @@
+bt_test@startup_domain
+VPI:0, VCI:38
+
+    
+Wizard Setup - ISP Parameters for Internet Access
+ 
+LAN connections
+    Test your Ethernet Connection   PASS
+ 
+WAN connections
+    Test ADSL synchronization   PASS
+    Test ADSL(ATM OAM) loopback test    FAIL
+    Test PPP/PPPoE server connection    FAIL
+    Ping default gateway    FAIL
+  
+
+bt_test_user@startup_domain also works for resetting and testing
