@@ -1,0 +1,93 @@
+#!/usr/bin/perl
+
+if($ARGV[0]=~m/-+h/){ print `perldoc $0`; exit; }
+my %output;
+my $siy = 31557600;
+my $sim = 2635200;
+my @av = ('97','98',98.5,98.6,98.7,98.8,98.9,'99.00','99.9','99.97','99.98','99.99','99.999','99.9999','99.99999','99.999999','100.00000');
+
+foreach my $avti (@av) {
+	$output{year}{$avti} = $siy - (( $avti/100 ) * $siy ); 
+	$output{month}{$avti}= $sim - (( $avti/100 ) * $sim ); 
+}
+my $mitab;
+foreach my $avit (sort keys %output) { 
+	print "%Available- Downtime/$avit\n";
+	foreach my $avis (sort {length($a) <=> length($b)} keys %{ $output{$avit} } ) {
+		my $how_long = (length($avis));
+                if($how_long < 7) {$mitab = "\t\t";}
+                elsif($how_long < 16) {$mitab = "\t";}
+		#NTS could turn the seconds into minutes and hrs 
+		# if there are enough of them
+		print "$avis\%$mitab- $output{$avit}{$avis} seconds\n";
+	}
+}
+
+=pod
+
+perldoc ./$0
+
+=cut 
+__END__
+
+=head1 NAME
+
+Uptime - How much you need to get your nines
+
+=head1 DESCRIPTION
+
+When people brag about uptime or service, it can be useful to know 
+what they are talking about
+
+=head2 Usage
+
+$ uptime
+
+=head1 SYNOPSIS
+
+ %Available- Downtime/year (365.25 days)
+ 98%       - 7.30 days
+ 99%       - 87.6 hrs
+ 99.9%     - 8.76 hrs
+ 99.99%    - 53   mins
+ 99.999%   - 5.25 mins
+ 99.9999%  - 31   secs
+ 99.99999% - 3.1  secs
+ 99.999999%- 315.58 milliseconds (0.315576 seconds)
+ 100.00000%- 0.0 secs
+
+ seconds in 365 days     = 31536000
+ seconds in 365.25 days  = 31557600
+
+ %Available- Downtime/month (30.5 days)
+ 98%       - 14.64 hrs
+ 99%       - 7.32  hrs
+ 99.9%     - 43.92 mins
+ 99.99%    -
+ 99.999%   -
+ 99.9999%  -
+ 99.99999% -
+ 99.999999%- 315.58 milliseconds (0.315576 seconds)
+ 100.00000%- 0.0 secs
+
+ seconds in 30.5 days = 2635200
+ dtpm = 263500 - ( Available/100 * 2635200 )
+
+=head1 More to come
+
+Need to be able to say [CC][YY][MM][DD][HH][MM][SS][mm][\d+]/[YMWDH]
+and have this calculate your percentage uptime.
+
+=head3 example
+
+ uptime 5d/Y 
+ 98.63% uptime if you are down for 5 days in a year (365.25 days)
+	echo '100-(($down_time/$time_span)*100)'|bc -l
+
+=head1 AUTHORS
+
+Alexx Roche (Original author and developer 2007-2010 )
+
+=head1 COPYRIGHT
+
+Copyright 2007-2010 Alexx Roche
