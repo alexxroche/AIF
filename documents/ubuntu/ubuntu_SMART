@@ -1,0 +1,4 @@
+#!/bin/sh
+# re-enable SMART if you do NOT have a SSD in your computer
+perl -pir 's/# ATA disks driven by libata\n#/# ATA disks driven by libata\n/s' lib/udev/rules.d/95-devkit-disks.rules
+reboot
