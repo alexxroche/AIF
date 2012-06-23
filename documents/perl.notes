@@ -1,0 +1,12 @@
+Notes on perl
+#to install CPAN
+perl -MCPAN -e 'install Bundle::CPAN'
+
+#to run CPAN
+perl -MCPAN -e shell;
+
+#to convert to an ip address 
+perl -MSocket -e 'print inet_ntoa(pack("N",1079066066)),"\n"'
+
+#find the last insert id
+my $last = &dbq("select LAST_INSERT_ID()");
