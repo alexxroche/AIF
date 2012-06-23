@@ -1,0 +1,80 @@
+http://onlamp.com/onlamp/2003/04/03/linuxhacks.html
+
+Linux Server Hacks , author of Linux Server Hacks
+
+Accomplish IP takeover with ping, bash, and a simple network utility.
+
+Directing traffic to one of several machines is fairly straightforward when using round-robin DNS. But what happens when one of those servers becomes unavailable? Here's one scheme for monitoring the health of another server, and standing in for it if it fails.
+
+First, we need to make a distinction between the server's "real" IP address, and the IP (or IPs) from which it actually serves public content. For this example, we'll be referring to two servers, Pinky and Brain. Pinky uses the IP address 208.201.239.16 for its "real" IP on eth0, and also has an IP alias of 208.201.239.36 on eth0:0. Brain uses 208.201.239.17 on eth0, and 208.201.239.37 on eth0:0. If you've never used IP aliases before, here's the very quick how-to:
+
+  # ifconfig eth0:0 1.2.3.4
+
+... and voila, you have another IP address (1.2.3.4) bound to eth0, called eth0:0. You used to have to specifically compile IP aliasing into the kernel, but the option seems to have gone away in recent kernels, and IP aliasing is apparently on by default. One important thing to remember about IP aliases is that if the interface that they are bound to (in this case, eth0) is ever brought down, then all of its associated aliases are also down. You can also make the alias any alphanumeric string, although some versions of ifconfig only display the first four or five characters of the alias when displaying interfaces.
+
+Related Articles
+
+Once Pinky and Brain have their respective eth0:0s set, bind a service (like Apache) to their aliased IPs, and set up round-robin DNS to point to both with a single hostname. We'll assume that we're setting up redundant web service for www.oreillynet.com, resolving to either 208.201.239.36 or 208.201.239.37.
+
+Now that roughly half of the traffic is going to each server, we'll need Pinky and Brain to monitor each other's health. This can be done by pinging each other's real IP address, and watching the results. Save the following into a script, and install it on Pinky:
+
+#!/bin/bash
+OTHER="brain"
+PUBLIC="208.201.239.37"
+
+PAUSE=3
+
+PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/sbin
+MISSED=0
+
+while true; do 
+  if ! ping -c 1 -w 1 $OTHER > /dev/null; then 
+    ((MISSED++))
+  else
+    if [ $MISSED -gt 2 ]; then
+      ifconfig eth0:$OTHER down
+    fi
+    MISSED=0
+  fi; 
+
+  if [ $MISSED -eq 2 ]; then
+    ifconfig eth0:$OTHER $PUBLIC
+    #
+    # ...but see discussion below...
+    #
+  fi
+  sleep $PAUSE; 
+done
+
+Naturally, set OTHER to pinky and PUBLIC to 208.201.239.36 on the copy that runs on Brain.
+
+Let's suppose that Brain suddenly stops responding on 208.201.239.17 (say a network technician accidentally pulled the wrong plug when working on the rack). After missing three pings in a row, Pinky will leap into action, bringing up eth0:brain as 208.201.239.37, the public IP that Brain is supposed to be serving. It will then continue to watch Brain's real IP address, and relinquish control when it is back online. ping -c 1 -w 1 means "send one ping packet, and timeout after one second, no matter what happens." ping will return non-zero if the packet didn't come back in the one-second time limit.
+
+But this isn't quite the entire solution. Although Pinky is now answering for Brain, any machines on the same network as the two servers (notably, the router just upstream at your ISP) will have the wrong MAC address cached for 208.201.239.37. With the wrong MAC address cached, no traffic will flow to Pinky, since it will only respond to packets that bear its own MAC address. How can we tell all of the machines on the 208.201.239.0 network that the MAC address for 208.201.239.37 has been updated?
+
+One way is to use the send_arp utlity from the High Availability Linux project. This very handy (and tiny) utility will craft an ARP packet to your specifications, and send it to a MAC address of your choice on the local network. If we specify all ones (for example, ff:ff:ff:ff:ff:ff) for the destination, then it effectively becomes a broadcast ARP packet. Most routers won't update their ARP tables when they see unrequested ARP broadcasts, but such a packet will signal them to resend an ARP request, to which Pinky will obligingly reply. The advantage of using broadcast is that it will signal all machines on the subnet simultaneously, instead of having to keep track of all of the MAC addresses of machines that need updating.
+
+The syntax of send_arp is send_arp [Source IP] [Source MAC] [Target IP] [Target MAC]. For example, our simple monitoring script above should run the following when it detects that Brain is down:
+
+  send_arp 208.201.239.37 00:11:22:aa:bb:cc 208.201.239.37 fffffffffff
+
+... where 00:11:22:aa:bb:cc is the hardware MAC address of Pinky's eth0. The script can continue to watch when Brain's real IP address (208.201.239.17) becomes available. When it does, we can bring eth0:brain back down, and let Brain worry about updating the ARP cache again (which it should be set to do on boot, and whenever its interface becomes available again).
+hacks.oreilly.com
+
+Hacks Gotta hack?
+Read a hack.
+Submit a hack.
+Visit hacks.oreilly.com.
+
+There are a number of improvements that could be made to this technique. For one thing, just because 208.201.239.17 is up doesn't guarantee that 208.201.239.37 is also available. Also, ping isn't the best test for service availability (a better test might be to actually request a web page from the other machine, and make sure that it has a success code and closing </html> tag).
+
+These improvements are left as an exercise to you, dear reader. Every site is different, so you'll need to find the technique that works best with the tools that you have for the problem at hand. After all, that's exactly what a hack is, isn't it?
+
+O'Reilly & Associates recently released (January 2003) Linux Server Hacks.
+
+    * Read sample hacks from this book on hacks.oreilly.com.
+    * You can also look at the Table of Contents, the Index, and the full description of the book.
+    * For more information, or to order the book, click here.
+
+Return to the Linux DevCenter.
+
