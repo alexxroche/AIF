@@ -14,7 +14,7 @@ help ()
     echo " or ";
     # SEARCH_STR='search for this';git grep "$SEARCH_STR" $(git log -g --pretty=format:%h -S"$SEARCH_STR")
     echo 'SEARCH_STR="search for this";git grep "$SEARCH_STR" $(git log -g --pretty=format:%h -S"$SEARCH_STR")';
-    echo "Usage: $0 \$filename_to_search_for [-v]" && exit;
+    echo "Usage: $0 \$filename_to_search_for [-v|-vv|-h]" && exit;
 }
 
 git_id ()
@@ -31,6 +31,11 @@ git_diff ()
     echo -e '\n git show commit_hash:path/to/file'
     echo -e '\n git show HEAD^^^:path/to/file'
     echo -e '\n#git difftool master:path/to/file dev:test/path/to/file.t '
+   
+ # you might want
+    echo -e 'FIND_THIS='index.html';for i in `git log --branches --name-only -- $FIND_THIS|grep ^commit|awk '{print $2}'`; do echo -n "$i "; git ls-tree $i -- $FIND_THIS|awk '{print $3}'; done'
+
+    echo -e 'git diff-tree -r \$commit_hash..HEAD -- \$path\/$file'
 }
 
 [ "$2" == '-id' ] && git_id "$1" && exit
@@ -57,22 +62,93 @@ then
     echo '######################################################################'
 fi
 
+arr_push() { arr=("${arr[@]}" "$1"); }
+arr_shift() { arr=("$1" "${arr[@]}"); }
+
 if [ $2 ]
 then
-    for i in `git log --name-only --all|grep "$1"|sort -u`
+    # wow - this is an ugly way to check that the file exists
+    match_count=0;
+    for i in `git log --name-only --all|grep "$1"|sed 's/^\s*//'|sort -u`
     do 
-        git log --pretty=format:"%Cred%H%Creset -%C(yellow)%d%Creset" --name-only --all -- $i
+        #match_count=$(($match_count+1)); echo $match_count;
         if [ "$2" == '-v' ]
         then
             count=0;
-            hashes=(`git log --pretty=format:"%H" --name-only --all -- $i|grep -v $i|grep .|sort -u`)
+            hashes=(`git log --pretty=format:"%h" --name-only --all -- $i|grep -v $i|grep .|sort -u`)
             for (( j = 0 ; j < ${#hashes[*]} ; j++ ))
             do
-                echo -n "[${hashes[$j]} = "
-                echo -n $(git ls-tree -r ${hashes[$j]} -- $i|grep $i)
-                echo ']'
+                this_hash=$(git ls-tree -r ${hashes[$j]} -- $i|grep $i|sed 's/\t?\s\s\n?/ /g')
+                #is_new=$(echo "$(${this_has})"|awk '{print $3}')
+                is_new=$(git ls-tree -r ${hashes[$j]} -- $i|grep $i|sed 's/\t?\s\s\n?/ /g'|awk '{print $3}')
+                it_is_old=0
+                for k in "${hash_seen[@]}"
+                do
+                   if [ "$k" == "$is_new" ]
+                   then 
+                        it_is_old=1
+                        #echo "duplicate $k for $1"
+                        break
+                   fi
+                done   
+                if [ $it_is_old -lt 1 ]; then
+                    hash_seen=("${hash_seen[@]}" "$is_new");
+                    echo "[${hashes[$j]} = $this_hash]"; fi
+                done
+        else
+         #git log --pretty=format:'%Cred%H%Creset - %C(yellow)%d%Creset%n' --name-only --all -- $i
+         commit_hash_seen=()
+         file_with_path=$1
+         if [ ! -f $file_with_path ]
+         then
+            echo "Searching for $1 in ."
+            file_with_path=$(find ./ -name "$1" -type f|sed 's/^\.\///')
+            echo "using $file_with_path"
+            if [ $file_with_path == $1 ]
+            then
+                 echo "Need full path for $1 with -vv option"
+                 exit;
+            fi
+         fi
+         #echo "for m in `git log --pretty=format:'%H' --all -- $file_with_path`"
+         for m in `git log --pretty=format:'%H' --all -- $file_with_path`
+         do
+            this_hash=$(git ls-tree -r $m -- $file_with_path|grep $i|sed 's/\t?\s\s\n?/ /g'|awk '{print $3}')
+            it_is_old=0
+            for k in "${hash_seen[@]}"
+            do
+                if [ "$k" == "$this_hash" ]
+                then
+                    it_is_old=1
+                    #echo "duplicate $k for $file_with_path"
+                    break
+                fi
             done
+            if [ $it_is_old -lt 1 ]; then
+               #hash_seen=("${hash_seen[@]}" "$this_hash"); #slow!
+               hash_seen+=("$this_hash");
+               #commit_hash_seen=("${commit_hash_seen[@]}" "$m") #slow!
+               commit_hash_seen+=("$m")
+               echo -n $(git ls-tree -r $m -- $file_with_path)
+               echo -n ' '
+               echo $(git log --pretty=format:'%H %ct %cd' $m -- $file_with_path|grep $m)
+            fi
+          done
+          if [ "$2" == '-vv' ]
+          then
+    echo '######################################################################'
+    echo -e '#|---------- \e[00;33m(Commit hash)\e[00m  -----------|   | filename | diff ..HEAD '
+    echo '######################################################################'
+            for n in "${commit_hash_seen[@]}"
+            do
+                this_diff=$(git diff $n..HEAD --stat -- $file_with_path|head -n1)
+                if [ "$this_diff" ]
+                then
+                    echo $n ' ' $this_diff
+                fi
+            done
+          fi
+          #echo -e '\n'
         fi
-        echo -e '\n'
     done
 fi
