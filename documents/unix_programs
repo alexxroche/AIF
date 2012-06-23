@@ -1,0 +1,18 @@
+Protocol: { server, (client) }
+===============================
+bkup: { spideroak, (you have to have a backup protocol before anything else!) }
+SMTPs: { exim, postfix, (Thunderbird) }
+IMAPs: { dovecot, (roundcube,pine,mutt) }
+HTTPS: { apache,monkey, ( Firefox ) }
+CalDAV: { calypso,radicale,DAVical, (Thunderbird) }
+CardDAV: { calypso, (CardDAVmate) }
+XMPP: { ejabberd, (Pidgin,finch) }
+CRM: { Notice }
+PIM: { Notice::PassPhrases }
+: { glusterFS }
+: { keepalived }
+disk encryption: { truecrypt }
+Server OS: { Slackware,CentOS,Debian }
+Phone: { Samsung Galaxy IV }
+Tablet: { Asus EeePC Transformer }
+editor: { vim,notepad++ }
