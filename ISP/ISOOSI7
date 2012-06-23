@@ -1,0 +1,29 @@
+Application (Layer 7)
+This layer supports application and end-user processes.
+Telnet and FTP are applications that exist entirely in the application level.
+
+Presentation (Layer 6)
+This layer provides independence from differences in data representation (e.g., encryption) It is sometimes called the syntax layer.
+
+Session (Layer 5)
+This layer establishes, manages and terminates connections between
+applications. The session layer sets up, coordinates, and terminates
+conversations, exchanges, and dialogues between the applications at
+each end.
+
+Transport (Layer 4)
+This layer provides transparent transfer of data between end
+systems, or hosts, and is responsible for end-to-end error recovery
+and flow control. It ensures complete data transfer.
+
+Network (Layer 3)
+This layer provides switching and routing technologies and virtual circuits. Routing and forwarding are functions of this layer, congestion control and packet sequencing.
+
+Data Link (Layer 2)
+At this layer, data packets are encoded and decoded into bits. The data link layer is divided into two sublayers:
+The Media Access Control (MAC) layer and the 
+Logical Link Control (LLC) layer. 
+
+Physical (Layer 1) electrical impulse Fast Ethernet, RS232, and ATM protocols
+
+
