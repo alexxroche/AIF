@@ -1,0 +1,85 @@
+All ISP things fall into, (or so I think)
+
+Network
+	Routers
+		Juniper
+		Cisco
+		Extream
+		Foundry
+		eBGP		- external Border Gateway Protocol
+		iBGP		- internal
+		HSRP		- Hot Standby Routing Protocol
+		OSPF		- Open Shortest Path First
+	Switches
+		Cisco
+		Netgear
+		[M|R]STP	[Multi|Rapid]Spaning Tree Protocol
+		VLANs		- Virtual Local Area Network s 
+		VTP		- VLAN Trunking Protocol
+		CDP		- Cisco Discovery Protocol
+	Peering
+		RIPE
+		Linx
+		Lonapp
+	Transit
+	   Tier 1 (A Transit-Free network)
+	      S1
+		Level3
+		Sprint
+		Global Crossing
+	      S2 (some paying settlements)
+		Above.net (sprint)
+		TeleGlobe (sprint)
+	      S3 (paying settlements)
+		XO	  (sprint/level3)		
+		Cogent	  (sprint/level3)
+	   Tier 2 (A network that peers with some networks, but still purchases IP transit or pays settlements to reach at least some portion of the Internet)
+	      S1
+		British Telecom
+		Cable and Wireless
+		Deutsche Telekom
+		France Telecom
+		Interoute
+		Tiscali International Network
+	      S2
+		Group NBT	(4G 2007)
+		Mailbox Internet
+	   Tier 3 (A network that solely purchases transit from other networks to reach the Internet)
+		My House
+
+	Comms
+		http://en.wikipedia.org/wiki/Plenum_chamber
+		
+
+Servers
+	DNS
+		BIND
+        NSD
+	Web
+		apache[2]
+        monkey
+	Email
+		exim
+			ClamAV
+			SpamAssassin
+		pop/imap(dovecot)
+			addresses -> people/roles
+	Mailing lists
+		mailman
+	FTP
+	Connections
+		Dialup
+		Leased Line
+		DSL
+		T1
+		e1
+Customers
+
+	Notice
+		CRM
+		Asset tracker
+        [many many other modules]
+	Information
+		ConnectionlessDSNs
+		Form to mail and other traversties
+		Why not use PHP, and other jokes.
