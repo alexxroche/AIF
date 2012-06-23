@@ -1,0 +1,21 @@
+So your code is broken in the master branch, (this should NEVER happen): {
+    solution_1: {
+        
+     git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --branches
+
+        #to find a working copy
+     git co -b fix $short_hash
+        #check that it works; if it does: (this next bit is sudo-code!)
+     for i in `got diff fix master --stat`; do
+        git co master -- some/file/that/you/think_is_fine
+           #check that it works
+           #(skip over any broken files with: git co fix -- broken/file)
+     done
+
+    You can then find out which parts of which files broke your code, and who to blame.
+
+    You can then replace the old master branch: git branch -d master && git co -b master && git branch -d fix
+    }
+
+
+Why should this never happen? Because branching and merging is so easy you should develop off in your own branch.
