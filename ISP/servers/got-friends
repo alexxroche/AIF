@@ -1,0 +1,1 @@
+echo "have I run out of friends or is something broken" | exim -s "lonely" ping@oleane.net
