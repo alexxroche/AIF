@@ -1,0 +1,3 @@
+#!/usr/bin/perl -p
+INIT{@k=pop=~/../g;$^C=map@s[$w++,$^C]=@s[$^C+=$_+hex$k[$w%@k],$w],@s=0..255}
+s#\C#$&^chr$s[255&map{1..$_}@s[$^C,$x]=@s[++$x,$^C+=$s[$x%=@s]]]#eg

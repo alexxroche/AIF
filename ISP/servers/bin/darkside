@@ -1,0 +1,10 @@
+#!/bin/sh
+# This turns off the screen properly. I trigger it from a keyboard shortcut
+
+#SCREENLOCK='gnome-screensaver-command -l' #Ubuntu 9.04
+#SCREENLOCK='xlock -usefirst -mode blank'   #Ubuntu 9.10 Live persistant
+SCREENOFF='xset dpms force off'
+#$SCREENLOCK ; sleep 1 && $SCREENOFF
+$SCREENLOCK & sleep 1 && $SCREENOFF
+sleep 50 && $SCREENOFF
+

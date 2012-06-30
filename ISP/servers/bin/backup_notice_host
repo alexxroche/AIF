@@ -1,0 +1,12 @@
+#!/bin/sh
+
+domain='.alexx.net'
+host=$(echo $0|sed 's/.*_//');
+hostname="$host$domain"
+#rpath='/var/www/sites/notice.alexx.net/dumps/'
+rpath='/var/backup/$hostname/'
+#echo $host $hostname $domain
+ping -c1 -w2 $hostname 2>&1 1>/dev/null && \
+rsync $host:'`find $rpath -type f -mmin -1024`' /var/backup/$hostname/ || echo "Host unreachable"
+
+# This should backup just the dumps created last night, (or yesterday)

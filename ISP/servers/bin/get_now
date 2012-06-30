@@ -1,0 +1,4 @@
+#!/bin/sh
+
+wget $1 -O $(date +%Y%m%d%H%M).jpg
+

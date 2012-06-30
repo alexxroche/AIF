@@ -1,0 +1,30 @@
+#!/bin/bash
+# /usr/local/bin/file-crypt 
+
+usage(){
+  echo "file-crypt [m|mount|u|unmount]"
+  echo " either mounts or unmounts encrypted file system"
+}
+
+if [ -z $1 ]
+then
+  usage
+  exit
+fi
+
+case "$1" in
+    "m" | "mount" )
+            #/usr/bin/encfs ~/.crypt ~/crypt
+            /usr/bin/encfs ~/Dropbox/encfs ~/dencfs
+            echo "Encrypted filesystem now mounted"
+            ;;
+    "u" | "unmount" )
+            #/usr/bin/fusermount -u ~/crypt
+            /usr/bin/fusermount -u ~/dencfs
+            echo "Encrypted filesystem has been unmounted"
+            ;;
+    * )
+            usage
+            ;;
+esac
+

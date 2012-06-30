@@ -1,0 +1,14 @@
+#!/bin/sh
+
+WIFI='wlan0'
+IP_ADDR=$(ifconfig $WIFI|grep Mask|awk '{print $2}'|sed 's/.*addr://')
+SUBNET_MASK=$(ifconfig $WIFI|grep Mask|sed 's/.*Mask://')
+MAC_ADDR=$(iwconfig $WIFI 2>/dev/null|grep Access|sed 's/.*Point: //')
+
+echo "airmon-ng start $WIFI"
+sudo airmon-ng start $WIFI
+echo "airtun-ng -a $MAC_ADDR mon0"
+sudo airtun-ng -a $MAC_ADDR mon0 &
+echo "ifconfig at0 $IP_ADDR netmask $SUBNET_MASK up"
+sudo ifconfig at0 $IP_ADDR netmask $SUBNET_MASK up
+

@@ -1,0 +1,448 @@
+#!/usr/bin/perl
+# thmdir ver2.1 20030508 roges at alexx dot net
+
+#To Do:
+#	 - save old css
+#	 - recursive option
+# also "Should the index be a whole page or will it be in a frame?
+use		Image::Size;
+use             Getopt::Long    qw(GetOptions);
+use strict;
+my $title;
+my $albumlong;
+my $albumauthor;
+my $bgcolor;
+my $albumfiles;
+my $checkhtml;
+my $txtcolor;
+my $bgimg;
+my $keep_html;
+my $inc_imgdtls;
+my $index_html = "index.html"; #this needs to be done properly
+my @other_files;
+my $reverse_order; 
+my $order; 
+my @img_file;
+my $update;
+my %desc;
+my $cli = 0; # 0 == human 1 == zero touch (for cron)
+
+if(-f "index.html")
+{
+	open(OLDINDEX, "<index.html");
+	while(<OLDINDEX>)
+	{
+	   if($_=~m/<body/)
+	   {
+		if($_=~m/bgcolor=\"(#[a-f0-9]{6})/)
+		{
+			$bgcolor = $1;
+		}
+		if($_=~m/text=\"#([a-f0-9]{6})/)
+		{
+			$txtcolor = $1;
+		}
+		if($_=~m/background=\"([^"]+)\"/)
+		{
+			$bgimg = $1;
+		}
+	   }
+	}
+	close(OLDINDEX);
+}
+GetOptions('dir=s'	=> \$albumfiles,
+	   'long=s'	=> \$albumlong,
+	   'author=s'	=> \$albumauthor,
+	   'bgcolor=s'	=> \$bgcolor,
+	   'checkhtml=s'=> \$checkhtml,
+	   'keephtml=s'=> \$keep_html,
+	   'u|update'=> \$update,
+	   'order=s'=> \$reverse_order,
+	   'inc_imgdtls=s'=> \$inc_imgdtls,
+	   'txtcolor=s' => \$txtcolor);
+
+if($update){ $cli = 1; 
+#this is a dirty hack: we should check in index for image details
+$inc_imgdtls = 'n';
+}
+
+
+print "Preparing to thumbnail a whole directory.\n\n" if $cli == 0;
+
+if ( "$albumfiles" eq "" && !$update)
+{
+	print "Which directory should I go to work on? (pwd by def): ";
+	$albumfiles=<>;
+	chop $albumfiles;
+	$albumfiles =~ s/\/$//;
+}
+if ( "$albumlong" eq "" && !$update)
+{
+	print "What should the album be called, (dir name by def): ";
+	$albumlong=<>;
+	chop $albumlong;
+	$title = $albumlong;
+}
+if ( "$albumauthor" eq "" && !$update)
+{
+	print "Who do we attribute these as the author? ";
+	$albumauthor=<>;
+	chop $albumauthor;
+}
+if ( "$bgcolor" eq "" && !$update)
+{
+	print "What back ground colour would you like? ";
+	print "\n(Six hex digits, $bgcolor by default) :";
+	$bgcolor=<>;
+	chop $bgcolor;
+}
+if ( "$checkhtml" eq "" && !$update)
+{
+        print "Would you like me to replace the html files? ";
+        print "\n(Ask each time, by default) :";
+        $checkhtml=<>;
+        chop $checkhtml;
+}
+if ( "$inc_imgdtls" eq "" && !$update)
+{
+	print "Should I include the image details? ";
+	print "\n[y/N] :";
+	$inc_imgdtls=<>;
+	chop $inc_imgdtls;
+}
+if ( "$txtcolor" eq "" && !$update)
+{
+        print "Finally what text colour would you like? ";
+        print "\n(Six hex digits, $txtcolor by default) :";
+        $txtcolor=<>;
+        chop $txtcolor;
+}
+if($update && !$keep_html){ $checkhtml = 'n'; $keep_html = 'e';}
+if( $order ne "" )
+{
+	$reverse_order = "r";
+}
+if( "$albumfiles" eq "" )
+{
+	$albumfiles = ".";
+}
+if ( ("$albumfiles" eq ".") && ("$title" eq "") )
+{
+	my $dir_list = `pwd`;
+	if($dir_list =~ /^.*\/([^\/]*)[\/]?$/)
+	{
+		$title = $1;
+		$title =~ s/[\.|\_]/ /g;
+	}
+}
+if ( "$albumlong" eq "" )
+{
+	if($albumfiles =~ /[\/]?[.+\/]?(.*)/) 
+	{ 
+		if( "$title" eq "" )
+		{
+			$title = $1;
+		}
+		$title =~ s/^\///;
+	}
+	else 
+	{ 
+		print "I don't have a title\n"; 
+		exit;
+	}
+}
+if(!$bgcolor)
+{
+	$bgcolor = "000000";
+}
+if(!$txtcolor)
+{
+	$txtcolor = "ffffff";
+}
+print "\nPlease wait while I do the messy to the files...\n" if $cli == 0;
+print "Key: ~ = New Image, # = Old Image, . = Replaced\n" if $cli == 0;
+if ( -e "$albumfiles/thumbs/" )
+{
+	print "Alredy got a dir' for thumb nails\n" if $cli == 0;
+}
+else
+{
+	print "Creating a thumb nail dir'\n" if $cli == 0;
+	system "mkdir $albumfiles/thumbs";
+}
+if ( -e "$albumfiles/descript.ion" )
+{
+	print "Ooh, a description file. That's handy.\n" if $cli == 0;
+	open(DESC,"<$albumfiles/descript.ion");
+	while (<DESC>)
+	{
+		(my $filename,my $description)=($_ =~ /^(.*?)\ (.*)/);
+		#$filename=~tr/A-Z/a-z/;
+		$description=~s/[\r\n]//g;
+		$description=~s/\"/&quot;/g;
+		$desc{$filename} = $description;
+	}
+	close(DESC);
+}
+if (-f "$albumfiles/$index_html")
+{
+	open(OLDINDEX,"<<$albumfiles/$index_html");
+	while (<OLDINDEX>)
+	{
+		if(/<title>(.*)<\/title>/)
+		{
+			my $temp_title = $1;
+			if(!$update)
+			{
+				print "Would you like to keep '$temp_title' as the title? [Y/n]: ";
+				my $keep_or_not=<>;
+				chomp($keep_or_not);
+				if("$keep_or_not" ne "n")
+				{
+					$title = $temp_title;
+				}
+				last;
+			}else{ $title = $temp_title; }
+		}
+		else
+		{
+			print "No title found in old index file\n" if $cli == 0;
+			last;
+		} 
+	}
+	close(OLDINDEX);
+}
+
+#not sure what this does
+
+open(OTHERFILES,"ls $albumfiles/*.*|");
+while (<OTHERFILES>)
+{
+        chop;
+	(my $prefix,my $filename)=($_=~/(.+)\/(.*)/);
+	if($filename =~ /.*\.\w{3,4}$/){
+		if($filename =~ /.*\.htm[l]?/i)
+		{
+			next;
+		}
+		elsif($filename =~ /.*\.jp[e]?g/i)
+		{
+			next;
+		}
+		elsif($filename eq $bgimg)
+		{
+			next;
+		}
+		else
+		{
+			push(@other_files,$filename);
+		}
+	}
+}
+close(OTHERFILES);
+
+#should check that we have >=1 file for each ending
+
+open(DIR,"ls -v$reverse_order $albumfiles/*.jpg $albumfiles/*.JPG $albumfiles/*.jpeg $albumfiles/*.JPEG 2>/dev/null|");
+while (<DIR>)
+{
+        chop;
+	my $imgname;
+	my $is_upper;
+	my $img_details;
+	my $htmlname;
+	my $bufx;
+	my $bufy;
+	my $tbufx;
+	my $tbufy;
+	(my $prefix,my $filename)=($_=~/(.+)\/(.*)/);
+	if($filename eq $bgimg){ next;}
+	my $fss_filename=$filename; #file system safe
+	$fss_filename=~s/(['|\s|\(|\)])/\\$1/g;
+#check to see is thumb already there .. maybe option to over write [y/N/a]
+#and check that it is not a zero byte file
+	my $filestat = (-s "$albumfiles/thumbs/$filename");
+	if((-f "$albumfiles/thumbs/$filename" && $filestat > 0) && ($checkhtml eq "n" || $checkhtml eq "N" || $keep_html eq "e" || $keep_html eq "E"))
+	{
+		print "#";
+		if($filename =~ /(.*)\.\w{3}/) { $imgname = $1;} else {print "Oh FecK\n"; exit;}
+		if($filename =~ /.*\.JPG/) { $is_upper = 1; }
+		$htmlname = $imgname.".html";
+		if(($checkhtml ne "N" || $keep_html ne "E"))
+		{
+       			my $string=`cat $albumfiles/$fss_filename`;
+       			($bufx, $bufy)=imgsize(\$string);
+       			my $size=int ((length $string));
+       			my $tstring=`cat $albumfiles/thumbs/$fss_filename`;
+       			($tbufx,$tbufy)=imgsize(\$tstring);
+			$img_details = $tbufx.":".$tbufy.":".$imgname.":".$size.":".$is_upper;
+			push(@img_file,$img_details);
+		}
+	}else{
+        	#my $spaztrap=`mkthumb $albumfiles/$filename > $albumfiles/thumbs/$filename`;
+        	my $spaztrap=`convert -quiet $albumfiles/$fss_filename -thumbnail 100 $albumfiles/thumbs/$fss_filename`;
+		unless($spaztrap){
+		   print "$spaztrap";
+		   #use Image::Magick::Thumbnail 0.06;
+        	   #$spaztrap= Image::Magick->new or die;
+		   #$spaztrp=Read("$albumfiles/$filename");
+		   #my ( $thumnail ) = Image::Magick::Thumbnail::create($spaztrap,100);
+		   #$thumbnail->Write("$albumfiles/thumbs/$filename");
+		}
+       		my $string=`cat $albumfiles/$fss_filename`;
+       		(my $bufx,my $bufy)=imgsize(\$string);
+       		my $size=int ((length $string));
+       		my $tstring=`cat $albumfiles/thumbs/$fss_filename`;
+       		($tbufx,$tbufy)=imgsize(\$tstring);
+		if($filename =~ /(.*)\.\w{3}/) { $imgname = $1;} else {print "Oh FecK\n"; exit;}
+		if($filename =~ /.*\.JPG/) { $is_upper = 1; }
+		$htmlname = $imgname.".html";
+		$img_details = $tbufx.":".$tbufy.":".$imgname.":".$size.":".$is_upper;
+		push(@img_file,$img_details);
+	}
+ #check to see if it already is there.
+   if ( -e "$albumfiles/$htmlname" )
+   {
+	if("$checkhtml" ne "n" && "$checkhtml" ne "N")
+	{
+		if("$keep_html" ne "a" && "$keep_html" ne "A")
+		{
+		  print "\nWould you like to replace $htmlname? non[e/Y/n/a]ll: ";
+			$keep_html=<>;
+			chomp($keep_html);
+			if("$keep_html" eq "e"	|| "$keep_html" eq "E") 
+			{
+				$checkhtml = "n"; 
+				$keep_html = "n";
+			}
+		}
+                if("$keep_html" ne "n" && "$keep_html" ne "N")
+                {
+		   open(HTML,">$albumfiles/$htmlname");
+			print HTML "<html><head><title>$imgname - $title</title></head>";
+			print HTML "\n<body text=\"#$txtcolor\" bgcolor=\"#$bgcolor\" link=\"#$txtcolor\" vlink=\"#$txtcolor\" alink=\"#$txtcolor\"><center>";
+			print HTML "<br>";
+			print HTML "<a href=\"$index_html\">";
+			print HTML "<img src=\"$filename\" border=0";
+			if($bufx){ print HTML " width=$bufx"; }
+			if($bufy){ print HTML " hight=$bufy"; }
+			print HTML "></a>";
+			if($desc{$filename})
+			{
+				print HTML "\n<br>$desc{$filename}<br>\n";
+			}
+			if($inc_imgdtls eq "y" || $inc_imgdtls eq 'Y'){
+				print HTML "<br><i>$filename</i>\n";
+				print HTML "<br><i>$tbufx x $tbufy</i>";
+			}
+			print HTML "\n</center>";
+			print HTML "</body></html>";
+		    close(HTML);
+		    print ".";
+		} else { print "#";}
+	}
+   }
+   else
+   {
+ 	open(HTML,">$albumfiles/$htmlname");
+        	print HTML "<html><head><title>$imgname - $title</title></head>";
+		print HTML "\n<body text=\"#$txtcolor\" bgcolor=\"#$bgcolor\" link=\"#$txtcolor\" vlink=\"#$txtcolor\" alink=\"#$txtcolor\"><center>";
+        	print HTML "<br>";
+        	print HTML "<a href=\"$index_html\">";
+        	print HTML "<img src=\"$filename\" border=0";
+                        if($bufx){ print HTML " width=$bufx"; }
+                        if($bufy){ print HTML " hight=$bufy"; }
+                        print HTML "></a>";
+		if($desc{$filename})
+        	{
+        	        print HTML "\n<br>$desc{$filename}<br>\n";
+		}
+		if($inc_imgdtls eq "y" || $inc_imgdtls eq 'Y'){
+	        	print HTML "<br><i>$filename</i>\n";
+        		print HTML "<br><i>$tbufx x $tbufy</i>";
+		}
+        	print HTML "\n</center>";
+        	print HTML "</body></html>";
+        close(HTML);
+        print "~";
+   }
+}
+my $colom_count = 0;
+open(INDEX,">$albumfiles/$index_html");
+	print INDEX "<html><head><title>$title</title></head>";
+	if($bgimg ne ''){ $bgimg = "background=\"$bgimg\"";}
+	print INDEX "\n<body text=\"#$txtcolor\" $bgimg bgcolor=\"#$bgcolor\" link=\"#$txtcolor\" vlink=\"#$txtcolor\" alink=\"#$txtcolor\"><center><table width=100%>";
+	foreach my $thum_4_index (@img_file)
+	{
+	(my $tbufx,my $tbufy,my $thum_name,my $size, my $is_upper) = split(/:/,$thum_4_index);
+		my $filename;
+		my $how_big = $size;
+		$how_big =~ s/(.{3})$/\,$1 Bites/;
+		$how_big =~ s/(\d*)(.{3})(\,\d{3} Bites)$/$1\,$2$3/;
+		$how_big =~ s/^\,//;
+		if($colom_count == 0)
+		{
+			print INDEX "<tr>\n";
+			$colom_count += 1;
+		}
+		else
+		{
+			$colom_count += 1;
+		}
+			print INDEX "    <td>\n	<center><a href=\"$thum_name";
+			print INDEX ".html\"><img src=\"./thumbs/$thum_name";
+		if( "$is_upper" eq "1" )
+		{
+			print INDEX ".JPG";
+			$filename = $thum_name.".JPG";
+		}
+		else
+		{
+			print INDEX ".jpg";
+			$filename = $thum_name.".jpg";
+		}
+			print INDEX "\" width=$tbufx hight=$tbufy></a>\n";
+	
+		if($desc{$filename} && ( $inc_imgdtls eq 'y' || $inc_imgdtls eq 'Y') )
+		{
+			print INDEX "\n<br>$desc{$filename}<br>\n";
+		}
+		else
+		{
+			if($inc_imgdtls eq "n"){
+				print INDEX "<br>$desc{$filename}\n";
+			}
+		}
+		if($inc_imgdtls eq 'y' || $inc_imgdtls eq 'Y'){
+			print INDEX "<br><font size=-2><i>$how_big<br>";
+			print INDEX "$tbufx x $tbufy</i></font></center>\n";
+		}else{
+			if($desc{$thum_name})
+			{
+				print HTML "\n<br>$desc{$filename}<br>\n";
+			}
+		}
+			print INDEX "    </td>\n";	
+		if($colom_count == 4)
+		{
+			print INDEX "</tr>\n";
+			$colom_count = 0;
+		}
+	}
+	print INDEX "</table></center>";
+	if(@other_files)
+	{
+		print INDEX"<br>";
+		foreach my $other_files (@other_files)
+		{
+			print INDEX "\n<a href=\"$other_files\">$other_files</a> ";
+		}
+	}
+	if($albumauthor)
+	{
+		print INDEX "\n<br>Images by $albumauthor</body></html>";
+	}
+close(INDEX);
+close(DIR);
+print "All finished!\n";
+exit(0);

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+[ ! $1 ] && echo "What shall I search for?" && exit;
+STRING=$1
+if [ $2 ]; then STRING="$STRING+$2"; fi
+if [ $3 ]; then echo "We only do one and two words for now"; exit; fi
+
+wget -qO - "http://www.google.com/dictionary/json?callback=dict_api.callbacks.id100&q=$STRING&sl=en&tl=en&restrict=pr,de&client=te" | sed 's/dict_api\.callbacks.id100.//' | sed 's/,200,null)//'

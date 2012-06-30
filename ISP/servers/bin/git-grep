@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ $1 ]
+then
+    #git log -g --grep="$@"
+    #git log -g -S"$@" # this searches and shows the logs
+    git grep "$@" $(git log -g --pretty=format:%h) #this shows the hash matches
+else
+    echo "Usage: git-grep something_here"
+fi

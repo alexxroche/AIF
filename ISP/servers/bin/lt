@@ -1,0 +1,29 @@
+#!/bin/bash
+# launch tmux
+
+# Starts tmux if it's not already running
+tmux start-server
+
+if ! $(tmux has-session -t default); then
+
+    cd /var/www/sites/Notice/
+
+    tmux new-session -d -s default 'sudo su -'
+
+    # Commands go here, e.g. this is what I use as my default session. Read the manual page for tmux for tips :)
+    tmux rename-window -t default:0 'mysql'
+    tmux new-window -t default:1 -n 'code'
+    tmux new-window -t default:2 -n 'templates'
+    tmux new-window -t default:3 -n 'logs'
+
+    tmux select-window -t default:0
+fi
+
+# This bit is optional; uncomment it to load the session when you create it with this script.
+if [ -z $TMUX ]; then
+    tmux -u attach-session -t default
+else
+    tmux -u switch-client -t default
+fi
+
+#vim:syn=sh

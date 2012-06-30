@@ -1,0 +1,23 @@
+#!/bin/sh
+
+ss_on=`gconftool-2 -g /apps/gnome-screensaver/idle_activation_enabled`
+
+if [ "$ss_on" = "true" ]; then
+    if [ $1 ]
+    then
+        echo "Screen saver is on"
+    else
+        gconftool-2 -s /apps/gnome-screensaver/idle_activation_enabled \
+        --type bool false
+        echo "screenSaver disabled"
+    fi
+else
+    if [ $1 ]
+    then
+        echo "Screen saver is disabled"
+    else
+        gconftool-2 -s /apps/gnome-screensaver/idle_activation_enabled \
+        --type bool true
+        echo "screenSaver enabled"
+    fi
+fi

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# should probably just use a bash alias
+
+git pull; perl Makefile.PL ; make 1>/dev/null && make install

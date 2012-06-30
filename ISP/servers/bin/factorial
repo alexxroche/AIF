@@ -1,0 +1,11 @@
+#!/bin/sh
+# doing factorials using bc
+# run bc and past in
+# define f(x){if(x>1){return(x*f(x-1))}else{return(1)}}
+# then f(any_number)
+# 
+# or write all of this to /usr/local/bin/factorial
+# chmod 755 /usr/local/bin/factorial 
+# factorial any_number
+
+echo "define f(x){if(x>1){return(x*f(x-1))}else{return(1)}} f($1)"|bc -l
