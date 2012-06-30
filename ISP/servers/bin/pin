@@ -1,0 +1,4 @@
+#!/bin/sh
+# pin Perl INstaller
+# This builds and installs the perl module that you are in
+perl Makefile.PL && make && make manifest && cpansign -s && make test && sudo make install
