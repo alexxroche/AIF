@@ -1,0 +1,63 @@
+UPDATE! I now just use ipmi and munin
+CentOS5
+ 
+This will likely install a version 5 OpenManage. At the time of writing version 5.3.0 was installed.
+ 
+wget -q -O - http://linux.dell.com/repo/hardware/bootstrap.cgi | bash
+ 
+If you see this error
+Could not retrieve mirrorlist http://mirrorlist.centos.org/?release=5&arch=i386&repo=os error was
+[Errno 4] IOError: <urlopen error (104, 'Connection reset by peer')>
+Error: Cannot find a valid baseurl for repo: base
+Then the firewall is not allowing FTP correctly. Have the Antivirus disabled and try again
+ 
+ 
+yum install srvadmin-all
+ 
+srvadmin-services.sh  start
+ 
+chkconfig --level 2345 mptctl on
+chkconfig --level 2345 dsm_sa_ipmi on
+chkconfig --level 2345 instsvcdrv on
+chkconfig --level 2345 dsm_om_shrsvc on
+chkconfig --level 2345 dsm_om_connsvc on
+chkconfig --level 2345 dataeng on
+ 
+ 
+root@ns0:~# omreport chassis
+Health
+Main System Chassis
+SEVERITY : COMPONENT
+Ok       : Fans
+Ok       : Intrusion
+Ok       : Memory
+Critical : Power Supplies
+Ok       : Processors
+Ok       : Temperatures
+Ok       : Voltages
+Ok       : Hardware Log
+Ok       : Batteries
+For further help, type the command followed by -?
+
+yum -y install munin-node perl-libwww-perl spamassassin
+/etc/init.d/munin-node start
+
+ln -s /opt/dell/srvadmin/oma/bin/libdsupt32.so.1.100.276 /usr/lib/libdsupt32.so.1
+ln -s /opt/dell/srvadmin/oma/bin/libomacs32.so.1 /usr/lib/libomacs32.so.1
+ln -s /opt/dell/srvadmin/oma/bin/libomclpr32.so.3 /usr/lib/libomclpr32.so.3
+ln -s /opt/dell/srvadmin/oma/bin/libomcldb32.so.3.70.276 /usr/lib/libomcldb32.so.3
+ln -s /opt/dell/srvadmin/oma/bin/libomclpr32.so.3 /usr/lib/libomclpr32.so.3
+ln -s /opt/dell/srvadmin/oma/bin/libomadb32.so.3 /usr/lib/libomadb32.so.3
+ln -s /opt/dell/srvadmin/oma/bin/libxmlsup32.so.2 /usr/lib/libxmlsup32.so.2
+
+rm /usr/lib/libdsupt32.so.1
+rm /usr/lib/libomacs32.so.1
+rm /usr/lib/libomclpr32.so.3
+rm /usr/lib/libomcldb32.so.3
+rm /usr/lib/libomclpr32.so.3
+rm /usr/lib/libomadb32.so.3
+rm /usr/lib/libxmlsup32.so.2
+
+echo '/opt/dell/srvadmin/oma/bin/'>>/etc/ld.so.conf.d/omsa.conf ; ldconfig ; srvadmin-services.sh restart 
+
+http://conport01/Intra/Company/Sysadmin/wiki/Wiki%20Pages/Dell%20OpenManage%20Installation.aspx
