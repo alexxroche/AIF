@@ -1,0 +1,56 @@
+
+Forked from version:
+---------------------- 
+skm-20081121 - on Nov 21, 2008 1:28 PM
+
+Reason for this fork
+----------------------
+- fixing root user issue (change from root user to sudo)
+- enhance SKM to create accounts on a remote host!
+- ease up my life for activating the use of the great Backup software 'BackupPC'
+
+Why is LSKUM named LSKUM?
+-------------------------
+LSKUM = Linux SSH-Key & User Management
+
+Ok, but why 'LSKUM' and not: [fill-in-what-you-want] ?
+
+Because ...
+... SKM is not enough anymore (doesn't point to the new user management function)
+... SKUM is a name/word used in several other products/sites..
+... SUKM is not the right name because the 'K' means Key and is related to SSH
+
+... LSKUM is nowhere mentioned else in the web (so we can use it and no confusion/mix-up possible)
+... LSKUM stands for everything the tool can do for you
+... LSKUM can be spoken easily ;o)
+
+
+Changelog/History
+---------------------
+2009-10-27 	Most of the implementation and fixes:
+		- created 'createaccount_action.php' to handle user add
+		- modified 'MyFunctions.inc.php' to fix root user issues
+		- created 'createaccount.php' to handle user add
+		- created 'sshconnectfail.php' to get better ssh feedback
+		- modified 'decrypt_key.php' to fix root user issues and improve encrypted key handling
+		- modified 'deploy_account.php' to use /etc/skm instead of WWW dir (security hole)
+
+2010-05-04	- fix: problem when adding user and ~/.ssh dir not existent (MyFunctions.inc.php & createaccount.php)
+		- created file VERSION (this file) to document changes
+		- created file HOWTO
+		- changed name from SKM to LSKUM (and added explanation why)
+		- renamings in several files for new name
+		- updated help text for creating remote user account
+		- fix: problem with duplicated help text when creating remote user account
+		- fix: sudoers command for backuppc prevent restoring
+		- modified deploy_account.php to match new naming
+		- added symlinks for README and CHANGELOG
+
+2011-05-26  External Fixes by JN:
+		- fix: lots of notice-fixes due to wrong variable handling
+		- fix: lots of lost variables (undefined index) bugs
+		- fix: adding users failed under certain circumstances
+		- fix: search pages were a bit buggy
+		- created file index.php with an include of show_all_hosts.php, since a deployment via ftp won't handle links correctly
+		- fix: some design issues and css
+		- fix: some texts were not in english, also for comments in the code
