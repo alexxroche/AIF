@@ -1,0 +1,40 @@
+[user]
+    name = "Alexx Roche"
+    email = "notice-bin@alexx.net"
+[merge]
+    tool = meld
+[color]
+    ui = auto
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+[color "diff"]
+    meta = yellow bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
+[alias]
+    p = push origin master
+    ls = ls-files
+    st = status
+    ci = commit
+    cia = commit -a
+    br = branch
+    co = checkout
+    df = diff
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --branches
+	rawlg = log --graph --pretty=tformat:'%ct %Cred%h%Creset -%C(yellow)%d%Creset %s' --branches
+	rawlog = log --pretty=tformat:'%ct %Cred%h%Creset -%C(yellow)%d%Creset %s' --branches
+	rawjog = log --pretty=format:'%ct %Cred%h%Creset - %T' --branches
+	rawlol = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ct)%Creset%n' --branches
+	dlog = log --graph --pretty=format:'%d' --abbrev-commit --date=raw --branches
+    lol = log --graph --decorate --pretty=oneline --abbrev-commit --branches
+    lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+	incoming = "!git remote update -p; git log ..@{u}"
+	outgoing = log @{u}..
+
