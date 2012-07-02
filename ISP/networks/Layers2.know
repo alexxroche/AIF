@@ -1,0 +1,34 @@
+
+TCP 7 layer model
+1 - 
+2 - MAC-address, Switch
+3 - IP, Router
+4 - TCP-udp
+5 - 
+6 - 
+7 -
+
+ISOI
+1 - 
+2 - MAC-address, Switch
+3 - IP, Router
+4 - TCP-udp
+5 - 
+6 - 
+7 -
+
+2 - STP
+
+3 -
+IGP:	OSPF	- link state
+	IS-IS	- link state
+	RIP	- distance
+	IGRP	- distance
+	EIGRP	-
+	iBGP	-
+EGP:
+	EGP3	-
+	eBGP	-
+	ISIS	-
+
+HSRP, VRRP - NOT routing protocols as they do not advertise IP routes or affect the routing table in any way.
