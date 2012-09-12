@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head><meta charset="utf-8" />
+<meta name="licence" content="This work is licensed under a MODIFIED Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/; The modification is that you MUST request PERSONAL permission from the copyright holder for USE this software." />
+<meta name="author" content="Alexx Roche; https://www.alexx.net/" />
+<meta name="src-uri" content="https://github.com/alexxroche/AIF/tree/master/scripts/html/soundcloud/group-cycle" />
+        <link rel="stylesheet" href="css/style.css" />
+<title>alexxroche soundcloud.com group_cycle tool</title>
+</head>
+ <body>
+    <div id="container">
+    </div>
+
+<!-- 
+
+In firefox, to get round: 
+Security Error: Content at https://soundcloud.com/connect/return_to_client may not load or link to file:///var/www/sites/github/AIF/scripts/html/soundcloud/group-cycle/index.html?#access_token=1-24169-22753309-f4954a7cfb35f13&expires_in=21599&scope=%2A.
+    
+go to: about:config and set user_pref("security.checkloaduri", "false");
+user_pref("capability.policy.policynames", "localfilelinks");
+user_pref("capability.policy.localfilelinks.sites", "https://soundcloud.com");
+user_pref("capability.policy.localfilelinks.checkloaduri.enab led", "allAccess");
+
+Google Chrome: https://chrome.google.com/webstore/detail/jllpkdkcdjndhggodimiphkghogcpida
+
+--> 
+
+    <!--script type="text/javascript" charset="utf-8" src="js/jquery_1.7.1_min.js"></script -->
+    <script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/jquery.sc.api.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/main.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/jquery.countdown.js"></script>
+
+    <div id="function" class="hidden">
+        <p id="padding"></p>
+        <p id="note"></p>
+        <p id="padding"></p>
+        <div id="countdown"></div>
+        <p id="padding"></p>
+        <h2></h2>
+        <p id="function">
+        <form id="group_cycle" method="post">
+        <input id="group_cycle" title="Remove and add all of your tracks from each of your groups"
+        class="orange button" type="submit" name="group_cycle" value="Cycle all tracks from each group now" />
+        </form>
+        </p>
+    </div>
+    <div id="licence">
+        <span><a href="LICENCE.txt"><img src="img/80x15.png" alt="LICENCE" /> 
+            Copyright &copy; 2012, Alexx Roche. You may NOT distribute this code without permission</a>
+        </span>
+    </div>
+    <div id="footer" class="hidden">
+<form id="logout"><input type="submit" class="logout" name="logout" value="" /></form>
+ </body>
+</html>
