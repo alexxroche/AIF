@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="licence" content="This work is licensed under a MODIFIED Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-nd/3.0/; The modification is that you MUST request PERSONAL permission from the copyright holder for USE this software." />
+    <meta name="author" content="Alexx Roche; https://www.alexx.net/" />
+    <meta name="src-uri" content="https://github.com/alexxroche/AIF/tree/master/scripts/html/soundcloud/track-cycle" />
+    <title>alexxroche soundcloud.com track_cycle tool</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <!--script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script-->
+    <script type="text/javascript" charset="utf-8" src="js/jquery_1.7.1_min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/jquery.countdown.js"></script>
+    <script type='text/javascript' charset="utf-8" src='js/persist-all-min.js'></script>
+    <script type="text/javascript" charset="utf-8" src="js/jquery.sc.api.js"></script>
+</head>
+ <body>
+    <div id="container">
+    </div>
+    <script type="text/javascript" charset="utf-8" src="js/main.js"></script>
+    <div id="tracks" class="hidden"><h2>Tracks</h2></div>
+    <div id="bunch" class="hidden" name="Bunch the groups together"></div>
+    <div id="db" class="hidden">
+    <p>
+        <h4>To-Do</h4>
+        <ol>
+        <li> update countdown when times are changed</li>
+        <li> Fix for firefox </li>
+        <li class="hidden"> use jQuery-ui to create groups tabs
+        <li class="hidden"> add ability to bunch groups together and apply to one or more tracks
+        <li class="hidden"> store user data and display that while waiting for api.soundcloud.com/me
+        <li class="hidden">
+// USE https://github.com/alexxroche/gibberish-aes to encrypt the client side data BEFORE saving it{
+//      The question here is, what key to use? We need it to be automatic, but not easy to guess/calculate.
+//      Something stored server side that is read-only and user specific AND requires authentication.
+//  i.e. api.get('/me/tracks', {limit:1,offset:1}, function(st){if(!st.id){st=$.makeArray($.parseJSON(st));}; key=st.secret_token + soundCloudApiKey;});
+//  (or we can just create an arbitrary field.)
+//  (If this was talking to https://github.com/alexxroche/Notice then the key would be stored, (encrypted)
+//    in the people table - that way you would have to compromise both the server AND the users desktop. )
+// }
+</li>
+        </ol>
+    </p>
+        
+        <fieldset><legend>Database</legend><label for="db">Data:</label><textarea id="db" cols="110" rows="5"></textarea>
+        <br /><button id="load_db" class="small orange button">Load</button>
+        <button id="save_db" class="small green button">Save</button></fieldset>Persist Type: <span id="type">none</span></div>
+    <div id="licence"><span><a href="LICENCE.txt"><img src="img/80x15.png" alt="LICENCE" /
+            >Copyright &copy; 2012, Alexx Roche. You may NOT distribute this code without permission</a></span></div>
+    <div id="footer" class="hidden"><form id="logout" method="post"><input type="submit" class="logout" name="logout" value="" /></form></body>
+</html>

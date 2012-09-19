@@ -9,17 +9,17 @@
   var tracks = new Object(); // associative array of track data (we only really need id,title,URI)
   var t = []; //array of track IDs
   var g = []; //array of group IDs
-  var hotd_html = '<select name="hotd">';
-  var h_html = '<select name="h">';
-  var m_html = '<select name="m">';
+  var offset_html = '<select id="offset_html" name="offset">';
+  var h_html = '<select id="h_html" name="h">';
+  var m_html = '<select id="m_html" name="m">';
   for (var h = 0;h<=24;h++) {
-            hotd_html = hotd_html + '<option>' + h + ' </option>';
+            offset_html = offset_html + '<option>' + h + ' </option>';
             h_html = h_html + '<option>' + h + ' </option>';
             m_html = m_html + '<option>' + h + ' </option>';
-  }   
+  }
   for (var m = 25;m<=59;m++)
             m_html = m_html + '<option>' + m + ' </option>';
-  hotd_html = hotd_html + '</select>';
+  offset_html = offset_html + '</select>';
   h_html = h_html + '</select>';
   m_html = m_html + '</select>';
 
@@ -67,41 +67,150 @@
  }
 
  // remove and add track t from all groups in this bunch b (or all groups)
- function track_cycle(t, b) {
+ function track_cycle(t, b) {  //track, bunch 
+    $('button[name="track_cycle"][id="' +t+ '"]').removeAttr("class", "orange").attr("class", "small green button");
+    // console.log('track_cycle for ' + t);
     if ( ! b ){
         b = g ;
+        console.log('track_cycle ALL groups');
     }
+    $.each(g, function(ok, group){
+        del_track(group, t, function(group, t, e){
+            // addd_track(group, t, callback, function(e){
+                // console.log('added track to group' + e);
+            //});
+        });
+    });
+    // would have thought this should be in a function within del_track, but it seems not
+    $.each(g, function(ok, group){
+        console.log('adding track ' + t + ' to group ' + group); 
+        add_track(group, t);
+    });
+    //console.log('done track_cycle');
+    setTimeout(function(){ $('button[name="track_cycle"][id="' +t+ '"]').removeAttr("class", "green").attr("class", "small orange button"); }, 1000);
     return true;
  }
 
- function show_tracks() {
+// dummy function until we migrate to the real track_cycle
+ function group_cycle(){ return true; }
+
+ function show_tracks(store) {
   if ( t.length >= 1 ){
     for (var i = 0;i<t.length;i++) {
       var id = t[i];
+      if(!tracks[id]){
+       // if($.browser.mozilla){
+            console.log('track ' + id + ' is not in the tracks DB');
+            console.log($.type(tracks));
+            console.log(tracks);
+            continue;
+       // }
+      }
       var title = tracks[id].title ? tracks[id].title : 'Track: ' + id;
       var link = tracks[id].permalink_url;
       var wave = tracks[id].waveform_url;
       if( ! $('div#track[name="' + id + '"]').length ) {
-            $('div#tracks').append('<div id="track" name="' + id + '"><form><table><tr> \
-            <td id="' + id + '">Reload:<input name="reload" type="checkbox" /></td>\
+            $('div#tracks').append('<div id="track" name="' + id + '"><form method="post"><table><tr> \
+            <td id="' + id + '"><button title="press me to cycle this track in all groups" class="small orange button" id="' + id + '" name="track_cycle">Reload:</button></td>\
+            <td><input id="' + id + '" name="reload" type="checkbox" /></td>\
             <td id="' + id + '">at:' + h_html + ':' + m_html + '</td>\
-            <td id="' + id + '">and every ' + hotd_html + ' hours</td>\
-            <td id="' + id + '"><a href="' + link + '">' + title + '</a></td> \
-            <td id="' + id + '"><span id="countdown" name="' + id + '"></span></td>\
-            <td id="buttons" class="right"><span id="buttons" class="right"></span></td>\
+            <td id="' + id + '" name="every">and every ' + offset_html + ' hours</td>\
+            <td id="' + id + '" name="cdh"><span id="countdown" name="' + id + '"></span></td>\
+            <td id="' + id + '"><a href="' + link + '" title="' + id + '">' + title + '</a></td> \
             </tr></table></form></div>');
+            $('select[id="h_html"]').removeAttr('id').attr('id' , id);
+            $('select[id="m_html"]').removeAttr('id').attr('id' , id);
+            $('select[id="offset_html"]').removeAttr('id').attr('id' , id);
+
+     load_db(store, db_key, function(this_data){
+        if(this_data){
+          if($.browser.mozilla){
+            try {
+            console.log(typeof this_data);
+           // var valid = $this_data;
+           // this_data = valid;
+            console.log(typeof this_data);
+            console.log('L99 size: ' + this_data.size);
+            //this_data = $.makeArray(this_data);
+            //this_data = JSON.parse(this_data);
+            console.log($.type(this_data));
+            console.log(this_data[id]);
+            }catch(e){ console.log('FF unhappy' + e.message);  console.log(e.toSource());}
+          }else{
+            if(!jQuery.isArray(this_data)){
+              // console.log('before: this_data type is ' + $.type(this_data));
+                try {
+                     this_data=$.parseJSON(this_data);
+             //       console.log('L99 length: ' + this_data.length);
+                }catch(e){
+                    console.log('failed in update_track to JSON:' + e.message);
+                    console.log('probably duff data');
+                    console.log($.type(this_data));
+                    console.log(this_data);
+                    //try to scrub the data or wipe the DB NOTE: {needs to be written }
+                }
+            }
+          }
+        // now we see if we have to set any of these
+            if(this_data[id]){
+              if(this_data[id].reload){
+                if( $('input[id="' + id + '"][name="reload"]').attr('checked') ){
+                    console.log('track:' + id + ' IS enabled for reload in DB and on the page');
+                }else{
+                    if( $('input[id="' + id + '"][name="reload"]').length ){
+                        $('input[id="' + id + '"][name="reload"]').attr('checked', true);
+                        //console.log('track:' + id + ' IS NOW checked');
+                    }else{
+                        console.log('track:' + id + ' isn\'t on the page yet');
+                    }
+                }
+              //} else{
+               // console.log('track:' + id + ' is not enabled for reload');
+               // var tmp = this_data[id];
+                //console.log(tmp);
+                if(this_data[id].h && this_data[id].m){
+                    var start = this_data[id].h + ', ' + this_data[id].m;
+                    console.log(start);
+                    var now = next_trigger(start, this_data[id].offset, function(callback){
+                        $('#countdown[name="' + id +'"]').html(callback);
+                    });
+                }
+              }
+              if(this_data[id].h || this_data[id].m || this_data[id].offset){
+                $('select[id="' + id + '"][name="m"]').val(this_data[id].m);
+                $('select[id="' + id +'"][name="h"]').val(this_data[id].h);
+                $('select[id="' + id + '"][name="offset"]').val(this_data[id].offset);
+              }
+       if(this_data[id].reload){
+        if(this_data[id].h || this_data[id].m){
+         // add the countdown clock
+           next_trigger(this_data[id].h, this_data[id].m, this_data[id].offset, function(callback){
+                console.log('offset countdown (minutes): ', callback);
+                $('[id="countdown"][name="' + id +'"]').html('(in <span name="cdd" id= "' + id + '"></span>)');
+                //$('[name="every"][id="' + id +'"]').append('[' + ( parseInt( ( ( 24 - this_data[id].h ) / this_data[id].offset ), 10) + 1) + ' reload/day]');
+                $('[name="every"][id="' + id +'"]').append('[' + ( ( ( 24 - this_data[id].h ) / this_data[id].offset ) | 1 ) + ' reload/day]');
+                if(callback >= 0){
+                    countdown_for(id, callback);
+                }
+           });
+        } // end "only countdown if we have an hour and minute for this track"
+       } // end "only add countdown for enabled tracks"
       }
-    }
+     }
+    });
    }
   }
-
+ }
+}
 
 //store data
 
- function save_db(db, key, val) {
+ function save_db(db, key, val, callback) {
   // Note that the value must be a string.  If you want to save structured
   // data like arrays or hashes, you should serialize it using Array.join or JSON.
-     db.set(key, val, function(i, e){ 
+    //var theString = (typeof val == "string") ? jQuery.parseJSON(val) : val;
+    var theString = JSON.stringify(val);
+     db.set(key, theString, function(e){ 
         if(val){
             if(val.length){
                 console.log('saved:' + val.length); 
@@ -109,8 +218,9 @@
                 console.log('db insert:');
                 console.log(val); 
             }
+            callback(val);
         }else{
-            console.log('sin:' + i + ', e:' + e);
+            console.log('DROP DB:' + e);
         }
      });
  }
@@ -118,9 +228,13 @@
  function load_db(db, key, callback){
     db.get(key, function(ok, val) {
       if (ok){
-        //console.log('db found:' + val.length);
-        console.log('db select:');
-        console.log(val.length);
+        //console.log('db SELECT: ' +ok);
+        if(val){
+          //  console.log('db found:' + val.length);
+          //  console.log(val);
+        }else{
+           console.log('db select:'); console.log(val);
+        }
         callback(val);
       }else{
         console.err('db missing');
@@ -133,59 +247,197 @@
 
 function update_track(db, key, tid, k, v){
      load_db(db, key, function(this_data){
+        console.log('saving using:' + key);
           if(this_data){
             // now we need to update this_data
             // probably best to turn it inso JSON and then change it
-           // if(!jQuery.isArray(this_data)){ 
-                    //this_data=$.makeArray(this_data); 
-                console.log('L128:'+$.type(this_data));
-           // }
-                console.log('L143 setting:'+tid + ', ' + k + ': ' + v);
-                if( this_data[tid]){
-                    this_data[tid][k] = v;
-                }else{
-                    this_data[tid] = { k: v };
+            if(!jQuery.isArray(this_data)){ 
+                try {
+                     //this_data= $.makeArray($.parseJSON(this_data));
+                     this_data=$.parseJSON(this_data);
+                }catch(e){ 
+                    console.log('failed in update_track to JSON:' + e.message); 
+                    console.log('probably duff data');
+                    console.log(this_data);
+                    //try to scrub the data or wipe the DB NOTE: {needs to be written }
                 }
-            //var html = this_data.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+               console.log('L128:'+$.type(this_data));
+               console.log(this_data);
+            }
+            if( this_data[tid] ){
+                    console.log('track ' + tid + ' exists in DB!');
+                    this_data[tid][k] = v;
+            }else{
+                if($.browser.mozilla){
+                    this_data = $.makeArray(this_data);
+                }
+                    console.log('no entry for: '+tid);
+                    console.log('trying to update this_data');
+                    console.log(this_data);
+                    this_data[tid] = new Object();
+                    this_data[tid][k] = v;
+                    var now = (new Date()).getTime();
+                    this_data[tid]['now'] = now;
+            }
 
-                console.log('L134:' +this_data);
-                save_db(db, key, this_data, function(){
-                    $('textarea#db').val(this_data);
+                save_db(db, key, this_data, function(k, v){
+                    $('textarea#db').val(k);
                 });
+                $('textarea#db').val(this_data);
           }else{
-                console.log('*snif* no data:' + data);
+              //  console.log('shiny new db:' + tid + ', ' + k + ': ' + v);
+                var newDB = new Object();
+                var now = (new Date()).getTime();
+                newDB[tid] = new Object();
+                newDB[tid][k] = v;
+                newDB[tid]['when'] = now;
+                console.log('saving new DB');
+                console.log(newDB);
+                save_db(db, key, newDB, function(l, m){
+                    //$('textarea#db').val('[' + tid + '] ' + k + ': ' v);
+                    $('textarea#db').val(l);
+                });
           }
         });
 
 } 
 
+function next_trigger(h, m, period, callback){
+   // var now = (new Date()).getTime();
+  // we have to know what time it is now
+    var date = new Date();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    var now = hour + ':' + minute;
+    var wait = (((0+h+period)*3600) + (0+m)*60);
+
+// NTS we have a BUG: if the next "every" is after midnight then we should show the countdown as being
+// NTS   ( 24 - now.hour ) + h )
+
+    if( h >= hour ){
+        // we have not got to the first time of the day
+        if(m > minute){
+         console.log('we have not got to ' + h + ':' + m + ' anchor yet');
+            //callback( ((h - (hour + 1)) *3600) + (((m+60) - minute) * 60));  //this is for seconds
+            callback( ((h - (hour + 1)) *60) + (m - minute));
+        }else{
+         console.log('we have JUST passed ' + h + ':' + m + ' now it is ' + hour + ':' + minute);
+            //callback( (((h + period) - hour  ) *3600) + ((m - minute) * 60) ); //this is for seconds
+            if( ( h - hour ) <= 0 ){
+                callback( (period*60) - (minute - m) );
+            }else{
+                callback( (((h - hour) + period ) *60) - (minute - m) );
+            }
+        }
+    }else if( hour > h && period > 0){
+        console.log('Pst ' + h + ':' + m + ', but by how many ' + period +'\'s ?');
+        // we have past the anchor and need to know how many periods past
+        // before we can calculate
+        while(hour > h){
+           // console.log('h:' + h + ', hour: ' + hour + ', gap: ', period);
+            h = parseInt(h) + parseInt(period);
+        }
+        //var hsl = hour > h? hour - h : h - hour;
+        console.log('h: ' + h + ', hour: ' + hour);
+        var hsl = h - hour;
+        var msl = minute > m ? (m+60) - minute : m - minute;
+        console.log('we have to wait ' + hsl + ':' + msl + ' until cycle'); 
+        // wait = (( hsl * 3600 ) + ( msl * 60) );  //this is for seconds
+        wait = ( ( hsl * 60 ) + msl);
+        callback(wait);
+    }else if(period > 0){
+        // TRIGGER IT NOW!
+        console.log('trigger: ' + now + ', ' + anchor);
+        //$('#countdown[name="' + id +'"]').html(callback);
+        return 1;
+    }
+  // how are we going to watch a random number of tracks and keep a record of their countdown?
+
+  // we have to know, for each track, (that is enabled) when to start and how many hours to wait.
+  //    [ We should display how many times a day that track is going to be reloaded ]
+  //
+  // we have to calculate how far away the next reload is
+  // we have to display it
+  // we have to catch t == 0 and trigger a reload
+  //
+  //  we have to monitor all tracks even if we start to display using pagination
+  //
+   // console.log('we are trying to countdown');
+}
+
+// countdown
+function countdown_for(id, offset) {
+    //var future = offset ? offset*1000 : 24*60*60*1000, // this is for seconds
+    var future = offset ? offset*60*1000 : 24*60*60*1000,
+        ts = (new Date()).getTime() + future;
+    if( $('[name="cdd"][id="' + id + '"]').length){
+      $('[name="cdd"][id="' + id + '"]').countdown({
+        timestamp   : ts,
+        callback    : function(days, hours, minutes){
+
+            if((new Date()) > ts){
+                console.log('resetting ' + future);
+                //ts = (new Date()).getTime() + future*1000; // this is for seconds
+                ts = (new Date()).getTime() + future*60*1000; 
+               console.warn('time to cycle:' + id + ' (' + offset + ')[' + future + ']');
+                var r = group_cycle('do');
+                if(r){
+                    console.log('auto cycle triggered');
+                    //window.location.reload(true);
+                    reset_track(id);
+                }else{
+                    console.log('autoCycle failed:' + r);
+                    alert('autoCycle failed:' + r);
+                   // window.location.reload(true);
+                }
+            }
+        }
+    });
+   }
+}
+
+ function reset_track(id){
+    var this_data = tracks;
+    var m = 0+this_data[id].m;
+    next_trigger(this_data[id].h, m, this_data[id].offset, function(callback){
+        console.log('offset countdown (seconds): ', callback);
+        $('[id="countdown"][name="' + id +'"]').html();
+        // only reset if that is enabled or remove it if (now + offset) > 24:00:00
+        if(this_data[id].offset > 0 && ( 24 >=  (this_data[id].offset + (new Date()).getHours() ))){
+                $('[id="countdown"][name="' + id +'"]').html('(in <span name="cdd" id= "' + id + '"></span>)');
+        // NOTE we /could/ have a countdown of the number of resets left today? 
+                countdown_for(id, callback);
+        }else{
+            $('[id="countdown"][name="' + id +'"]').remove();
+        }
+   });
+}
+
  // collect the track data from the database
+
  var store = new Object();
- var found_DB = false;
  try {
     store = new Persist.Store(app);
      $(document).ready(function() {
         $('span#type').html(Persist.type);
     });
-    found_DB = true;
- }catch(e){ console.log(e.message); }
- // load up the page (if we have data
- if(found_DB){
-    //console.log('found DB!');
-   // $('span#type').html(Persist.type);
-    show_tracks(function(){
+   // load up the page (if we have data
+   //console.log('found DB!');
+   load_db(store, db_key, function(this_data){
+       // $.each(this_data, function(k, v){ //console.log('found in DB: ' + k + '=' + v); // tracks[k] = v; });
+       // console.log(this_data);
+      $(document).ready(function() {
+        $('textarea#db').val(this_data);
         $('div#tracks').addClass("blue");
-    });
- }
+      });
+   });
+ }catch(e){ console.log(e.message); }
 
 
  // wait for the API to be available
  $(document).bind($.sc.api.events.AuthSuccess, function(event) {
       $('.loading').remove();
       $('#tracks').removeAttr("class", "hidden");
-
- //$(this).change(function(ed) { alert('you touched a ' + $(this).get(0).tagName ); });
- //$(this).change(function(ed) { alert('you touched a ' + $.type(ed)  + ':' + ed); console.log(ed); });
 
   $('#logout').submit(function(e){
     e.preventDefault();
@@ -196,6 +448,7 @@ function update_track(db, key, tid, k, v){
 
 // http://developers.soundcloud.com/docs/api/guide#pagination
  // going to have to step through pages while(api.get("/users/" + user_ud + "/groups", { limit: page_size, offset: page }, function(data) { return data.length;}) == page_size 
+   
   api.get("/users/" + user_id + "/groups", { limit: page_size }, function(data) {
      if ( ! jQuery.isArray(data) ) { data = $.parseJSON(data); data = $.makeArray(data); }
      $.map( data, function(group){
@@ -206,35 +459,48 @@ function update_track(db, key, tid, k, v){
 
 // check the track list and update our store and then the page
 
+    // NOTE we want to add pagination when there are too many tracks (is that too many in the database or in total?)
   api.get('/me/tracks', function(data){
      //if ( ! jQuery.isArray(data) ) { data = $.parseJSON(data); data = $.makeArray(data); }
-     if(!jQuery.isArray(data)){ data=$.makeArray($.parseJSON(data)); }
+     //if(!jQuery.isArray(data)){ data=$.makeArray($.parseJSON(data)); }
+     if(!jQuery.isArray(data)){ data=$.parseJSON(data); }
      $.map( data, function(track){
       if( track.id ){
         var id = track.id;
-        var title = track.title;
-        var link = track.permalink_url;
         t.push(id); //this lets us know the size of tracks{}
      // we could just store everything that the API gives us, but 
      // with the limited size of some stores we should limit ourselves
         //console.log(id + ': ' + title);
         var now = (new Date()).getTime();
 
-        // check data in DB for this row
-
-        tracks[id] = { "time": now, "title": track.title, "permalink_url": track.permalink_url, "waveform_url": track.waveform_url };
+        //tracks[id] = { "time": now, "title": track.title, "permalink_url": track.permalink_url, "waveform_url": track.waveform_url };
+        if( ! tracks[id] ){
+            tracks[id] = { "time": now, "title": track.title, "permalink_url": track.permalink_url, "waveform_url": track.waveform_url };
+        }else{
+            tracks[id]["time"] = now;
+            tracks[id]["permalink_url"] = track.permalink_url;
+            tracks[id]["waveform_url"] = track.waveform_url;
+            tracks[id]["title"] = track.title;
+        }
        // console.log('L209, tracks:' + tracks);
-
-// check that the DB is up to date 
-        show_tracks();
+        show_tracks(store, tracks);
       }
      });
         $('div#db').removeAttr("class", "hidden");
         if($.browser.mozilla){
-            //$('textarea#db').html(tracks.toSource());
-            console.log(tracks.toSource());
+            $('textarea#db').html(tracks.toSource());
+            //console.log(tracks.toSource());
+            $.each(tracks, function(key, value) { 
+                if($.type(value)){
+                    $.each(value, function(ki, vel) { 
+                        console.log(ki + ': ' + vel);
+                    });
+                }else{
+                    console.log(key + ': ' + value);
+                }
+            });
         }else{
-            $('textarea#db').val( decodeURIComponent(jQuery.param(tracks)) );
+           // $('textarea#db').val( decodeURIComponent(jQuery.param(tracks)) );
             var arrayNow = $.makeArray( tracks );
            //$('textarea#db').val( $.each(arrayNow) );
           // $('textarea#db').val( jQuery.param(arrayNow) );
@@ -249,101 +515,84 @@ function update_track(db, key, tid, k, v){
 
         // hmmm NOTE trying to bind watching
         $('#tracks').bind('DOMSubtreeModified', function(e) {
-          if (e.target.html.length > 0) {
-            console.log('eeee:' + e);
+          if (e.target.innerHTML && e.target.id){
+           var this_name = 'You ';
+            if( e.target.name){ this_name = e.target.name; }
+            //else if( e.target.parent.name){ this_name = e.target.name; }
+          //  var this_name = e.target.name ? e.target.name : e.target.parent.name;
+            console.log(this_name + ' pressed for ' + e.target.id + ', ' + e.target.innerHTML);
           }else{
-            console.log('fffffff:' + e);
+           // console.log('target event:'); console.log(e);
           }
         });
         $('input, select').change(function(ed){
-              var this_id = $(this).parent().attr('id');
-              var name = $(this).attr('name');
-  //        if ( $(this).parent().attr('id') ){
-          if ( this_id >= 0 ){
-              //console.log('L243:' +  tracks[$(this).parent().attr('id')].title);
-              //console.log('L243:' +  tracks[this_id].title);
-
-        // get the existing value from the database with load_db NOTE (not written yet)
+            var id = $(this).parent().attr('id');
+            var name = $(this).attr('name');
+            if ( ! id >= 0 ){ id = $(this).attr('id'); }
+            if ( id >= 0 ){
               if ( $(this).attr('type') == 'checkbox' ){            
-                update_track(store, db_key, $(this).parent().attr('id'), $(this).attr('name'), ed.target.checked);
- if(debug = 'REM'){
-                var value = '';
-                if ( ed.target.checked ){
-                  value = 1; //'checked';
-                }else{
-                  value = 0; // 'unchecked';
-                }
-                if(value.length){
-                 //   console.log( '{' + $(this).parent().attr('id') + ': { ' + $(this).attr('name') + ': ' + value + '}}');                  
-                   if( tracks[this_id] ){
-                    //console.log(' setting  ' + this_id + ' ' + name + ': ' + value);
-                    
-                    if(value == 'checked'){
-                       tracks[this_id][name] = 1;
-                    }else{
-                       tracks[this_id][name] = 0;
-                    }
-                   // console.log(this_id + ': ');
-                   // console.log(name + ': ' + tracks[this_id][name]);
-                    //console.log(tracks);
-                   // save_db(store, db_key, tracks);
-                       // var html = tracks.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                        $('textarea#db').val(tracks[this_id]);
-                   }else{
-                     console.warn(this_id + ' does not exist yet');
-                     tracks[this_id] = { "$(this).attr('name')": "$value" };
-                     save_db(store, db_key, tracks);
-                     $.each(tracks, function(key, value) { 
-                        if(key == this_id){
-                            var txt = tracks[this_id];
-                            $('textarea#db').val(txt);
+                update_track(store, db_key, id, name, ed.target.checked);
+                if(ed.target.checked){
+                    // show_track(id); // this should be cut from show_tracks into its own function
+                    var h = $('select[name="h"][id="' + id + '"]').val();
+                    var m = $('select[name="m"][id="' + id +'"]').val();
+                    var offset = $('select[name="offset"][id="' + id +'"]').val();
+                    console.warn('putting back:' + h + 'h' + m + ', every ' + offset + ' hours');
+                    next_trigger(h, m, offset, function(callback){
+                       // $('[name="every"][id="' + id +'"]').append('[' + ( ( ( 24 - tracks[id].h ) / tracks[id].offset ) | 1 ) + ' reload/day]');
+                        if(callback >= 0){
+                            $('[name="cdh"][id="' + id +'"]').append('<span id="countdown" name="' + id + '">(in <span name="cdd" id= "' + id + '"></span>)</span>');
+                            countdown_for(id, callback);
                         }
-                      });
-                   }
-                }else{  
-                    if($.browser.mozilla){
-                        console.log('no value for:' + ed.toSource());
-                    }else{
-                        console.log('no value for:');
-                        console.log(ed);
-                    }
+                    });
+                }else{ 
+                    $('[id="countdown"][name="' + id +'"]').remove();
+                    reset_track(id);
                 }
-   }
               }else{
-                console.log( '{' + $(this).parent().attr('id') + ': { ' + $(this).attr('name') + ': ' + $(this).attr('value') + '}}');                  
-                update_track(store, db_key, $(this).parent().attr('id'), $(this).attr('name'), $(this).attr('value'));
+               // console.log( '{' + $(this).parent().attr('id') + ': { ' + $(this).attr('name') + ': ' + $(this).attr('value') + '}}');                  
+                update_track(store, db_key, id, name, $(this).attr('value'));
               }              
-          }else{
-            console.log(ed);
-          }
+            }else{
+                console.log('L269 no id:' );
+                console.log(ed);
+            }
         });
 
-
+      $('button[name="track_cycle"]').click(function(e){
+         e.preventDefault();
+         var this_track = $(this).attr('id');
+         //console.log('trying to cyclec track' + this_track);
+         var this_tracks_bunch = g; //this is the default for now
+         if( tracks[this_track].bunch ){
+            this_tracks_bunch = tracks[this_track].bunch; // the groups that this track should be in 
+         }
+         track_cycle(this_track, this_tracks_bunch);
+         return false;
+      });
 
   });
   $('button#load_db').click(function(){ 
-        load_db(store, db_key, function(this_data){
+        load_db(store, db_key, function(this_data, e){
             if(this_data){
                 //console.log('db select:' + this_data );
                 console.log('db select:');
                 console.log(this_data);
-                $('textarea#db').val(this_data);
+                console.log(e);
+                $.each(this_data, function(k, v){
+                    //$('textarea#db').val($('textarea#db').val() + k + '=' + v + "\n");
+                    $('textarea#db').val(this_data);
+                });
+            }else{
+                console.log('LOAD pressed' + this_data + ', e:' + e);
             }
         });
     });
   $('button#save_db').click(function(){ 
-     console.log('you pressed the save button' + $('textarea#db').val());
+     //console.log('you pressed the save button' + $('textarea#db').val());
         save_db(store, db_key, $('textarea#db').val());
       //setTimeout(function(){ $('textarea#db').val(''); }, 1500);
     });
 
-  $('#track_cycle').submit(function(e){
-     e.preventDefault();
-     var this_track = this.data('#track');  
-     var this_tracks_bunch = this.data('#groups'); // the groups that this track should be in 
-     track_cycle(this_track, this_tracks_bunch);
-     return false;
-  });
-
- });
+});
 })(jQuery);
