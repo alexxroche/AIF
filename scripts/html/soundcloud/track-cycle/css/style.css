@@ -172,4 +172,4 @@ ul,li { white-space:nowrap; }
 .logout { padding: 5px 10px; border: none; width: 140px; background: url("../img/btn-disconnect-l.png") no-repeat scroll center center transparent; }
 .orange { background-color: orange; color: black; }
 #footer,.footer { position: absolute; padding: 0 0 0 70% ; width: 10px; margin: auto auto; text-align: right; bottom: 0px; }
-#licence { position: absolute; z-index: 1; padding: 0 0 0 15%; margin: auto auto; text-align: right; bottom: 0px; }
+#licence { position: absolute; z-index: 1; top: 100%; padding: 0 0 0 0; margin: auto auto; text-align: right; bottom: 0px; }

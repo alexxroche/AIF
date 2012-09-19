@@ -1,7 +1,7 @@
 (function($) {  
  
   //variables
-    var debug = true;
+    var debug = false;
     var user_id = 1;
     //var tracks = new Object();
       var tracks = { 
@@ -15,7 +15,7 @@
             8 : { reload: true, h: 9, m: 42, hotd: 0 }, 
         };
     var t = [1,2,3,4,5,6,7,8];
-  for (var m = 9;m<=24;m++){
+  for (var m = 9;m<=32;m++){
         t.push(m);
         var date = new Date();
         var min = date.getMinutes() +1;
@@ -103,7 +103,7 @@
            var m = 0+this_data[id].m;
            //console.log(start);
            next_trigger(this_data[id].h, m, this_data[id].hotd, function(callback){
-                console.log('offset countdown (seconds): ', callback);
+               // console.log('offset countdown (seconds): ', callback);
                 $('[id="countdown"][name="' + id +'"]').html('(in <span name="cdd" id= "' + id + '"></span>)');
                 //$('[name="every"][id="' + id +'"]').append('[' + ( parseInt( ( ( 24 - this_data[id].h ) / this_data[id].hotd ), 10) + 1) + ' reload/day]');
                 $('[name="every"][id="' + id +'"]').append('[' + ( ( ( 24 - this_data[id].h ) / this_data[id].hotd ) | 1 ) + ' reload/day]');
@@ -123,7 +123,51 @@
       setTimeout(function(){ $('.loading').remove(); }, 900);
  // let them know we are working
   if( ! $('.sc-authorize').length ){$('<span class="orange loading" title="Welcome!">Loading Notice::SoundCloud</span>').prependTo(container); }
+  reload_page(23, 59);
   }
+
+function reload_page(h, m){
+    var now_hour = (new Date()).getHours();
+    var now_min  = (new Date()).getMinutes();
+    var now_sec  = (new Date()).getSeconds();
+    if( now_hour == h && now_min == m && now_sec >= 59){
+        console.warn('RELOADING PAGE!');
+        alert("You reloaded the page!");
+        // reload the page, to hide all sins (probably don't need this but it might help.)
+       // window.location.href=window.location.href;
+       // history.go(0)
+       window.location.reload(true);
+    }else{
+       var wait = 24*60*60;
+       if(h > now_hour){
+        var hours_left = h - now_hour;
+            if(m > now_min){
+                var mins_left = m - now_min;
+                wait = (( hours_left * 3600 ) + ( mins_left * 60 ));
+            }else{
+                var mins_left = now_min - m;
+                wait = (( hours_left * 3600 ) + ( mins_left * 60 ));
+            }
+       console.log('NOT time yet: ' + wait + ' seconds left (' + hours_left + ')');
+        }else{
+        var hours_left = now_hour - h;
+            if(m > now_min){
+                var mins_left = m - now_min;
+                wait = (( hours_left * 3600 ) + ( mins_left * 60 ));
+       console.log('not time yet: ' + wait + ' seconds left (' + mins_left + ')');
+            }else{
+                var mins_left = now_min - m;
+                wait = (( hours_left * 3600 ) + ( mins_left * 60 ));
+            }
+       }
+        var interval = wait * 1000;
+        if(interval >= 1000 ){
+            setTimeout(function(){ window.location.reload(true); }, interval);
+            //setInterval(window.location.reload(true), interval);
+        }
+    }
+    
+}
 
 function next_trigger(h, m, period, callback){
    // var now = (new Date()).getTime();
@@ -135,7 +179,7 @@ function next_trigger(h, m, period, callback){
     var anchor = '';
     if(h <= 9){ anchor += 0+h }else{ anchor += h; }
     if(m <= 9){ anchor += ':' + 0+m }else{ anchor += ':' + m; }
-    console.log(anchor + ', ' + now);
+   // console.log(anchor + ', ' + now);
     //var anchor = (new Date(year, month, day, start)).getTime();
     var wait = (((0+h+period)*3600) + (0+m)*60);
 
@@ -145,15 +189,15 @@ function next_trigger(h, m, period, callback){
     if( h >= hour ){
         // we have not got to the first time of the day
         if(m > minute){
-         console.log('we have not got to ' + h + ':' + m + ' anchor yet');
+     //    console.log('we have not got to ' + h + ':' + m + ' anchor yet');
             callback( ((h - (hour + 1)) *3600) + (((m+60) - minute) * 60));
         }else{
-         console.log('we have JUST passed ' + h + ':' + m + ' now it is ' + hour + ':' + minute);
+     //    console.log('we have JUST passed ' + h + ':' + m + ' now it is ' + hour + ':' + minute);
             callback( (((h + period) - hour  ) *3600) + ((m - minute) * 60) );
         }
         return 
     }else if( hour > h && period > 0){
-        console.log('Pst ' + h + ':' + m + ', but by how many ' + period +'\'s ?');
+       // console.log('Pst ' + h + ':' + m + ', but by how many ' + period +' minutes?');
         // we have past the anchor and need to know how many periods past
         // before we can calculate
         while(hour > h){
@@ -163,7 +207,7 @@ function next_trigger(h, m, period, callback){
         //var hsl = hour > h? hour - h : h - hour;
         var hsl = h - hour;
         var msl = minute > m? (m+60) - minute : m - minute;
-        console.log('we have to wait ' + hsl + ':' + msl + ' until cycle'); 
+        //console.log('we have to wait ' + hsl + ':' + msl + ' until cycle'); 
         wait = (( hsl * 3600 ) + ( msl * 60) );
         callback(wait);
     }else if(period > 0){
@@ -226,7 +270,7 @@ function countdown_for(id, offset) {
     var this_data = tracks;
     var m = 0+this_data[id].m;
     next_trigger(this_data[id].h, m, this_data[id].hotd, function(callback){
-        console.log('offset countdown (seconds): ', callback);
+      //  console.log('offset countdown (seconds): ', callback);
         $('[id="countdown"][name="' + id +'"]').html();
         // only reset if that is enabled AND hotd < 24 - now.hour
         if(this_data[id].hotd > 0 && ( 24 >=  (this_data[id].hotd + (new Date()).getHours() ))){
