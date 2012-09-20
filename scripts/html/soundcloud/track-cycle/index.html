@@ -24,16 +24,16 @@
         <h4>To-Do</h4>
         <ol>
         <li> update countdown when times are changed</li>
-        <li> Fix for firefox </li>
         <li class="hidden"> use jQuery-ui to create groups tabs
+        <li class="hidden"> Paginate through groups in blocks of 50 </li>
         <li class="hidden"> add ability to bunch groups together and apply to one or more tracks
-        <li class="hidden"> store user data and display that while waiting for api.soundcloud.com/me
+        <li class="hidden"> show seconds somewhere, (possibly when hours_left == 00 and mins_left == 00 but t>= 0 seconds)</li>
+        <li class="hidden"> store /me data and display that while waiting for api.soundcloud.com/me
         <li class="hidden">
 // USE https://github.com/alexxroche/gibberish-aes to encrypt the client side data BEFORE saving it{
 //      The question here is, what key to use? We need it to be automatic, but not easy to guess/calculate.
 //      Something stored server side that is read-only and user specific AND requires authentication.
 //  i.e. api.get('/me/tracks', {limit:1,offset:1}, function(st){if(!st.id){st=$.makeArray($.parseJSON(st));}; key=st.secret_token + soundCloudApiKey;});
-//  (or we can just create an arbitrary field.)
 //  (If this was talking to https://github.com/alexxroche/Notice then the key would be stored, (encrypted)
 //    in the people table - that way you would have to compromise both the server AND the users desktop. )
 // }
