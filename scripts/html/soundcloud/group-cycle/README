@@ -1,0 +1,32 @@
+Steps to get this working:
+
+1. Contact Alexx Roche for permission and your user key.
+
+2. Install a web server, (if you don't already have one.)
+
+ This might seem like an odd thing, but because of certain web-browser security
+ measures, local files do not mix with http, which is needed for authentication.
+
+ You can pick on of the following: {
+    http://en.wlmp-project.net/downloads.php?cat=lighty
+    https://github.com/valenok/mongoose
+    http://portableapps.com/apps/development/xampp
+ }
+  or anything else that can server up html via http.
+
+    You MUST run in on port 80, which may require admin rights.
+
+3. Get this code
+
+    Well you can clone it from github.com/alexxroche or just this directory
+
+4. Install code
+
+    Where ever the files are served from, by your web-server, create a directory, (folder in windows speak) called sites.
+    In sites create a directory called github... carry on until you have:
+        http://localhost/sites/github/AIF/scripts/html/soundcloud/group-cycle/
+    and then put the contents of this directory in group-cycle.
+
+5. Just use it.
+
+    If your computer does not like localhost then edit your hosts file.

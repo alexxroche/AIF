@@ -209,8 +209,8 @@ function no_redirect_auth(){
  function update_track(db, key, tid, k, v){
      load_db(db, key, function(this_data){
         //console.log('saving using:' + key);
-          if(this_data){ // works for google chrome
-          //if(this_data.length >=3){
+          //if(this_data){ // works for google chrome
+          if(this_data.length >=3){
             // now we need to update this_data
             // probably best to turn it inso JSON and then change it
             if(!jQuery.isArray(this_data)){ 
