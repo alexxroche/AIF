@@ -1,0 +1,93 @@
+# http://www.felixcrux.com/posts/creating-basic-makefile/
+# Then LxR spliced in CPP
+SHELL = /bin/sh
+CC    = gcc
+PP   = g++
+DEPDIR = .deps
+df = $(DEPDIR)/$(*F)
+
+ 
+FLAGS        = -std=gnu99 -Iinclude
+CFLAGS       = -pedantic -Wall -Wextra -march=native -ggdb3
+FLAGPP       = -c -Wall
+DEBUGFLAGS   = -O0 -D _DEBUG
+RELEASEFLAGS = -O2 -D NDEBUG -combine -fwhole-program
+ 
+TARGET  = hello_world
+TARGPP  = hello_cpp
+SOURCES = $(shell echo src/*.c)
+SOURCPP = $(shell echo src/*.cpp)
+SRCS = $(SOURCES) $(SOURCPP)
+COMMON  = include/definitions.h include/debug.h
+HEADERS = $(shell echo include/*.h)
+OBJECTS = $(SOURCES:.c=.o)
+OBJECPP = $(SOURCPP:.cpp=.o)
+ 
+PREFIX = $(DESTDIR)/usr/local
+BINDIR = $(PREFIX)/bin
+ 
+ 
+all: $(TARGET) $(TARGPP)
+
+$(TARGET): $(OBJECTS) $(COMMON)
+	$(CC) $(FLAGS) $(CFLAGS) $(DEBUGFLAGS) -o $(TARGET) $(OBJECTS)
+
+$(TARGPP): $(OBJECPP)
+	$(PP) -o $(TARGPP) $(OBJECPP)
+
+release: $(SOURCES) $(HEADERS) $(COMMON)
+	$(CC) $(FLAGS) $(CFLAGS) $(RELEASEFLAGS) -o $(TARGET) $(SOURCES)
+
+profile: CFLAGS += -pg
+profile: $(TARGET)
+ 
+cpp: $(TARGPP)
+
+.cpp.o:
+	$(PP) $(FLAGPP) $< -o $@
+ 
+install: release
+	install -D $(TARGET) $(BINDIR)/$(TARGET)
+ 
+install-strip: release
+	install -D -s $(TARGET) $(BINDIR)/$(TARGET)
+ 
+uninstall:
+	-rm $(BINDIR)/$(TARGET)
+ 
+ 
+clean:
+	-rm -f $(OBJECTS)
+	-rm -f $(OBJECPP)
+	-rm -f gmon.out
+ 
+distclean: clean
+	-rm -f $(TARGET)
+	-rm -f $(TARGPP)
+
+COMPILE.c = $(CC) $(FLAGS) $(CFLAGS) $(DEBUGFLAGS) -c
+
+deps:
+	#gcc -MM src/a.c > .deps/a.d
+	gcc -MM $(CFLAGS) $*.c > $(df).d
+	@$(MAKEDEPEND)
+
+MAKEDEPEND:
+	$$($$@_DEPS) \
+	cp $(df).d $(df).P \
+	sed -e 's/#.*//' -e 's/^[^:]*: *//' -e 's/ *\\$$//' \
+                -e '/^$$/ d' -e 's/$$/ :/' < $(df).d >> $(df).P; \
+            rm -f $(df).d
+
+.SECONDEXPANSION:
+
+$(foreach OBJ,$(OBJECTS),$(eval $(OBJ)_DEPS = $(shell gcc -MM $(OBJ:.o=.c) | sed s/.*://)))
+%.o: %.c $$($$@_DEPS)
+	$(COMPILE.c) -o $@ $<
+# $(CC) $(FLAGS) $(CFLAGS) $(DEBUGFLAGS) -c -o $@ $<
+
+# %.o: %.c $(HEADERS) $(COMMON)
+#    $(CC) $(FLAGS) $(CFLAGS) $(DEBUGFLAGS) -c -o $@ $<
+
+.PHONY : all profile release \
+	install install-strip uninstall clean distclean

@@ -1,0 +1,25 @@
+#!/bin/sh
+# script to test what happens when a dependency gets renamed
+
+if [ "$make" = "" ]; then
+  make=`which make`
+fi
+
+# echo commands
+set -x
+set -e
+
+# restore normal state
+mv bar1.h bar.h 2>/dev/null || true
+rm -f foo.d foo.o || true
+
+# build
+$make -r
+cat foo.d
+
+# rename the dependency
+mv bar.h bar1.h
+
+# build, such that foo.c refers to bar1 now
+$make -r CFLAGS=-DBAR1
+cat foo.d
