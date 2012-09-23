@@ -1,0 +1,78 @@
+So you want to be a hacker? (In the original sense of the word!)
+
+I found that it helps to know a little about many different things and
+accept that there is always more to learn and that you will find it hard
+to master all corners of computing. That said, this is my guide to those
+that entering, or in, the computer science world.
+
+(Each section is broken down into blocks like this):
+
+== Category ==
+
+(Explanation) 
+Thing to do: {items or sub category}
+  [Rational]
+
+
+== Concepts ==
+
+Unit tests
+UTF-8, base64
+DVCS
+
+
+== Hardware ==
+
+(You should know that when you are accessing the hard disk or 
+RAM.. what those are, and how they are physically connected.)
+  [ If you want to be a surgeon then you have to learn anatomy ] 
+
+Build a working desktop/server from: 
+{motherboard, cpu, fan, RAM, harddisk, case}
+What is a North-Bridge? ISA, PCI, AGP, VGA, USB, API
+
+
+==  Languages ==
+
+(You should be able to crete a hello world in each of these and solve
+the fizz-buzz problem.)
+
+Learn bash as a scripting language; 
+  [ from just this you can learn loops, continue, break, variables ] 
+Learn a compiled language, (C/C++); 
+  [ because C is the most enduring language ] 
+Learn make; 
+  [ because you should learn enough C/C++ to need make ] 
+Learn how to do factorials using bc;
+  [ because mathematics is cool! ] 
+Learn find sed awk grep; 
+  [ because string manipulation is useful ] 
+Learn a scripting language, (perl python);
+  [perl is the glue of the internet (and makes regexp fun)]
+
+
+== Operating systems ==
+
+Install Slackware then install LFS; Install BSD
+
+
+== Books to know about == 
+
+The Lion book, K&R C, O'Reilly $(each == Languages ==)
+The Orange Book 
+The Blue Book
+
+== History == 
+
+Why are there so many Linux distos?  
+Who created the FSF?
+Why are CSS_sprites cool?
+
+
+== programming ==
+
+(This is NOT the same as a language, this is the actual day-to-day work
+that you do and should be used to)
+
+Learn Vim; VCS: {svn git}; Keep notes on: {things that you learn, things
+that you do}
