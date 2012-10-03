@@ -1,0 +1,16 @@
+If you have used tmux or screen, then the other can
+seem frustrating when you want $function but do not know
+the command, (which most people will bind to the command
+that they already know in their .$multiplexer.conf )
+
+These are the commands that I need to be bilingual.
+Ctrl-a || Ctrl-b keybindings is marked cmd and ^ for ctrl.
+
+Screen      tmux    Function
+==========================================================
+screen -r   tmux a  reattach 
+----------------------------------------------------------
+cmd A       cmd ,   Rename a screen
+cmd ^a      cmd l   Toggle between last two active screens
+
+
