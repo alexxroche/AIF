@@ -1,0 +1,71 @@
+https://en.wikipedia.org/wiki/VCard https://github.com/alexxroche/AIF/blob/master/scripts/perl/vcard-view.pl
+
+N   Name
+FN  Formatted Name
+NICKNAME    Nickname
+PHOTO   Photograph      base64
+BDAY    Birthday
+ADR Delivery Address
+LABEL   Label Address
+TEL Telephone
+EMAIL   Email
+MAILER  Email Program (Optional)
+TZ  Time Zone
+GEO Global Positioning
+TITLE   Title
+ROLE    Role or occupation
+LOGO    Logo
+AGENT   Agent
+ORG Organization Name or Organizational unit
+NOTE    Note
+REV Last Revision
+SOUND   Sound
+URL URL
+UID Unique Identifier
+VERSION Version
+KEY Public Key
+
+#######################################################
+
+X-ABUID
+X-ANNIVERSARY
+X-ASSISTANT
+X-MANAGER
+X-SPOUSE
+X-GENDER
+X-AIM
+X-ICQ
+X-JABBER
+X-MSN
+X-YAHOO
+X-TWITTER
+X-SKYPE, X-SKYPE-USERNAME
+X-GADUGADU
+X-GROUPWISE
+X-MS-IMADDRESS
+X-MS-CARDPICTURE
+X-PHONETIC-FIRST-NAME, X-PHONETIC-LAST-NAME
+introduced and used by Mozilla, also used by Evolution (software)
+X-MOZILLA-HTML
+X-MOZILLA-PROPERTY
+introduced and used by Evolution (software)
+X-EVOLUTION-ANNIVERSARY
+X-EVOLUTION-ASSISTANT
+X-EVOLUTION-BLOG-URL
+X-EVOLUTION-FILE-AS
+X-EVOLUTION-MANAGER
+X-EVOLUTION-SPOUSE
+X-EVOLUTION-VIDEO-URL
+X-EVOLUTION-CALLBACK
+X-EVOLUTION-RADIO
+X-EVOLUTION-TELEX
+X-EVOLUTION-TTYTDD
+introduced and used by Kontact and KAddressBook
+X-KADDRESSBOOK-BlogFeed
+X-KADDRESSBOOK-X-Anniversary
+X-KADDRESSBOOK-X-AssistantsName
+X-KADDRESSBOOK-X-IMAddress
+X-KADDRESSBOOK-X-ManagersName
+X-KADDRESSBOOK-X-Office
+X-KADDRESSBOOK-X-Profession
+X-KADDRESSBOOK-X-SpouseName
