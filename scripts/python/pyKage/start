@@ -1,0 +1,11 @@
+#!/usr/bin/python
+
+# from Package (directory) import module (flaskr.py)
+from flaskr import flaskr
+
+# run it
+flaskr.app.run()
+# or if you would rather:
+#if __name__ == "__main__":
+#    flaskr.app.run()
+

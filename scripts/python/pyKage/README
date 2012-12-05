@@ -1,0 +1,31 @@
+#!/bin/sh
+
+# This is an example package based on http://flask.pocoo.org/docs/tutorial/introduction/
+# As a programmer that wanted to add python to my toolkit this is where I started.
+
+# You can run this script by:
+
+cd flaskr
+python flaskr.py 
+
+# though you can also do 
+
+python flaskr/flaskr.py
+
+
+# or 
+
+./start
+
+
+# or due to flaskr/__main__.py you can even do
+
+python flaskr
+
+
+# there is even 
+
+python flaskr/__init__.py
+
+
+# So Tim Toady
