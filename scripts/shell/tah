@@ -1,0 +1,29 @@
+#!/bin/bash
+# tah ver 0.1 20130128 alexx at cpan dot org
+# http://xkcd.com/1168/
+
+# to deal with those evil people that don't have a directory 
+if [ "$1" == '-h' ]
+then
+    echo "tah [-d|-h] [dir or tar]"
+    echo " -d deletes the files that were extracted from a tar"
+    echo "  otherwise tar up a directory or extract a tar inteligently"
+    exit
+fi
+
+if [ "$1" == '-d' ]
+then
+    tar ztvf $2|awk '{ print $NF }'|sort -r|while read i; do if [ -d $i ]; then rmdir $i; else rm $i; fi; done
+else
+
+    if [ $(echo $1|grep -E '.tar.gz$|.tgz$') ]
+    then
+        tar zxvf $1
+    elif [ $(echo $1|grep -E '.tar.bz2$') ]
+    then
+        tar jxvf $1
+    else
+        tar jcvf $1.tar.bz2 $1
+    fi
+fi
+
