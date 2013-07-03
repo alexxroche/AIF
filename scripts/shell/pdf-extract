@@ -68,7 +68,7 @@ then
     if [ $4 ]
     then
         #gs -dNOPAUSE -sDEVICE=jpeg -dFirstPage=1 -dLastPage=1 -sOutputFile=${OUTPATH}_%02d.jpg -dJPEGQ=100 -r72x72 -q $PDF -c quit #some fonts unreadable
-        #gs -dNOPAUSE -sDEVICE=jpeg -dFirstPage=1 -sOutputFile=${OUTPATH}_%02d.jpg -q wedding_ceremony.pdf -dJPEGQ=100 -c quit #some fonts unreadable
+        #gs -dNOPAUSE -sDEVICE=jpeg -dFirstPage=1 -sOutputFile=${OUTPATH}_%02d.jpg -q $PDF -dJPEGQ=100 -c quit #some fonts unreadable
         #gs -dNOPAUSE -sDEVICE=jpeg -dFirstPage=1 -dLastPage=1 -sOutputFile=${OUTPATH}_%02d.jpg -dJPEGQ=100 -r900x900 -q $PDF -c quit # max of 9000pxx9000px
         #gs -dNOPAUSE -sDEVICE=jpeg -dFirstPage=1 -dLastPage=1 -sOutputFile=${OUTPATH}%03d.jpg -dJPEGQ=100 -q $PDF -c quit # did -r72x72
         gs -dNOPAUSE -sDEVICE=jpeg -dFirstPage=1 -dLastPage=1 -sOutputFile=${OUTPATH}_%04d.jpg -dJPEGQ=70 -r250x250 -q $PDF -c quit
