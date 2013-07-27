@@ -1,0 +1,7 @@
+#functional
+xinput --list | awk -F 'id=' '{print $2}' | awk '{print $1}'
+#methodical
+xinput --list | awk '{ for (i = 1; i <= NF; i++) if ($i ~ /id=/) { print substr($i, 4); break; } }'
+#A.C (no B required, i.e. leet) A-G,P-Z (no HtoO i.e. not watered down) agPizza pitzag
+xinput --list | awk -F"id=" 'NF{split($2,a," ");print a[1]}'
+
