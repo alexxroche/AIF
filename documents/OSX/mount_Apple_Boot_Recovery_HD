@@ -1,0 +1,6 @@
+How to mount Apple Boot Recovery disk 
+
+Open a terminal and type in:
+
+sudo diskutil mount `diskutil list|grep 'Recovery HD'|awk '{print $NF}'`
+
