@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# if you have a bad/intermittant connection and are trying to rsync a large file:
+# this tries every 15 minutes to do an RSYNC until the file is the correct size
+
+# Usage: file size host path
+
+FILENAME=$1
+FILESIZE=$2
+LS_SIZE_AWK='{print $5}'
+REMOTE_HOST=$3
+REMOTE_PATH=$4
+LOCAL_PATH='.'
+RSYNC_CMD="rsync --bwlimit=2000 -Pavv $REMOTE_HOST:$REMOTE_PATH/$FILENAME $LOCAL_PATH"
+
+while [ $(ls -l $LOCAL_PATH/$FILENAME |awk $LS_SIZE_AWK) -lt $FILESIZE ]
+do
+    $RSYNC_CMD & sleep 1200; kill $(ps auwxf|grep rsync|grep -Ev 'grep|ssh'|awk '{print $2}')
+done
