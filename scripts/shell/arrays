@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# how to do bash arrays
+# http://tldp.org/LDP/abs/html/arrays.html
+
+foo=( 1 two three 4 five )
+
+for i in ${foo[@]}; do echo $i; done
+# you can also use ${foo[*]} but that can have shell expansion implications
+for i in ${foo[*]}; do echo $i; done
+
+echo ""
+echo " - another way"
+declare -a colors
+colors=( red green blue yellow black white green pink )
+element_count=${#colors[@]}
+index=0
+while [ "$index" -lt "$element_count" ]
+do    # List all the elements in the array.
+  echo ${colors[$index]}
+  #    ${colors[index]} also works because it's within ${ ... } brackets.
+  let "index = $index + 1"
+  # Or:
+  #    ((index++))
+done
