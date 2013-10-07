@@ -1,0 +1,90 @@
+#!/bin/bash
+
+# route between two interfaces
+# so that you can share your connection with
+# another computer.
+# i.e. you are connected via wifi and want to
+# use your ethernet port as a connection for your desktop
+
+LAN='eth0'
+WAN='wlan0'
+PCIDR=10.42.0.0
+HOST='10.42.0.1/24'
+CLIENT='10.42.0.2/24'
+SUBNET='0.0.0.0/0'
+
+GW=$(ifconfig $WAN|grep inet|head -n1|awk '{print $2}'|sed 's/.*://')
+
+# tell the kernel to forward IPv4 packets between interfaces
+# (this should be off by default for security)
+sudo sh -c "echo 1 >/proc/sys/net/ipv4/ip_forward"
+
+
+add_iptables(){
+    echo Adding iptables stuff connecting $LAN to $GW via $WAN for $PCIDR/24
+    #echo sudo iptables -t nat -A POSTROUTING -s $PCIDR/24 ! -d $PCIDR/24 -j MASQUERADE
+    sudo iptables -t nat -A POSTROUTING -s $PCIDR/24 ! -d $PCIDR/24 -j MASQUERADE
+    #echo sudo iptables -t nat -A POSTROUTING -s $PCIDR/24 -o $LAN -j SNAT --to-source $GW
+    sudo iptables -t nat -A POSTROUTING -s $PCIDR/24 -o $LAN -j SNAT --to-source $GW
+
+    # We should add IPv6 support with a link-local connection
+    # though it is probably easier to simply install miredo over on the desktop machine.
+    #sudo ip6tables -t nat -A POSTROUTING -s $PCIDR/24 ! -d $PCIDR/24 -j MASQUERADE
+    #sudo ip6tables -t nat -A POSTROUTING -s $PCIDR/24 -o $LAN -j SNAT --to-source $GW
+}
+
+if [ "$(iptables-save |grep -q MASQUERADE && iptables-save|grep -q 'SNAT' && echo 1|| echo 0)" != 1 ]; then add_iptables; fi
+
+if_route() {
+    echo sudo ifconfig $LAN $HOST
+    echo sudo route add -host ${CLIENT%%/*} $LAN
+   if [ false ]
+   then
+    echo "FALSE IS TRUE! - who knew?"
+    sudo ifconfig $LAN $HOST
+    #sudo route add -net $PCIDR/24 $LAN
+    sudo route add -host ${CLIENT%%/*} $LAN
+   fi
+}
+
+if [ "$(ifconfig |grep -q "$LAN" && route -n|grep -q "$PCIDR" && echo 1)" != 1 ]; then if_route; fi
+
+# over on the "desktop" (machine that you are acting as a gateway for.)
+desktop() {
+
+    # try to ssh to $CLIENT and run these commands.
+    # This is unlikely as you would need ssh access to the remote computer AND 
+    # sudo enabled over _there_ for the user running this script.
+    ssh ${CLIENT%%/*} sudo ifconfig $LAN $CLIENT && \
+    ssh ${CLIENT%%/*} sudo route add -net $SUBNET gw ${HOST%%/*} || \
+    (
+    # maybe see if there is any answer on $LAN and if we can ssh into it?
+
+    # plan B
+
+    echo "# Unsurprisingly I can NOT ssh over to $CLINET "
+    echo "# so you are going to have to enter the next two lines over there"
+    echo sudo ifconfig $LAN $CLIENT
+    echo sudo route add -net $SUBNET gw ${HOST%%/*}
+    )
+}
+
+if [ $1 ]
+then
+    # tear down
+    route del -net 0.0.0.0/0 gw 10.42.0.1
+    sudo iptables -t nat -D POSTROUTING -s $PCIDR/24 ! -d $PCIDR/24 -j MASQUERADE
+    sudo iptables -t nat -D POSTROUTING -s $PCIDR/24 -o $LAN -j SNAT --to-source $GW
+    exit
+fi
+
+# otherwise build
+
+desktop
+
+
+# Copyright Alexx Roche, 2013
+# Released under the MIT Licence.
+# If it helps you, you may use this in any helpful or constructive way.
+# Be kind.
+
