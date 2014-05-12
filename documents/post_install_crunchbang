@@ -1,0 +1,97 @@
+#!/bin/bash
+
+# Installed crunchbang 11
+
+# Should not do this, AND you have to remember to undo it
+# after install because it compromises your security!
+sudo echo "$(whoami) ALL=NOPASSWD: ALL" >/etc/sudoers.d/$(whoami)
+
+# downloaded and install truecrypt
+
+# fix truecrypt's need for nautilus
+
+echo '#!/bin/bash
+exec thunar $3
+exit 0' >> /usr/bin/nautilus
+
+# installed /usr/local/bin/keychain
+sudo apt-get -y install keychain
+# still needed for testing
+sudo apt-get -y install telnet
+sudo apt-get -y install mtr
+
+# mounted backup
+# restore dot.files (.ssh .vimrc .vim .gitconfig .screenrc .tmuxrc)
+if [ -d ~/backup/.ssh ]
+then
+    rsync -mavPAX ~/backup/.ssh ~
+    rsync -mavPAX ~/backup/.screenrc ~
+    rsync -mavPAX ~/backup/.gitconfig ~
+fi
+# installed SpiderOak
+# installed keepass
+
+# set up my git repos
+
+sudo apt-get -y install git
+sudo mkdir /var/www/sites
+sudo chown alexx: /var/www/sites
+
+sudo apt-get -y install meld
+
+# install dig and other dns stuff
+apt-get -y install dnsutils libssl-dev tcpdump
+
+# set keyboard repeat rate ~/.config/openbox/autostart
+xset r rate 199 42
+
+# restored bin, files, music, images
+
+# fix lasttab in firefox: browser.ctrlTab.preview=true
+
+# set timezone echo 'Europe/Paris'>/etc/timezone
+tzselec
+
+# run xev to find  Alt-Return and Ctrl+Alt,Home
+# (I use Alt+Return for full screen and
+# and Ctrl+Alt,Home to globally toggle play/pause of media)
+
+# installed skype
+## swap mouse buttons over
+
+sudo apt-get -y install pidgin-otr
+
+# fixed vim (openssl.vim)
+sudo apt-get -y install vim-basic
+# [some key stroke is disabling the arrow keys]
+
+# install french keyboad and add
+# Ctrl-Left-Shift => toggle between query and azerty
+# actually I'm now using Alt+caps_lock
+
+
+setxkbmap -option grp:alt_caps_toggle,terminate:ctrl_alt_bksp,grp_led:scroll gb,fr &
+
+sudo echo '
+XKBMODEL="pc105"
+XKBLAYOUT="gb,fr"
+XKBVARIANT=","
+XKBOPTIONS="grp:alt_caps_toggle,terminate:ctrl_alt_bksp,grp_led:scroll"
+
+BACKSPACE="guess"
+' > /etc/default/keyboard
+
+sudo apt-get -y install fbxkb
+
+echo 'fbxkb &' >> ~/.config/openbox/autostart
+
+# download KGS
+# fix javaws
+
+sudo ln -s /usr/bin/java /usr/lib/jvm/java-7-openjdk-i386/jre/bin/java
+
+# install support scripts
+apt-get -y install sqlite3 libsqlite3-dev apg feh par2 locate tree lsof
+updatedb &
+# needed by live-linux
+apt-get -y install realpath
