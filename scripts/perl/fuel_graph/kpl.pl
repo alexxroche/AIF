@@ -1,16 +1,18 @@
 #!/usr/bin/perl -T
 use strict;
 use warnings;
-#use Data::Dumper;
+use Data::Dumper;
 use DateTime;
 my %opt; # It is nice to have them
 $|=1;
 
 our $VERSION = 0.02;
 
+# sudo cpanm Chart::Clicker
+
 =head1 NAME
 
-kpl.pl - Graph, using Chart::Clicker, fuel effiencey of a vehichle (Kilometers Per Liter), and other things
+kpl.pl - Graph, using Chart::Clicker, fuel efficiency of a vehicle(kilometers Per Liter), and other things
 
 =head1 SYNOPSIS
 
@@ -18,18 +20,18 @@ Just fill in data.csv and run it.
 
 =head1 DESCRIPTION
 
-By recording just three pieces of data, each time you refuel, we can calculte
-the rate of fuel consumption since the last refil.
+By recording just three pieces of data, each time you refuel, we can calculate
+the rate of fuel consumption since the last refill.
 
-  * km/litre = ({Odometer at refil}"o" - last_refil("o")) / v(olume)
+  * km/litre = ({Odometer at refill}"o" - last_refill("o")) / v(olume)
 
 We can highlight typos/{payment mistakes} if we include the price per volume
- and the cost or refilling, (this is not a phylisophical calculation; 
+ and the cost or refilling, (this is not a philosophical calculation; 
 How much were you asked to pay?)
 
     * is v*p ~ c
 
-So the graph of km/litre should highlight deteriation in performance over time, (or improvement should you use Lord Selby's mixture.)
+So the graph of km/litre should highlight deterioration in performance over time, (or improvement should you use Lord Selby's mixture.)
 
 On the right y-axis we overlay a graph of fuel prices
 
@@ -37,7 +39,7 @@ On the right y-axis we overlay a graph of fuel prices
 
 Note To Self  - things to do later
 
-* we can overlay rate of fuel consumption {spikes indicate increated load}
+* we can overlay rate of fuel consumption {spikes indicate increased load}
 
 * we can overlay velocity (distance over time) {spikes are long trips}
 
@@ -48,14 +50,14 @@ Note To Self  - things to do later
 This script expects a data file in the form
 
     * Date of refilling         ([CC]YY-MM-DD|dd.mm.[cc]yy) [2001-01-28|3.12.02]
-    * Vehicule Odometer reading (km)         [23145],
-    * Volume of Fule added      (litres)     [27.193],
+    * Vehicle Odometer reading (km)         [23145],
+    * Volume of Fuel added      (litres)     [27.193],
     * Price per volume unit     (£/l)        [0.891],
     * Cost of refilling         (£)          [50.12]
 
 The last two are optional, but if included this script will check for errors.
 
-It is possibly to change the order of the data by predecating with a line
+It is possible to change the order of the data by predicating with a line
 that indicated the order: e.g.
 
 =over
@@ -74,8 +76,8 @@ but it was requested.)
 
     * $outfile    - the name of the file we output to
     * $data       - the name of the data file
-    * $data_type  - csv ssv txt ods (only the first has been implemented so far)
-    * $opt{redan} - "Take care of the pennies and the pounds will take care of themselves"; Do we round our the pennies, or even to the nearest 100 $
+    * $data_type  - csv ssv txt ods yaml XML json (only the first has been implemented so far)
+    * $opt{redan} - "Take care of the pennies and the pounds will take care of themselves"; Do we round the pennies, or even to the nearest 100 $
 
 =back
 
@@ -83,7 +85,7 @@ but it was requested.)
 
 my $outfile = 'kmPerlitre_and_euroPerLitre.png';
 my $data = 'data.csv';
-$opt{redan} = 1; # granularity to currency to check for. 0.01 is the smallest
+$opt{redan} = 1; # granularity to currency to check for. 0.01 (one penny) is the smallest
 
 ######################################################
 # Unless you are hacking this is the end of the line #
@@ -143,15 +145,17 @@ sub _check_price{
             $c=~m/\d+/){ warn "The data in $opt{data_row} of $data is missing or corrupt\n"; }
     #unless( int($v*$p) == int($c) ){ #how closely do we check?
     my $ec = $v * $p; # expected_cost
+    my $ev = $c / $p; # expected_cost
     unless( 
             int($ec) <= int($c + $opt{redan}) &&
             int($ec) >= int($c - $opt{redan})
           ){
         #did we pay too much or too little?
         if( ($c-$opt{redan}) > $ec ){
-            print "Cost:" . int($c) . " is bigger than ($v * $p)=" . int($ec); 
+            print "Data-error: Cost:" . int($c) . " is bigger than ($v * $p)=" . int($ec) . " in line $opt{data_row}\n"; 
             my $cd = $c - $ec;
             print STDERR "The cost in line $opt{data_row} of $data seems high by $cd\n" if $opt{V}>=1;
+            print STDERR "\t - If the Price is right and the cost is correct then the volume is " . (sprintf('%.2f', $ev)) . " not $v\n ";
         }elsif( ($c+$opt{redan}) < $ec ){
             my $cd = $ec - $c;
             print STDERR "The cost in line $opt{data_row} of $data seem low by $cd\n" if $opt{V}>=1; 
@@ -198,6 +202,7 @@ sub _parse_data {
                                             $line[$opt{order}{v}],
                                             $line[$opt{order}{p}],
                                             $line[$opt{order}{c}]);
+        $prix=~s/\s//g;
 
         # Here we would like to be able to estimate values that are lost or obviously wrong
         # e.g. if the Odo goes down but the date goes up then something is wrong.
@@ -212,6 +217,7 @@ sub _parse_data {
         &_check_price($vol,$prix,$cost) if ($vol && $prix && $cost);
         if($last_distance){
             my $d = $odo - $last_distance; 
+            #print "$d = $odo - $last_distance\n" if $opt{D}>=1; 
             my $dpl = $d/$vol;
             my ($year,$month,$day);
             if($date=~m/^\d{2,4}-\d{1,2}-\d{1,2}$/){
@@ -223,6 +229,8 @@ sub _parse_data {
             }else{
                 &help("$date in line $count of $data is not a valid date");
             }
+            if($year < 1900){ $year += 2000; }
+            print "Creating date: year=> $year, month=> $month, day=> $day\n" if $opt{D}>=2;
             my $dt = DateTime->new(year=> $year, month=> $month, day=> $day);
             my $e = $dt->epoch();
             push @{ $opt{data}{1}{values} }, $dpl; # y-axis
@@ -235,7 +243,7 @@ sub _parse_data {
                 push @{ $opt{data}{2}{keys} }, $e;
             }
 
-            print "$e : $d\n" if $opt{D}>=1;
+            print "$e : $d\n" if $opt{D}>=2;
         }
         $last_distance = $odo;
         if($opt{D}>=2){
@@ -253,7 +261,7 @@ sub _parse_data {
 
 sub _create_graph {
 
-use Chart::Clicker;
+use Chart::Clicker; # tested with version 2.88
 use Chart::Clicker::Axis::DateTime;
 use Chart::Clicker::Data::Series;
 use Chart::Clicker::Data::DataSet;
@@ -264,8 +272,12 @@ $cc->title->text('Checking Vehicular Efficiency');
 $cc->title->font->size(20);
 
 my $series1 = Chart::Clicker::Data::Series->new( $opt{data}{1} );
+#print "\n" . Dumper($opt{data}{1});
 my ($series2,$context2,$ds2);
-if($opt{data}{2}){ $series2 = Chart::Clicker::Data::Series->new( $opt{data}{2} ); }
+if($opt{data}{2}){ 
+    #print Dumper($opt{data}{2});
+    $series2 = Chart::Clicker::Data::Series->new( $opt{data}{2} ); 
+}
 my $ctx = $cc->get_context('default');
     $ctx->domain_axis(
             Chart::Clicker::Axis::DateTime->new(

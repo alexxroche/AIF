@@ -1,0 +1,269 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Center Page</title>
+</head>
+<body>
+<div id="face">
+ &nbsp;  Clock </div>
+<script>
+
+var w = window,
+    d = document,
+    e = d.documentElement,
+    g = d.getElementsByTagName('body')[0],
+    x = w.innerWidth || e.clientWidth || g.clientWidth,
+    y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+    //console.log(altoDocumento);
+    //console.log(anchoDocumento);
+    var x_mid  = x / 2;
+    var y_mid = y / 2;
+//alert(x + ' × ' + y);
+offset = 'margin-left: -30px; margin-top: -10px;'
+foffset = 'margin-left: -47px; margin-top: -10px;'
+
+
+// 
+function getCSSRule(ruleName, deleteFlag) {               // Return requested style obejct
+   ruleName=ruleName.toLowerCase();                       // Convert test string to lower case.
+   if (document.styleSheets) {                            // If browser can play with stylesheets
+      for (var i=0; i<document.styleSheets.length; i++) { // For each stylesheet
+         var styleSheet=document.styleSheets[i];          // Get the current Stylesheet
+         var ii=0;                                        // Initialize subCounter.
+         var cssRule=false;                               // Initialize cssRule. 
+         do {                                             // For each rule in stylesheet
+            if (styleSheet.cssRules) {                    // Browser uses cssRules?
+               cssRule = styleSheet.cssRules[ii];         // Yes --Mozilla Style
+            } else {                                      // Browser usses rules?
+               cssRule = styleSheet.rules[ii];            // Yes IE style. 
+            }                                             // End IE check.
+            if (cssRule)  {                               // If we found a rule...
+               if (cssRule.selectorText.toLowerCase()==ruleName) { //  match ruleName?
+                  if (deleteFlag=='delete') {             // Yes.  Are we deleteing?
+                     if (styleSheet.cssRules) {           // Yes, deleting...
+                        styleSheet.deleteRule(ii);        // Delete rule, Moz Style
+                     } else {                             // Still deleting.
+                        styleSheet.removeRule(ii);        // Delete rule IE style.
+                     }                                    // End IE check.
+                     return true;                         // return true, class deleted.
+                  } else {                                // found and not deleting.
+                     return cssRule;                      // return the style object.
+                  }                                       // End delete Check
+               }                                          // End found rule name
+            }                                             // end found cssRule
+            ii++;                                         // Increment sub-counter
+         } while (cssRule)                                // end While loop
+      }                                                   // end For loop
+   }                                                      // end styleSheet ability check
+   return false;                                          // we found NOTHING!
+}                                                         // end getCSSRule 
+
+function killCSSRule(ruleName) {                          // Delete a CSS rule   
+   return getCSSRule(ruleName,'delete');                  // just call getCSSRule w/delete flag.
+}                                                         // end killCSSRule
+
+function addCSSRule(ruleName) {                           // Create a new css rule
+   if (document.styleSheets) {                            // Can browser do styleSheets?
+      if (!getCSSRule(ruleName)) {                        // if rule doesn't exist...
+         if (document.styleSheets[0].addRule) {           // Browser is IE?
+            document.styleSheets[0].addRule(ruleName, null,0);      // Yes, add IE style
+         } else {                                         // Browser is IE?
+            document.styleSheets[0].insertRule(ruleName+' { }', 0); // Yes, add Moz style.
+         }                                                // End browser check
+      }                                                   // End already exist check.
+   }                                                      // End browser ability check.
+   return getCSSRule(ruleName);                           // return rule we just created.
+} 
+
+function changeIt() {
+ // http://www.quirksmode.org/dom/changess.html
+    if (!document.styleSheets) return;
+    var theRules = new Array();
+    if (document.styleSheets[1].cssRules)
+        theRules = document.styleSheets[1].cssRules
+    else if (document.styleSheets[1].rules)
+        theRules = document.styleSheets[1].rules
+    else return;
+    theRules[theRules.length-1].style.backgroundColor = '#EEF0F5';
+}
+
+function toDegrees (angle) {
+  return angle * (180 / Math.PI);
+}
+
+function toRadians (angle) {
+  return angle * (Math.PI / 180);
+}
+
+function updateMil(){
+    // draw a '.' that races round the inside of the face
+    var lradius = 2 * ( y_mid / y ) * 60;
+}
+
+function updateSecond(){
+
+ // update the analogue time
+    var div = document.getElementById("face");
+    var t = new Date();
+    var hour = ("0" + t.getHours() %12).slice(-2);
+    var min =  ("0" + t.getMinutes()).slice(-2);
+    var sec =  ("0" + t.getSeconds()).slice(-2);
+    div.textContent = hour + ':' + min + ':' + sec;
+//alert(hour + ':' + min + ':' + sec);
+    //console.log(hour + ':' + min + ':' + sec);
+    
+
+ // the number of seconds tick round inside of the hours
+    var sradius = 2 * ( y_mid / y ) * 80;
+    angle = 6 //  number of degrees between the seconds
+    var s = new Date();
+    var sdegrees = angle * s.getSeconds()
+    var second_x = x_mid + ( Math.sin( toRadians(sdegrees) ) * sradius ) ;
+    var second_y = y_mid - ( Math.cos( toRadians(sdegrees) ) * sradius ) ;
+
+    var sclr = 'ACF';
+    //var sscss = '.second{position: absolute; left:' + second_x + 'px; top:' + second_y + 'px; widht:250px; color: #' + sclr + ';' + offset +'}';
+    var scss = 'position: absolute; left:' + second_x + 'px; top:' + second_y + 'px; widht:250px; color: #' + sclr + ';' + offset;
+    var secondDiv;
+    if( secondDiv = document.getElementById('second') ){
+        secondDiv.innerHTML = sec;
+        //secondDiv.innerHTML = sec + '[' + second_x + ',' + second_y + ']';
+        var sec_css = getCSSRule('.second');
+        //secondDiv.style.cssText = sscss;
+        //sec_css.style.cssText = scss;
+        sec_css.style.left = second_x + 'px';
+        sec_css.style.top = second_y + 'px';
+    //var add_css = addCSSRule('.hour' + i);
+    //add_css.style.cssText = 'position: absolute; left:' + this_x + 'px; top:' + this_y + 'px; widht:250px; color: #' + hclr + ';' + offset;
+    }else{
+        secondDiv = document.createElement('div');
+        secondDiv.className = 'second';
+        secondDiv.id = 'second';
+        //secondDiv.innerHTML = sec + '[' + second_x + ',' + second_y + ']';
+        secondDiv.innerHTML = sec;
+        document.getElementsByTagName('body')[0].appendChild(secondDiv);
+       // secondDiv.style.cssText = scss;
+        var add_sec_css = addCSSRule('.second');
+        add_sec_css.style.cssText = scss;
+    }
+    if(sec = 01){  
+        updateMinute();
+    }
+}
+
+function updateMinute(){
+    // the number of minutes ticks round the outside of the hours
+        var mradius = 2 * ( y_mid / y ) * 112;
+    angle = 6 //  number of degrees between the minutes
+    var s = new Date();
+    var mdegrees = angle * s.getMinutes()
+    var minute_x = x_mid + ( Math.sin( toRadians(mdegrees) ) * mradius ) ;
+    var minute_y = y_mid - ( Math.cos( toRadians(mdegrees) ) * mradius ) ;
+    var t = new Date();
+    var min =  ("0" + t.getMinutes()).slice(-2);
+
+
+    var sclr = 'fac';
+    var scss = 'position: absolute; left:' + minute_x + 'px; top:' + minute_y + 'px; widht:250px; color: #' + sclr + ';' + offset;
+    var secondDiv;
+    if( secondDiv = document.getElementById('minute') ){
+        secondDiv.innerHTML = min;
+        //secondDiv.innerHTML = sec + '[' + minute_x + ',' + minute_y + ']';
+        var sec_css = getCSSRule('.minute');
+        //secondDiv.style.cssText = sscss;
+        //sec_css.style.cssText = scss;
+        sec_css.style.left = minute_x + 'px';
+        sec_css.style.top = minute_y + 'px';
+    //var add_css = addCSSRule('.hour' + i);
+    //add_css.style.cssText = 'position: absolute; left:' + this_x + 'px; top:' + this_y + 'px; widht:250px; color: #' + hclr + ';' + offset;
+    }else{
+        secondDiv = document.createElement('div');
+        secondDiv.className = 'minute';
+        secondDiv.id = 'minute';
+        //secondDiv.innerHTML = sec + '[' + minute_x + ',' + minute_y + ']';
+        secondDiv.innerHTML = min;
+        document.getElementsByTagName('body')[0].appendChild(secondDiv);
+       // secondDiv.style.cssText = scss;
+        var add_sec_css = addCSSRule('.minute');
+        add_sec_css.style.cssText = scss;
+    }
+
+    if(min = 01){  
+        updateHour();
+    }
+
+}
+
+function updateHour(){
+    // we make each hour after this hour pale and colourful
+    for(i=1;i<=12;i++){
+    }
+}
+
+
+ var style = document.createElement('style');
+style.type = 'text/css';
+style.innerHTML ='.second{} #face{width:' + x_mid + 'px; height:' + y_mid + 'px; position:absolute; top:50%; left:50%;' + foffset + '}; .highlight{font-size:30px;}';
+document.getElementsByTagName('head')[0].appendChild(style);
+
+// draw on the seconds
+updateSecond();
+updateMinute();
+
+var d = new Date();
+/*
+var div = document.getElementById("face");
+var here = d.getHours() % 12 + '.' +  d.getMinutes();
+var now = ("0" + d.getHours() % 12).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2) + ':' + ("0" + d.getSeconds() % 12).slice(-2);
+    //div.innerHTML = now;
+    //div.textContent = now + '(' + x + '->' + x_mid + ',' + y + '->' + y_mid + ')';
+    //div.textContent = now + '(' + x_mid + ',' + y_mid + ')';
+    div.textContent = now;
+//    alert(now);
+    //var text = div.textContent;
+
+*/
+
+for(i=1;i<=12;i++){
+  // we add a div to div and position it
+    
+    var hradius = 2 * ( y_mid / y ) * 100;
+    angle = 30 //  number of degrees between the hours
+    degrees = angle * i
+    this_sin = Math.sin( toRadians(degrees) ).toFixed(15) % 360
+    this_cos = Math.cos( toRadians(degrees) ).toFixed(15) % 360
+    this_x = x_mid + ( this_sin * hradius ) ;
+    this_y = y_mid - ( this_cos * hradius ) ;
+
+    var innerDiv = document.createElement('div');
+    innerDiv.className = 'hour' + i;
+    var highlight = '';
+    if( d.getHours() % 12 == i ){ highlight = ' highlight'; }
+    //innerDiv.innerHTML = '<span class="hour' + highlight + '">' + i + '(' + parseInt(this_x) + ',' + parseInt(this_y) + ')</span>';
+    //innerDiv.innerHTML = '<span class="hour' + highlight + '">' + i + '(' + parseInt(this_sin*100)/100 + ',' + parseInt(this_cos*100)/100 + 
+    //')<br />['+ parseInt(this_x) + ',' + parseInt(this_y) + ']</span>';
+    innerDiv.innerHTML = '<span class="hour' + highlight + '">' + i + '</span>';
+    //div.appendChild(innerDiv);
+    g.appendChild(innerDiv);
+
+hclr = '' + i + i + i + ''; if(i ==10){ hclr = 'ACF'; }else if(i == 11){ hclr = 'CAF';}else if(i == 12){ hclr='FAC';}
+    /*
+    var style = document.createElement('style');
+style.type = 'text/css';
+style.innerHTML = '.hour' + i + '{position: absolute; left:' + this_x + 'px; top:' + this_y + 'px; widht:250px; color: #' + hclr + ';' + offset +'}';
+document.getElementsByTagName('head')[0].appendChild(style);
+    innerDiv.className = 'hour' + i;
+    */
+
+    var add_css = addCSSRule('.hour' + i);
+    add_css.style.cssText = 'position: absolute; left:' + this_x + 'px; top:' + this_y + 'px; widht:250px; color: #' + hclr + ';' + offset;
+}
+
+
+ setInterval(updateSecond,1000);
+//setInterval(updateMinute,60000);
+// setInterval(updateHour,3600000);
+
+</script> </body>
+</html>
