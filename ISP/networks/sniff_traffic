@@ -1,3 +1,12 @@
+# DNS requests leaving your server
+tcpdump -lvi any "udp port 53" 2>/dev/null
+
+tshark -f "udp port 53" -R "dns.qry.type == A and dns.flags.response == 0"
+
+# DNS requests TO your server
+tcpdump -lvi any "udp port 43"
+
+
 ngrep -p 80 -d wlan0 -W byline
 
 tcpdump -i any 'tcp port 80'
@@ -17,3 +26,5 @@ sar -n DEV 1 3
 
 iftop
 iptraf
+
+tshark -f "udp port 53" -R "dns.qry.type == A and dns.flags.response == 0"
