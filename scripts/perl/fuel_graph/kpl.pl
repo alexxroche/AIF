@@ -3,10 +3,12 @@ use strict;
 use warnings;
 use Data::Dumper;
 use DateTime;
+#use List::AllUtils qw(sum);
+use List::Util qw(sum);
 my %opt; # It is nice to have them
 $|=1;
 
-our $VERSION = 0.02;
+our $VERSION = 0.04;
 
 # sudo cpanm Chart::Clicker
 
@@ -137,6 +139,10 @@ sub help {
     exit;
 }
 
+use Scalar::Util qw(looks_like_number);
+
+sub mean { return @_ ? sum(@_) / @_ : 0 }
+
 sub _check_price{
     # volume, price, cost (where price is price/volume )
     my ($v,$p,$c) = @_;
@@ -144,7 +150,10 @@ sub _check_price{
             $p=~m/\d+/ &&
             $c=~m/\d+/){ warn "The data in $opt{data_row} of $data is missing or corrupt\n"; }
     #unless( int($v*$p) == int($c) ){ #how closely do we check?
-    my $ec = $v * $p; # expected_cost
+    my $ec=0;
+    if(looks_like_number($p) && looks_like_number($v) ){ 
+        $ec = $v * $p; # expected_cost
+    }
     my $ev = $c / $p; # expected_cost
     unless( 
             int($ec) <= int($c + $opt{redan}) &&
@@ -155,7 +164,7 @@ sub _check_price{
             print "Data-error: Cost:" . int($c) . " is bigger than ($v * $p)=" . int($ec) . " in line $opt{data_row}\n"; 
             my $cd = $c - $ec;
             print STDERR "The cost in line $opt{data_row} of $data seems high by $cd\n" if $opt{V}>=1;
-            print STDERR "\t - If the Price is right and the cost is correct then the volume is " . (sprintf('%.2f', $ev)) . " not $v\n ";
+            print STDERR "\t - If the Price is right and the cost is correct then the volume is " . (sprintf('%.2f', $ev)) . " not $v\n";
         }elsif( ($c+$opt{redan}) < $ec ){
             my $cd = $ec - $c;
             print STDERR "The cost in line $opt{data_row} of $data seem low by $cd\n" if $opt{V}>=1; 
@@ -169,22 +178,43 @@ sub _check_price{
 sub _parse_data {
   if(-w $data){
     open(DATA, $data) or warn "Did not open $data";
-    my ($count,$last_distance);
+    my ($count,$last_distance,$good_lines);
     $opt{order}{d} = 0;
     $opt{order}{o} = 1;
     $opt{order}{v} = 2;
     $opt{order}{p} = 3;
     $opt{order}{c} = 4;
-    LINE: while(my @line = split(',', <DATA>)){
+    my $delim= ',';
+    LINE: while(my @line = split($delim, <DATA>)){
         $count++;
         $opt{data_row} = $count;
-        next LINE if ($line[0]=~m/^\s*#/ || $line[0]=~m/^\s*$/);
+        if ($line[0]=~m/^\s*#/ || $line[0]=~m/^\s*$/){ 
+            $good_lines++;
+            next LINE;
+        };
+        #next LINE if ($line[0]=~m/^\s*#/ || $line[0]=~m/^\s*$/);
+        unless($line[1]){
+            my $tab_match = () = $line[0]=~m/\t/g; # it would be nice to automatically split on \t rather than csv
+            $line[0]=~s/\s\s/ /g; # remove duplicate spaces
+            my @fixed_line = split(/\s/, $line[0]);
+            # remove blank entries
+            for(my $data_point=0;$data_point<=(@fixed_line -1);$data_point++){
+                #if (!$fixed_line[$data_point] || length($fixed_line[$data_point]) <= 0 || $fixed_line[$data_point] == undef){ 
+                if (!$fixed_line[$data_point] || length($fixed_line[$data_point]) <= 0){
+                    splice @fixed_line, $data_point, 1;
+                    #delete($fixed_line[$data_point]); 
+                }
+            }
+            print "setting " . Dumper(\@line) . " to " . Dumper(\@fixed_line) . "\n" if $opt{D}>=3;
+            @line = @fixed_line;
+        }
         if($line[0]=~m/^\D/){ # we have a non-default order [d,o,v,p,c ]
             for(my $args=0;$args<=(@line -1);$args++){
                 my $td = $line[$args]; $td=~s/\s.*[\n]?$//; #type of data
                 print "setting $td to $args\n" if $opt{D}>=10;
                 $opt{order}{$td} = $args;
             }
+            $good_lines++;
             next LINE;
             # this means that the data file can change the order with each entry
             # (if your book keeping is that messy )
@@ -202,39 +232,85 @@ sub _parse_data {
                                             $line[$opt{order}{v}],
                                             $line[$opt{order}{p}],
                                             $line[$opt{order}{c}]);
-        $prix=~s/\s//g;
+        if($odo){ $odo=~s/\s//g; }
+        if($vol){ $vol=~s/\s//g; }
+        if($prix){ $prix=~s/\s//g; }
+        if($cost){ $cost=~s/\s//g; }
 
         # Here we would like to be able to estimate values that are lost or obviously wrong
         # e.g. if the Odo goes down but the date goes up then something is wrong.
 
-        if($odo && $odo!~m/^\d+(\.\d+)?$/){ print "Line $opt{data_row} $odo is not a valid distance.\n" if $opt{V}>=1; next LINE; }
+        if($odo && $odo!~m/^\d+(\.\d+)?$/){ print "Line $opt{data_row} $odo is not a valid distance.\n" if $opt{V}>=2; next LINE; }
         if($date=~m/\?/){ print "Line $opt{data_row} of $date is not a valid date.\n" if $opt{V}>=1; next LINE; }
         if($date!~m/\d/){ print "Line $opt{data_row} of $date is not a valid date.\n" if $opt{V}>=1; next LINE; }
-        if($vol!~m/\d+/){ print "Line $opt{data_row} of $date is not a valid volume.\n" if $opt{V}>=1; next LINE; }
-        if($prix && $prix!~m/\d+/){ print "Line $opt{data_row} of $date is not a valid price.\n" if $opt{V}>=1; next LINE; }
-        if($cost && $cost!~m/\d+/){ print "Line $opt{data_row} of $date is not a valid cost.\n" if $opt{V}>=1; next LINE; }
+        if(!defined($vol) || $vol!~m/\d+/){ print "Line $opt{data_row} of " . (defined($vol) ? $vol : Dumper(\@line)) . " is not a valid volume.\n" if $opt{V}>=1; next LINE; }
+        if($prix && $prix!~m/\d+/){ print "Line $opt{data_row} of $prix is not a valid price.\n" if $opt{V}>=1; next LINE; }
+        if($cost && $cost!~m/\d+/){ print "Line $opt{data_row} of $cost is not a valid cost.\n" if $opt{V}>=1; next LINE; }
 
         &_check_price($vol,$prix,$cost) if ($vol && $prix && $cost);
         if($last_distance){
+            unless($odo){ $odo = $last_distance; } # this seems like a bad kludge
+            #unless($odo){ $odo = 0; } # this seems like a bad kludge
             my $d = $odo - $last_distance; 
             #print "$d = $odo - $last_distance\n" if $opt{D}>=1; 
-            my $dpl = $d/$vol;
+            my $dpl;
+            if(defined $vol && looks_like_number($vol) ){
+                $dpl  = $d/$vol;
+            }else{
+                $dpl = 1;
+            }
+            unless(defined $opt{average_dpl}){ $opt{average_dpl} = 50; }
+            if($dpl<=0){
+                print STDERR "ERR: we can't have negative distance per volume: $d / $vol\n" if $opt{D}>=1;
+                #$dpl=0;
+                $dpl= $opt{average_dpl} ? $opt{average_dpl} : 0;
+            }elsif($dpl > $opt{average_dpl} + 100){
+                print STDERR "ERR: aberant distance/volume $dpl\n" if $opt{D}>=1;
+                $dpl= $opt{average_dpl} ? $opt{average_dpl} : 0;
+            }else{
+                $opt{average_dpl} = ( ( $opt{average_dpl} + $dpl ) / 2 );
+            }
             my ($year,$month,$day);
+            #print "FINDING Date:$date;\n";
             if($date=~m/^\d{2,4}-\d{1,2}-\d{1,2}$/){
                 ($year,$month,$day) = split('-', $date);
+            }elsif($date=~m/^(\d{1,2})[\.|\/](\d{1,2})[\.|\/](\d{2,4})$/){
+                ($day,$month,$year) = ($1,$2,$3);
             }elsif($date=~m/^\d{2,4}\/\d{1,2}\/\d{1,2}$/){
                 ($year,$month,$day) = split('\/', $date);
-            }elsif($date=~m/^(\d{1,2})[\.\/](\d{1,2})[\.\/](\d{2,4})$/){
-                ($day,$month,$year) = ($1,$2,$3);
+            }elsif($date=~m/^\d{1,2}\/\d{1,2}\/\d{2,4}$/){
+                ($day,$month,$year) = split('\/', $date);
+            #}elsif($date=~m/^\d{1,2}\/\d{1,2}\/\d{2,4}$/){ # yank dates not supported
+            #    ($month,$day,$year) = split('\/', $date);
             }else{
+                print STDERR "BAD date: $date\n";
                 &help("$date in line $count of $data is not a valid date");
             }
             if($year < 1900){ $year += 2000; }
-            print "Creating date: year=> $year, month=> $month, day=> $day\n" if $opt{D}>=2;
+            if($month < 10 && length($month) < 2){ $month = '0' . $month;}
+            if($day < 10 && length($day) < 2){ $day = '0' . $day;}
+            print "Creating date: year=> $year, month=> $month, day=> $day from $date\n" if $opt{D}>=10;
             my $dt = DateTime->new(year=> $year, month=> $month, day=> $day);
             my $e = $dt->epoch();
+            unless($opt{last_epoch}){ $opt{last_epoch} = 0; }
+            if($e - $opt{last_epoch} < 0){ print STDERR "Data-row: $opt{data_row} You seem to be going back in time: $opt{last_epoch} $e\n" if $opt{D}>=0; }
+            $opt{last_epoch} = $e;
+            
             push @{ $opt{data}{1}{values} }, $dpl; # y-axis
             push @{ $opt{data}{1}{keys} }, $e; # x-axis
+            #push @{ $opt{running_average_data}{1}{values} }, ( ( @{ $opt{running_average_data}{1}{values} }[$#{ $opt{running_average_data}{1}{vales} } -1] + $dpl ) /2 );
+
+            my $running_average = mean(@{ $opt{data}{1}{values} });
+
+   #         my $running_average = defined $opt{running_average_data}{1}{values} ? ( ( @{ $opt{running_average_data}{1}{values} }[$#{ $opt{running_average_data}{1}{vales} } -1] + $dpl ) /2 ) : $dpl;
+            if(defined $running_average && $running_average >= 1){
+                #print "Setting Running average for $e to " . int($running_average) . " ( $running_average )\n";
+                push @{ $opt{running_average_data}{1}{keys} }, $e; # x-axis
+                push @{ $opt{running_average_data}{1}{values} }, $running_average;
+                #push @{ $opt{running_average_data}{1}{values} }, 15;
+            }
+
+
             if($prix){
                 unless($opt{data}{2}){
                     $opt{data}{2}{name} = 'Price Per Liter';
@@ -245,14 +321,18 @@ sub _parse_data {
 
             print "$e : $d\n" if $opt{D}>=2;
         }
+        #if($odo >=1){
         $last_distance = $odo;
+        #}
         if($opt{D}>=2){
         print "Date $opt{order}{d}: $date, ";
         print "Odo $opt{order}{o}: $odo,  ";
         print "Vol $opt{order}{v}: $vol, ";
         print "Ppl $opt{order}{p}: $prix, Cost $opt{order}{c}: $cost\n" if $opt{D}>=1;
         }
+        $good_lines++;
     }
+    print "Closing data after $good_lines / $count lines processed\n" if $opt{V}>=1;
     close(DATA);
  }else{
     &help("Can't find the $data file");
@@ -273,6 +353,40 @@ $cc->title->font->size(20);
 
 my $series1 = Chart::Clicker::Data::Series->new( $opt{data}{1} );
 #print "\n" . Dumper($opt{data}{1});
+$opt{running_average_data}{1}{name} = 'Rolling Average Distance per litre';
+my $running_average_data = Chart::Clicker::Data::Series->new( $opt{running_average_data}{1} );
+#my $running_average_data = Chart::Clicker::Data::Series->new(
+#   keys => @{ $opt{data}{1}{keys} },
+#   values => @{ $opt{running_average_data}{1}{values} }
+#);
+
+# Estimated company mean km/l
+
+my $company_claimed_real_average_pl = 22.1074728;
+my $expected_mean_pl = 18.5185;
+$opt{crap}{1}{name} = "Company claimed average km/l";
+$opt{emp}{1}{name} = "Realistic average km/l";
+
+my $data_average = mean(@{ $opt{data}{1}{values} });
+$opt{average_data}{1}{name} = sprintf('Mean Distance per litre: %.2f km/l', $data_average);
+my $rad = Chart::Clicker::Data::DataSet->new(series => [ $running_average_data ]);
+    foreach my $data_date (@{ $opt{data}{1}{keys} }){
+        push @{ $opt{crap}{1}{keys} }, $data_date; # x-axis
+        push @{ $opt{emp}{1}{keys} }, $data_date; # x-axis
+        push @{ $opt{average_data}{1}{keys} }, $data_date; # x-axis
+        push @{ $opt{average_data}{1}{values} }, $data_average; # y-axis
+        push @{ $opt{crap}{1}{values} }, $company_claimed_real_average_pl; # x-axis
+        push @{ $opt{emp}{1}{values} }, $expected_mean_pl; # x-axis
+    }
+my $average_data = Chart::Clicker::Data::Series->new( $opt{average_data}{1} );
+my $ad = Chart::Clicker::Data::DataSet->new(series => [ $average_data ]);
+
+my $crap = Chart::Clicker::Data::Series->new( $opt{crap}{1} );
+my $cad = Chart::Clicker::Data::DataSet->new(series => [ $crap ]);
+
+my $emp = Chart::Clicker::Data::Series->new( $opt{emp}{1} );
+my $ead = Chart::Clicker::Data::DataSet->new(series => [ $emp ]);
+
 my ($series2,$context2,$ds2);
 if($opt{data}{2}){ 
     #print Dumper($opt{data}{2});
@@ -287,6 +401,19 @@ my $ctx = $cc->get_context('default');
                     format          => "%y-%m-%d"
                     )
             );
+#print "km/l keys go from 0 .. " . $#{ $opt{data}{1}{keys} }  . " with values from " . @{ $opt{data}{1}{values} }[0] . " to " .
+#            @{ $opt{data}{1}{keys} }[$#{$opt{data}{1}{values} } -1] . 
+#    "\n";
+#    #exit;
+my $trend_line;
+# $trend_line = Chart::Clicker::Data::Series->new(
+#    keys   => [ 0, $#{ $opt{data}{1}{keys} } ],
+#    values => [ @{ $opt{data}{1}{values} }[0],
+#            @{ $opt{data}{1}{keys} }[$#{ $opt{data}{1}{values} } -1]
+#            ],
+#    name   => 'km/l trendline',
+#);
+#my $ds1 = Chart::Clicker::Data::DataSet->new(series => [ $series1, $trend_line ]);
 my $ds1 = Chart::Clicker::Data::DataSet->new(series => [ $series1 ]);
 
 if($opt{data}{2}{name}){ 
@@ -343,6 +470,10 @@ $ctx->domain_axis->label_font->family('Hoefler Text');
 
 $ds1->context('default');
 $cc->add_to_datasets($ds1);
+$cc->add_to_datasets($ad);
+$cc->add_to_datasets($rad);
+$cc->add_to_datasets($cad);
+$cc->add_to_datasets($ead);
 
 if($series2){  #We might not have any price details
     $ds2 = Chart::Clicker::Data::DataSet->new(series => [ $series2 ]);
@@ -367,7 +498,12 @@ __END__
 
 =head1 BUGS AND LIMITATIONS
 
-Needs three lines of data to plot the graph.
+Should calculate missing values (marked as ?)
+
+Should draw on "Known Average km/l (18.5185)" and calculated average km/l
+22.1074728 kilometres per litre
+
+Needs three rows of data to plot the graph.
 
 Dates have to be in one of three fixed formats.
 
@@ -378,6 +514,12 @@ Does not die cleanly if you feed it an invalid output file
 Does not check for a reduction of total distance, (which is really easy.)
 
 Different types of journey are probably not the same efficiency, so we need to calculate the type of journey, (where possible) and see if we can graph each category of journey separately.
+
+Does not sort data by date before graphing
+
+Does not deal with missing data as cleanly as it could, (remove broken data rows or estimate broken/missing data)
+
+Does not let you control which lines are showen
 
 =head1 Examples
 
